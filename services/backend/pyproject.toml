@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "src"
+version = "0.1.0"
+description = ""
+authors = ["noFrostoo <nofrost1a@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+fastapi = "^0.65.2"
+pydantic = "^1.8.1"
+SQLAlchemy = "^1.4.11"
+requests = "^2.25.1"
+uvicorn = "^0.13.4"
+
+[tool.poetry.dev-dependencies]
+mypy = "^0.901"
+pytest = "^5.2"
+
+[tool.poetry.scripts]
+run = "src:main"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
