@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "src"
+name = "app"
 version = "0.1.0"
 description = ""
 authors = ["noFrostoo <nofrost1a@gmail.com>"]
@@ -7,7 +7,7 @@ authors = ["noFrostoo <nofrost1a@gmail.com>"]
 [tool.poetry.dependencies]
 python = "^3.9"
 fastapi = "^0.65.2"
-pydantic = "^1.8.1"
+pydantic = {extras = ["email"], version = "^1.8.2"}
 SQLAlchemy = "^1.4.11"
 requests = "^2.25.1"
 uvicorn = "^0.13.4"

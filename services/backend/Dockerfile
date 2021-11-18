@@ -4,7 +4,7 @@ ENV PYTHONFAULTHANDLER=1 \
     PYTHONHASHSEED=random \
     PYTHONUNBUFFERED=1
 
-WORKDIR /src
+WORKDIR /app
 
 FROM base as builder
 
@@ -28,8 +28,8 @@ FROM base as final
 RUN apk add --no-cache libffi libpq
 COPY --from=builder /venv /venv
 ENV PATH=/venv/bin:$PATH
-COPY /src .
+COPY /app .
 EXPOSE 8080
 EXPOSE 5000
-CMD ["uvicorn", "src:app", "--host", "0.0.0.0", "--port", "5000"]
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "5000"]
 #CMD ["sh"]
