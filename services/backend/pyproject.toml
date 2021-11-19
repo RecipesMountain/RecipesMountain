@@ -11,6 +11,8 @@ pydantic = {extras = ["email"], version = "^1.8.2"}
 SQLAlchemy = "^1.4.11"
 requests = "^2.25.1"
 uvicorn = "^0.13.4"
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+passlib = "^1.7.4"
 
 [tool.poetry.dev-dependencies]
 mypy = "^0.901"
