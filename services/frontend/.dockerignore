@@ -1,0 +1,20 @@
+# Python
+**/__pycache__/
+**/.venv/
+**/.mypy_cache/
+
+# Node.js
+**/node_modules/
+
+# Readme
+**/README
+**/README.*
+
+# Git
+**/.git/
+**/.gitignore
+
+# Docker
+**/.dockerignore
+**/Dockerfile
+**/docker-compose.yml

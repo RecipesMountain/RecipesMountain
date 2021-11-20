@@ -1,17 +1,14 @@
-from typing import TYPE_CHECKING
+import uuid
 
-from sqlalchemy import Boolean, Column, Integer, String
-from sqlalchemy.orm import relationship
+from sqlalchemy import Boolean, Column, String
+from sqlalchemy.dialects.postgresql import UUID
 
 from app.db.base_class import Base
 
-if TYPE_CHECKING:
-    from .item import Item  # noqa: F401
-
 
 class User(Base):
-    id = Column(Integer, primary_key=True, index=True)
-    username = Column(String, index=True, nullable=False)
-    full_name = Column(String, nullable=True)
+    id = Column(UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4())
+    full_name = Column(String, index=True)
+    email = Column(String, unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
-    is_superuser = Column(Boolean(), default=False)
+    is_superuser = Column(Boolean, nullable=False, default=False)
