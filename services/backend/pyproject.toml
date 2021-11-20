@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "src"
+name = "app"
 version = "0.1.0"
 description = ""
 authors = ["noFrostoo <nofrost1a@gmail.com>"]
@@ -7,17 +7,21 @@ authors = ["noFrostoo <nofrost1a@gmail.com>"]
 [tool.poetry.dependencies]
 python = "^3.9"
 fastapi = "^0.65.2"
-pydantic = "^1.8.1"
+pydantic = {extras = ["email"], version = "^1.8.2"}
 SQLAlchemy = "^1.4.11"
 requests = "^2.25.1"
 uvicorn = "^0.13.4"
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+passlib = "^1.7.4"
+alembic = "^1.7.5"
+psycopg2 = "^2.9.2"
 
 [tool.poetry.dev-dependencies]
 mypy = "^0.901"
 pytest = "^5.2"
 
 [tool.poetry.scripts]
-run = "src:main"
+run = "app:main"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

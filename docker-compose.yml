@@ -9,7 +9,7 @@ services:
       - POSTGRES_DB=test
     ports:
     - "5432:5432"
-    container_name: "postgres"
+    container_name: "postgres-recipemountain"
     volumes:
     - postgres:/var/lib/postgresql/data
   
@@ -18,11 +18,16 @@ services:
     links:
       - "postgres:database"
     environment:
-      - DB_HOST=database 
-      - DB_URL=postgres://user:pass@database:5432/test
+      - PROJECT_NAME=RecipeMountain
+      - FIRST_SUPERUSER=admin@example.com
+      - FIRST_SUPERUSER_PASSWORD=admin
+      - POSTGRES_SERVER=database:5432
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=test
     ports:
       - "5000:5000"
-    container_name: "backend"
+    container_name: "backend-recipemountain"
     depends_on:
       - postgres
   
@@ -35,6 +40,7 @@ services:
       - '/app/node_modules'
     ports:
       - "8080:8080"
+    container_name: "frontend-recipemountain"
 
 volumes:
   postgres:
