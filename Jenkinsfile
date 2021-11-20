@@ -14,6 +14,7 @@ pipeline {
       steps {
         script {
           sh """
+          export PATH=${PATH}:/usr/local/bin
           pip install -r requirements.txt
           pip install coverage
           """
