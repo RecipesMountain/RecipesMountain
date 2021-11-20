@@ -53,7 +53,7 @@ pipeline {
           alwaysLinkToLastBuild: true,
           keepAll: true,
           reportDir: 'reports',
-          reportFiles: 'htmlcov/index.html', 'htmlcov/style.css'
+          reportFiles: 'htmlcov/index.html, htmlcov/style.css', 
           reportName: 'Test coverage',
           reportTitles: 'Test coverage'])
       }
