@@ -3,7 +3,9 @@ pipeline {
     timestamps() // Append timestamps to each line
     timeout(time: 20, unit: 'MINUTES') // Set a timeout on the total execution time of the job
   }
-  agent any
+  agent {
+    docker { image 'python:3.9-alpine' }
+  }
   stages {  // Define the individual processes, or stages, of your CI pipeline
     stage('Checkout') { // Checkout (git clone ...) the projects repository
       steps {
@@ -14,7 +16,6 @@ pipeline {
       steps {
         script {
           sh """
-          export PATH=${PATH}:/usr/local/bin
           pip install -r requirements.txt
           pip install coverage
           """
