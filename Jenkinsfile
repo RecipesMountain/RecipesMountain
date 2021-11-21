@@ -15,11 +15,10 @@ pipeline {
         script {
           sh """
           docker-compose up -d
-          docker container ls
-          docker container logs 
+          docker container ls 
           cd services/backend
           docker build --target=test  -t backend-test .
-          docker run -i --env-file .env-test backend-test '/venv/bin/pytest'
+          docker run -i --env-file .env-test  --network recipesmountain_default --link  postgres-recipemountain:database backend-test '/venv/bin/pytest'
           docker run -i backend-test '/venv/bin/black' '--check' '--diff' '--verbose'  '.' 
  
           pip install -r requirements.txt
