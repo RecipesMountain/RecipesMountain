@@ -15,15 +15,8 @@ pipeline {
         script {
           sh """
           docker-compose up -d
-          docker container ls 
-          docker network ls
           cd services/backend
           docker build --target=test  -t backend-test .
-          docker run -i --env-file .env-test  --network recipesmountain_jenkinsci_default --link  postgres-recipemountain:database backend-test '/venv/bin/pytest'
-          docker run -i backend-test '/venv/bin/black' '--check' '--diff' '--verbose'  '.' 
- 
-          pip install -r requirements.txt
-          pip install coverage
           """
         }
       }
@@ -32,7 +25,7 @@ pipeline {
       steps {
         script {
           sh """
-          black --check .
+          docker run -i backend-test '/venv/bin/black' '--check' '--diff' '--verbose'  '.' 
           """
         }
       }
@@ -41,7 +34,7 @@ pipeline {
       steps {
         script {
           sh """
-          pytest --junitxml=report.xml
+            docker run -i --env-file .env-test  --network recipesmountain_jenkinsci_default --link  postgres-recipemountain:database backend-test '/venv/bin/pytest'
           """
         }
       }
@@ -50,18 +43,19 @@ pipeline {
       steps {
         script {
           sh """
-          coverage run -m pytest
-          coverage html
-          """
+          export filehash=$(find backend/* -type f \( -exec sha1sum "$PWD"/{} \; \) | awk '{print $1}' | sort | sha1sum)
+          docker run -i --env-file .env-test  --network recipesmountain_default --link  postgres-recipemountain:database backend-test '/venv/bin/coverage' 'run' '-m' 'pytest' 
+          docker run -i -v /shared:/shared --env-file .env-test  --network recipesmountain_default --link  postgres-recipemountain:database backend-test '/venv/bin/coverage' 'html' '-d' '/shared/$filehash' 
+          """          // coverage html
         }
-        publishHTML (target : [allowMissing: false,
-          alwaysLinkToLastBuild: true,
-          keepAll: true,
-          reportDir: 'reports',
-          reportFiles: 'htmlcov/index.html, htmlcov/style.css', 
-          reportName: 'Test coverage',
-          reportTitles: 'Test coverage'])
-      }
+      //   publishHTML (target : [allowMissing: false,
+      //     alwaysLinkToLastBuild: true,
+      //     keepAll: true,
+      //     reportDir: 'reports',
+      //     reportFiles: 'htmlcov/index.html, htmlcov/style.css', 
+      //     reportName: 'Test coverage',
+      //     reportTitles: 'Test coverage'])
+      // }
     }
   }  
 }
