@@ -15,6 +15,8 @@ pipeline {
         script {
           sh """
           docker-compose up -d
+          docker container ls
+          docker container logs 
           cd services/backend
           docker build --target=test  -t backend-test .
           docker run -i --env-file .env-test backend-test '/venv/bin/pytest'
