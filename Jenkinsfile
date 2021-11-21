@@ -16,7 +16,8 @@ pipeline {
       steps {
         script {
           sh """
-          cd service/backend
+          ls
+          cd RecipesMountain/service/backend
           pip install -r requirements.txt
           pip install coverage
           """
