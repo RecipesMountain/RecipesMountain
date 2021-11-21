@@ -3,9 +3,7 @@ pipeline {
     timestamps() // Append timestamps to each line
     timeout(time: 20, unit: 'MINUTES') // Set a timeout on the total execution time of the job
   }
-  agent {
-    docker { image 'ubuntu:20.04' }
-  }
+  agent any
   stages {  // Define the individual processes, or stages, of your CI pipeline
     stage('Checkout') { // Checkout (git clone ...) the projects repository
       steps {
@@ -16,19 +14,6 @@ pipeline {
       steps {
         script {
           sh """
-          sudo apt-get update
-          sudo apt-get install \
-          ca-certificates \
-          curl \
-          gnupg \
-          lsb-release
-          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-          echo \
-          "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
-          $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-          sudo apt-get update
-          sudo apt-get install docker-ce docker-ce-cli containerd.io
-          
           cd services/backend
           docker build --target=test  -t backend-test .
           docker run -it backend-test '/venv/bin/pytest'
