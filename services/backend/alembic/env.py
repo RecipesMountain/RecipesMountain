@@ -25,12 +25,13 @@ target_metadata = None
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
 
+
 def get_db_url():
     return "postgresql://{}:{}@{}/{}".format(
-        os.environ['POSTGRES_USER'],
-        os.environ['POSTGRES_PASSWORD'],
-        os.environ['POSTGRES_SERVER'],
-        os.environ['POSTGRES_DB']
+        os.environ["POSTGRES_USER"],
+        os.environ["POSTGRES_PASSWORD"],
+        os.environ["POSTGRES_SERVER"],
+        os.environ["POSTGRES_DB"],
     )
 
 
@@ -72,9 +73,7 @@ def run_migrations_online():
     )
 
     with connectable.connect() as connection:
-        context.configure(
-            connection=connection, target_metadata=target_metadata
-        )
+        context.configure(connection=connection, target_metadata=target_metadata)
 
         with context.begin_transaction():
             context.run_migrations()
