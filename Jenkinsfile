@@ -16,7 +16,7 @@ pipeline {
       steps {
         script {
           sh """
-          apk add postgresql-dev
+          sudo apk add postgresql-dev
           cd services/backend
           pip install -r requirements.txt
           pip install coverage
