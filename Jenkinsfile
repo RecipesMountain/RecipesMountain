@@ -16,6 +16,7 @@ pipeline {
           sh """
           docker-compose up -d
           docker container ls 
+          docker network ls
           cd services/backend
           docker build --target=test  -t backend-test .
           docker run -i --env-file .env-test  --network recipesmountain_default --link  postgres-recipemountain:database backend-test '/venv/bin/pytest'
