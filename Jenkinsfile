@@ -16,8 +16,8 @@ pipeline {
           sh """
           cd services/backend
           docker build --target=test  -t backend-test .
-          docker run -it backend-test '/venv/bin/pytest'
-          docker run -it backend-test '/venv/bin/black' '--check' '--diff' '--verbose'  '.' 
+          docker run -i backend-test '/venv/bin/pytest'
+          docker run -i backend-test '/venv/bin/black' '--check' '--diff' '--verbose'  '.' 
  
           pip install -r requirements.txt
           pip install coverage
