@@ -21,7 +21,7 @@ pipeline {
         }
       }
     }
-    stage('Linting') { // Run pylint against your code
+    stage('Linting') {
       steps {
         script {
           sh """
@@ -41,21 +41,14 @@ pipeline {
         }
       }
     }
-    stage('Test coverage') { // Perform unit testing
+    stage('Test coverage') {
       steps {
         script {
           sh """
           export filehash=\$(find services/backend/ -type f -print0  | xargs -0 sha1sum | awk '{print \$1}' | sha1sum | awk '{print \$1}' )
           docker run -i  -v /shared:/shared --env-file services/backend/.env  --network recipesmountain_jenkinsci_default --link  postgres-recipemountain:database backend-test '/bin/sh' '-c' "/venv/bin/coverage run -m pytest && mkdir -p /shared/\$filehash && /venv/bin/coverage html -d /shared/\$filehash" 
-          """          // coverage html
+          """       
         }
-      //   publishHTML (target : [allowMissing: false,
-      //     alwaysLinkToLastBuild: true,
-      //     keepAll: true,
-      //     reportDir: 'reports',
-      //     reportFiles: 'htmlcov/index.html, htmlcov/style.css', 
-      //     reportName: 'Test coverage',
-      //     reportTitles: 'Test coverage'])
       }
     }
   }  
