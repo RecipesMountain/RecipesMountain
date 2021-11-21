@@ -45,7 +45,7 @@ pipeline {
       steps {
         script {
           sh """
-          export filehash=\$(find services/backend/* -type f \\( -exec sha1sum "\$PWD"/{} \\; \\) | awk '{print \$1}' | sort | sha1sum)
+          export filehash=\$(find services/backend/ -type f -print0  | xargs -0 sha1sum | awk '{print \$1}' | sha1sum | awk '{print \$1}' )
           docker run -i  -v /shared:/shared --env-file services/backend/.env  --network recipesmountain_jenkinsci_default --link  postgres-recipemountain:database backend-test '/bin/sh' '-c' "/venv/bin/coverage run -m pytest && mkdir -p /shared/\$filehash && /venv/bin/coverage html -d /shared/\$filehash" 
           """          // coverage html
         }
