@@ -5,6 +5,8 @@ pipeline {
         stage('Hello world') {
             steps {
                 echo 'Hello world'
+                slackSend(channel: "jenkins-ci-sages-4", message: "Build OK.")
+)
             }
         }
     }
