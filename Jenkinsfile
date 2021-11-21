@@ -4,7 +4,7 @@ pipeline {
     timeout(time: 20, unit: 'MINUTES') // Set a timeout on the total execution time of the job
   }
   agent {
-    docker { image 'python:3.9-alpine' }
+    docker { image 'ubuntu:20.04' }
   }
   stages {  // Define the individual processes, or stages, of your CI pipeline
     stage('Checkout') { // Checkout (git clone ...) the projects repository
@@ -16,8 +16,11 @@ pipeline {
       steps {
         script {
           sh """
-          sudo apk add postgresql-dev
           cd services/backend
+          docker build --target=test  -t backend-test .
+          docker run -it backend-test '/venv/bin/pytest'
+          docker run -it backend-test '/venv/bin/black' '--check' '--diff' '--verbose'  '.' 
+ 
           pip install -r requirements.txt
           pip install coverage
           """

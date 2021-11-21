@@ -23,6 +23,12 @@ RUN poetry export -f requirements.txt | /venv/bin/pip install -r /dev/stdin
 COPY . .
 RUN poetry build && /venv/bin/pip install dist/*.whl
 
+FROM builder as test
+
+RUN poetry export --dev --without-hashes -f requirements.txt | /venv/bin/pip install -r /dev/stdin
+COPY . .
+RUN poetry build && /venv/bin/pip install dist/*.whl
+
 FROM base as final
 
 RUN apk add --no-cache libffi libpq
