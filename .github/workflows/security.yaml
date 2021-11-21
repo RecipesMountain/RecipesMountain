@@ -1,0 +1,85 @@
+name: Security
+
+on: 
+  pull_request:
+    branches:
+      - main
+
+jobs:  
+  snyk-python:
+    name: snyk
+    runs-on: ubuntu-latest
+    permissions:
+      # required for all workflows
+      security-events: write
+    outputs:
+      status: ${{ job.status }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/python@master
+        continue-on-error: true # To make sure that SARIF upload gets called
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --sarif-file-output=snyk.sarif services/backend/
+          json: true
+      - name: Upload result to GitHub Code Scanning
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: snyk.sarif
+      - uses: actions/upload-artifact@v2
+        with:
+          name: python snyk
+          path: snyk.json
+
+  snyk-node:
+    name: snyk
+    runs-on: ubuntu-latest
+    permissions:
+      # required for all workflows
+      security-events: write
+    outputs:
+      status: ${{ job.status }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/node@master
+        continue-on-error: true # To make sure that SARIF upload gets called
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --sarif-file-output=snyk.sarif services/frontend/
+          json: true
+      - name: Upload result to GitHub Code Scanning
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: snyk.sarif
+      - uses: actions/upload-artifact@v2
+        with:
+          name: node snyk
+          path: snyk.json
+  
+  CodeQL:
+    name: codeql
+    runs-on: ubuntu-latest
+
+    permissions:
+      # required for all workflows
+      security-events: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Initializes the CodeQL tools for scanning.
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v1
+        with:
+          languages: javascript, python
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v1
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v1
