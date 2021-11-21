@@ -1,0 +1,84 @@
+name: CI
+
+on: 
+  push:
+    branches-ignore:
+      - main 
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  Test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: Install Poetry
+        run: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+      - name: Install packages
+        run: |
+          cd services/backend/
+          ~/.poetry/bin/poetry install
+      - name: Start dockers
+        run: docker-compose up -d
+      - name: Test backend running
+        run: curl localhost:5000
+      - name: Test DB running
+        env: 
+          DOCKER_CONTAINER_NAME: "postgres-recipemountain"
+        run: timeout 90s bash -c "until docker exec $DOCKER_CONTAINER_NAME pg_isready ; do sleep 5 ; done"
+      - name: Test frontend running
+        run: timeout 300s bash -c "while !(curl localhost:8080); do sleep 1; done"
+      - name: Run backend unit test test
+        env:
+          PROJECT_NAME: RecipeMountain
+          FIRST_SUPERUSER: admin@example.com
+          FIRST_SUPERUSER_PASSWORD: admin
+          POSTGRES_SERVER: localhost:5432
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: pass
+          POSTGRES_DB: test
+        run: |
+          cd services/backend/
+          ~/.poetry/bin/poetry run pytest
+  
+  Lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16.0
+      - name: cache node 
+        id: cache-node
+        if: always()
+        uses: actions/cache@v2
+        with:
+          path: |
+            **/node_modules
+            **/.eslintcache
+            ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node
+      - name: Install node node_modules
+        if: steps.cache-node.outputs.cache-hit != 'true'
+        run: |
+          cd services/frontend
+          npm install
+      - name: Run JS Lint
+        if: always()
+        run: |
+          cd services/frontend
+          npm run lint
+      - name: lint backend
+        uses: psf/black@stable
+        if: always()
+        with:
+          options: "--check --verbose --diff"
+          src: "./services/backend/app"
+      
