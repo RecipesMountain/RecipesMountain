@@ -55,7 +55,7 @@ pipeline {
       //     reportFiles: 'htmlcov/index.html, htmlcov/style.css', 
       //     reportName: 'Test coverage',
       //     reportTitles: 'Test coverage'])
-      // }
+      }
     }
   }  
 }
