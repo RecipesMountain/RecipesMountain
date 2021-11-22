@@ -30,7 +30,7 @@ pipeline {
           echo "build workplace is ${env.WORKSPACE}"
           echo 'Testing Nexus pushing'
           """
-          dockerImg = docker.build("${imageName}", "../services/backend")
+          dockerImg = docker.build("${imageName}", ${env.WORKSPACE} +"/services/backend")
           sh 'echo "Testing Nexus pushing"'
         }
       }
