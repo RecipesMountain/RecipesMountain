@@ -22,6 +22,7 @@ pipeline {
           sh """
           docker-compose up -d
           cd services/backend
+          pwd
           echo "build URL is ${env.BUILD_URL}"
           echo "build workplace is ${env.WORKSPACE}"
           docker build --target=test  -t backend-test .
