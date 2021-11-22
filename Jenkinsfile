@@ -26,7 +26,7 @@ pipeline {
           docker build --target=test  -t backend-test .
           echo 'Testing Nexus pushing'
           """
-          dockerImg = docker.build("${imageName}:1")
+          dockerImg = docker.build("${imageName}")
           docker.withRegistry(DOCKER_REPO_ADDRESS, registryCred){
               dockerImg.push()
           }
