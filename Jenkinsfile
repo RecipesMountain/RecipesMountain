@@ -22,10 +22,14 @@ pipeline {
           sh """
           docker-compose up -d
           cd services/backend
-          
+          echo "build URL is ${env.BUILD_URL}"
+          echo "build workplace is ${env.WORKSPACE}"
+          docker build --target=test  -t backend-test .
+          echo "build URL is ${env.BUILD_URL}"
+          echo "build workplace is ${env.WORKSPACE}"
           echo 'Testing Nexus pushing'
           """
-          dockerImg = docker.build("${imageName}")
+//           dockerImg = docker.build("${imageName}")
           sh 'echo "Testing Nexus pushing"'
         }
       }
