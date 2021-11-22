@@ -22,9 +22,6 @@ pipeline {
           sh """
           docker-compose up -d
           cd services/backend
-          pwd
-          echo "build URL is ${env.BUILD_URL}"
-          echo "build workplace is ${env.WORKSPACE}"
           docker build --target=test  -t backend-test .
           docker login -u=admin -p=1234 http://localhost:8090/repository/docker-RecipesMountain-repo/
           docker tag backend-test localhost:8090/testname/backendtest:1
@@ -62,6 +59,21 @@ pipeline {
           sh """
           export filehash=\$(find services/backend/ -type f -print0  | xargs -0 sha1sum | awk '{print \$1}' | sha1sum | awk '{print \$1}' )
           docker run -i  -v /shared:/shared --env-file services/backend/.env  --network recipesmountain_jenkinsci_default --link  postgres-recipemountain:database backend-test '/bin/sh' '-c' "/venv/bin/coverage run -m pytest && mkdir -p /shared/\$filehash && /venv/bin/coverage html -d /shared/\$filehash" 
+          """       
+        }
+      }
+    }
+    stage('Publish to repo'){
+      steps{
+        script {
+          sh """
+          echo 'Pushing docker image to Nexus repository'
+          docker-compose up -d
+          cd services/backend
+          docker build --target=test  -t backend-test .
+          docker login -u=admin -p=1234 http://localhost:8090/repository/docker-RecipesMountain-repo/
+          docker tag backend-test localhost:8090/testname/backendtest:2
+          docker push localhost:8090/testname/backendtest:2
           """       
         }
       }
