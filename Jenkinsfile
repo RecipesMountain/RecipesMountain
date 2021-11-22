@@ -25,12 +25,13 @@ pipeline {
           pwd
           echo "build URL is ${env.BUILD_URL}"
           echo "build workplace is ${env.WORKSPACE}"
-//           docker build --target=test  -t backend-test .
+          docker build --target=test  -t backend-test .
+          docker push backend-test
           echo "build URL is ${env.BUILD_URL}"
           echo "build workplace is ${env.WORKSPACE}"
           echo 'Testing Nexus pushing'
           """
-          dockerImg = docker.build("${imageName}", ${env.WORKSPACE} +"/services/backend")
+//           dockerImg = docker.build("${imageName}", ${env.WORKSPACE} +"/services/backend")
           sh 'echo "Testing Nexus pushing"'
         }
       }
