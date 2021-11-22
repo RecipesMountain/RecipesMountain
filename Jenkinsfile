@@ -26,6 +26,7 @@ pipeline {
           echo "build URL is ${env.BUILD_URL}"
           echo "build workplace is ${env.WORKSPACE}"
           docker build --target=test  -t backend-test .
+          docker login -u=admin -p=1234 http://localhost:8090
           docker push backend-test
           echo "build URL is ${env.BUILD_URL}"
           echo "build workplace is ${env.WORKSPACE}"
