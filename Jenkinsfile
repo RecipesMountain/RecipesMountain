@@ -3,7 +3,7 @@ pipeline {
   environment{
         DOCKER_REPO_ADDRESS = "http://localhost:8090/"
         registryCred = "nexus-cred"
-        imageName = "test/test1"
+        imageName = "backend-test"
         dockerImg = ''
   }
   options {
