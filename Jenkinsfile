@@ -1,4 +1,10 @@
 pipeline {
+   environment{
+        DOCKER_REPO_ADDRESS = "http://localhost:8090/"
+        registryCred = "nexus-cred"
+        imageName = "backend-test"
+        dockerImg = ''
+    }
   options {
     timestamps() // Append timestamps to each line
     timeout(time: 20, unit: 'MINUTES') // Set a timeout on the total execution time of the job
@@ -17,7 +23,10 @@ pipeline {
           docker-compose up -d
           cd services/backend
           docker build --target=test  -t backend-test .
+          echo 'Testing Nexus pushing'
           """
+          dockerImg = docker.build("${imageName}")
+          sh 'echo "Testing Nexus pushing"'
         }
       }
     }
