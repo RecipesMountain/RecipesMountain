@@ -72,11 +72,21 @@ pipeline {
           cd services/backend
           docker build --target=test  -t backend-test .
           docker login -u=admin -p=1234 http://localhost:8090/repository/docker-RecipesMountain-repo/
-          docker tag backend-test localhost:8090/testname/backendtest:2
-          docker push localhost:8090/testname/backendtest:2
+          docker tag backend-test localhost:8090/testname/backendtest:${env.BUILD_NUMBER}
+          docker push localhost:8090/testname/backendtest:${env.BUILD_NUMBER}
           """       
+
         }
       }
     }
+  }
+  post{
+      success{
+        slackSend channel: 'jenkins-ci-sages-4', color: 'good', message: 'Build:' + ${env.BUILD_TAG} + 'on branch ' + ${env.BRANCH_NAME} + ' finished with success.'
+      }
+      
+      failure{
+        slackSend channel: 'jenkins-ci-sages-4', color: 'danger', message: 'Build:' + env.BUILD_TAG + 'on branch ' + ${env.BRANCH_NAME} + ' failed.'
+      }
   }  
 }
