@@ -4,6 +4,7 @@ pipeline {
         registryCred = "nexus-cred"
         imageName = "backend-test"
         dockerImg = ''
+        partOfMess = "Build: ${env.BUILD_TAG} on branch ${env.BRANCH_NAME}"
     }
   options {
     timestamps() // Append timestamps to each line
@@ -81,7 +82,6 @@ pipeline {
     }
   }
   post{
-     partOfMess = "Build: ${env.BUILD_TAG} on branch ${env.BRANCH_NAME}"
       success{
         slackSend channel: 'jenkins-ci-sages-4', color: 'good', message:  partOfMess + ' finished with success.'
       }
