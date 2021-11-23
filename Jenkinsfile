@@ -81,12 +81,13 @@ pipeline {
     }
   }
   post{
+     partOfMess = "Build: ${env.BUILD_TAG} on branch ${env.BRANCH_NAME}"
       success{
-        slackSend channel: 'jenkins-ci-sages-4', color: 'good', message: 'Build: ${env.BUILD_TAG} on branch ${env.BRANCH_NAME}  finished with success.'
+        slackSend channel: 'jenkins-ci-sages-4', color: 'good', message:  partOfMess + ' finished with success.'
       }
       
       failure{
-         slackSend channel: 'jenkins-ci-sages-4', color: 'danger', message: 'Build: ${env.BUILD_TAG} on branch ${env.BRANCH_NAME}  failed.'
+        slackSend channel: 'jenkins-ci-sages-4', color: 'danger', message: partOfMess + ' failed.'
       }
   }  
 }
