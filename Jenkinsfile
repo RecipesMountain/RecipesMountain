@@ -24,13 +24,7 @@ pipeline {
           docker-compose up -d
           cd services/backend
           docker build --target=test  -t backend-test .
-          docker login -u=admin -p=1234 http://localhost:8090/repository/docker-RecipesMountain-repo/
-          docker tag backend-test localhost:8090/testname/backendtest:1
-          docker push localhost:8090/testname/backendtest:1
-          echo 'Testing Nexus pushing'
           """
-//           dockerImg = docker.build("${imageName}", "./services/backend")
-          sh 'echo "Testing Nexus pushing"'
         }
       }
     }
@@ -75,7 +69,7 @@ pipeline {
           echo 'Pushing docker image to Nexus repository'
           docker-compose up -d
           cd services/backend
-          docker build --target=test  -t backend .
+          docker build -t backend .
           docker login -u=admin -p=1234 http://localhost:8090/repository/docker-RecipesMountain-repo/
           docker tag backend localhost:8090/releases/backend:${env.BUILD_NUMBER}
           docker push localhost:8090/releases/backend:${env.BUILD_NUMBER}

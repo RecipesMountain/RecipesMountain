@@ -25,7 +25,12 @@ jobs:
       - name: Start dockers
         run: docker-compose up -d
       - name: Test backend running
-        run: curl localhost:5000
+        run: |
+            curl --connect-timeout 5 \
+            --max-time 10 \
+            --retry 5 \
+            --retry-delay 0 \
+            --retry-max-time 60 localhost:5000
       - name: Test DB running
         env: 
           DOCKER_CONTAINER_NAME: "postgres-recipemountain"
