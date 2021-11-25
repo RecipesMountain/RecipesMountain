@@ -65,16 +65,20 @@ pipeline {
       }
     }
     stage('Publish to repo'){
+       when{
+           branch "main"
+       }
       steps{
+         
         script {
           sh """
           echo 'Pushing docker image to Nexus repository'
           docker-compose up -d
           cd services/backend
-          docker build --target=test  -t backend-test .
+          docker build --target=test  -t backend .
           docker login -u=admin -p=1234 http://localhost:8090/repository/docker-RecipesMountain-repo/
-          docker tag backend-test localhost:8090/testname/backendtest:${env.BUILD_NUMBER}
-          docker push localhost:8090/testname/backendtest:${env.BUILD_NUMBER}
+          docker tag backend localhost:8090/testname/backend:${env.BUILD_NUMBER}
+          docker push localhost:8090/releases/backend:${env.BUILD_NUMBER}
           """       
 
         }
