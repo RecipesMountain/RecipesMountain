@@ -66,7 +66,7 @@ pipeline {
     }
     stage('Publish to repo'){
        when{
-           branch "jenkinsCi"
+           branch "main"
        }
       steps{
          
