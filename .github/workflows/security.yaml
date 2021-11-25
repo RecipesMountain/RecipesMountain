@@ -20,7 +20,8 @@ jobs:
         run: |
           curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
           cd services/backend/
-          ~/.poetry/bin/poetry install
+          poetry export --dev --without-hashes -f requirements.txt
+          pip install -r requirements.txt
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/python@master
         continue-on-error: true # To make sure that SARIF upload gets called
