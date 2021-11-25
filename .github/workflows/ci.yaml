@@ -27,12 +27,7 @@ jobs:
       - name: show backend logs
         run:  docker container logs backend-recipemountain
       - name: Test backend running
-        run: |
-            curl --connect-timeout 30 \
-            --max-time 30 \
-            --retry 5 \
-            --retry-delay 5 \
-            --retry-max-time 60 localhost:5000
+        run: timeout 300s bash -c "while !(curl localhost:5000); do sleep 1; done"
       - name: Test DB running
         env: 
           DOCKER_CONTAINER_NAME: "postgres-recipemountain"
