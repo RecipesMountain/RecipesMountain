@@ -66,7 +66,6 @@ pipeline {
         script {
           sh """
           echo 'Pushing docker image to Nexus repository'
-          docker-compose up -d
           cd services/backend
           docker build -t backend .
           docker login -u=admin -p=1234 http://localhost:8090/repository/docker-RecipesMountain-repo/
