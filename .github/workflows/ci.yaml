@@ -26,6 +26,7 @@ jobs:
         run: docker-compose up -d
       - name: Test backend running
         run: |
+            docker container logs backend-recipemountain
             curl --connect-timeout 5 \
             --max-time 10 \
             --retry 5 \
