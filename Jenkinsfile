@@ -82,7 +82,7 @@ pipeline {
     }
     stage('Deploy'){
        when{
-           branch "main"
+           branch "ciDeploy"
        }
       steps{
         script {
