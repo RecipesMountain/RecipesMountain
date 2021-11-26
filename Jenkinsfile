@@ -76,6 +76,23 @@ pipeline {
         }
       }
     }
+    stage('Publish to repo'){
+       when{
+           branch "main"
+       }
+      steps{
+        script {
+          sh """
+          docker-compose down
+          """      
+        }
+        script {
+          sh """
+          docker-compose up -d --build
+          """       
+        }
+      }
+    }
   }
   post{
       success{
