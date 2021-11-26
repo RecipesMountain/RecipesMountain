@@ -21,6 +21,7 @@ pipeline {
       steps {
         script {
           sh """
+          docker-compose -p recipesmountain up -d
           cd services/backend
           docker build --target=test  -t backend-test .
           """
