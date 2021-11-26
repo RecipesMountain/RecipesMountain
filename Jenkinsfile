@@ -44,7 +44,7 @@ pipeline {
         script {
           sh """
           cd services/backend
-          docker run -i --env-file .env  --network recipesmountain_jenkinsci_default --link  postgres-recipemountain:database backend-test '/venv/bin/pytest'
+          docker run -i --env-file .env  --network recipemountain-network --link  postgres-recipemountain:database backend-test '/venv/bin/pytest'
           """
         }
       }
@@ -54,7 +54,7 @@ pipeline {
         script {
           sh """
           export filehash=\$(find services/backend/ -type f -print0  | xargs -0 sha1sum | awk '{print \$1}' | sha1sum | awk '{print \$1}' )
-          docker run -i  -v /shared:/shared --env-file services/backend/.env  --network recipesmountain_jenkinsci_default --link  postgres-recipemountain:database backend-test '/bin/sh' '-c' "/venv/bin/coverage run -m pytest && mkdir -p /shared/\$filehash && /venv/bin/coverage html -d /shared/\$filehash" 
+          docker run -i  -v /shared:/shared --env-file services/backend/.env  --network recipemountain-network --link  postgres-recipemountain:database backend-test '/bin/sh' '-c' "/venv/bin/coverage run -m pytest && mkdir -p /shared/\$filehash && /venv/bin/coverage html -d /shared/\$filehash" 
           """       
         }
       }
