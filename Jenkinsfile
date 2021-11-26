@@ -71,12 +71,16 @@ pipeline {
           docker login -u=admin -p=1234 http://localhost:8090/repository/docker-RecipesMountain-repo/
           docker tag backend localhost:8090/releases/backend:${env.BUILD_NUMBER}
           docker push localhost:8090/releases/backend:${env.BUILD_NUMBER}
+          # cd ../../
+          # cd services/frontend
+          # docker build -t frontend .
+          # docker tag frontend localhost:8090/releases/frontend:${env.BUILD_NUMBER}
+          # docker push localhost:8090/releases/frontend:${env.BUILD_NUMBER}
           """       
-
         }
       }
     }
-    stage('Publish to repo'){
+    stage('Deploy'){
        when{
            branch "main"
        }
