@@ -85,8 +85,6 @@ pipeline {
           sh """
           docker-compose down
           """      
-        }
-        script {
           sh """
           docker-compose up -d --build
           """       
