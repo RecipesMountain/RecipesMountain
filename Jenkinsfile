@@ -21,6 +21,8 @@ pipeline {
       steps {
         script {
           sh """
+          docker-compose down
+          docker-compose up -d --build
           cd services/backend
           docker build --target=test  -t backend-test .
           """
