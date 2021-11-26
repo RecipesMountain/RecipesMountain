@@ -21,8 +21,6 @@ pipeline {
       steps {
         script {
           sh """
-          docker-compose -p recipesmountain down
-          docker-compose -p recipesmountain up -d --build
           cd services/backend
           docker build --target=test  -t backend-test .
           """
@@ -78,21 +76,6 @@ pipeline {
           # docker build -t frontend .
           # docker tag frontend localhost:8090/releases/frontend:${env.BUILD_NUMBER}
           # docker push localhost:8090/releases/frontend:${env.BUILD_NUMBER}
-          """       
-        }
-      }
-    }
-    stage('Deploy'){
-       when{
-           branch "ciDeploy"
-       }
-      steps{
-        script {
-          sh """
-          docker-compose down
-          """      
-          sh """
-          docker-compose up -d --build
           """       
         }
       }
