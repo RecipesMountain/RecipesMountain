@@ -1,0 +1,28 @@
+version: "3.3"
+
+services:
+  jenkins:
+    build: ./jenkins
+    container_name: jenkins-recipemountain
+    ports:
+      - "2137:8080"
+      - "50000:50000"
+    volumes:
+      - jenkinsData:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+  nexus:
+    container_name: nexus-recipemountain
+    image: sonatype/nexus3
+    ports:
+      - "21370:8081"
+    volumes:
+      - nexus-data:/nexus-data
+  smee_client:
+    command: -u https://smee.io/PGmdhPk8tuMJSXP -t http://localhost:8080/github-webhook/
+    image: deltaprojects/smee-client
+
+volumes:
+  jenkinsData:
+    external: true
+  nexus-data:
+    external: true
