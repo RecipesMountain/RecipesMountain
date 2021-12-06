@@ -29,5 +29,6 @@ def home():
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
 
+
 def uvicorn_main():
     uvicorn.run("app.main:app", host="0.0.0.0", port=5000, reload=True)
