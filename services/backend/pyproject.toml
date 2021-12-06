@@ -14,18 +14,18 @@ uvicorn = "^0.13.4"
 python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 passlib = "^1.7.4"
 alembic = "^1.7.5"
-psycopg2 = "^2.9.2"
-black = "^21.11b1"
+psycopg2-binary = "^2.9.2"
 coverage = "^6.1.2"
+python-multipart = "^0.0.5"
 
 [tool.poetry.dev-dependencies]
 mypy = "^0.901"
 pytest = "^5.2"
+black = "^21.11b1"
 
 [tool.poetry.scripts]
-run = "app:main"
+run = "app.main:uvicorn_main"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
-
