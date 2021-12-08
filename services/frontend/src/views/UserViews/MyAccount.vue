@@ -1,0 +1,1 @@
+// manage your account like change password or change your email
