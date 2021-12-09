@@ -1,32 +1,39 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
+  <v-app>
+    <AppBar/>
+    <v-main>
+      <v-sheet
+      id="scrolling-techniques-3"
+      class="overflow-y-auto"
+      >
+      <router-link to="/">Main</router-link> |
       <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+      <router-view/>
+      </v-sheet>
+    </v-main>
+    <Footer/>
+  </v-app>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import Footer from "@/components/layout/Footer.vue"
+import AppBar from "@/components/layout/AppBar.vue"
 
-#nav {
-  padding: 30px;
-}
+export default {
+  name: 'App',
+  components: {
+    Footer,
+    AppBar
+  },
+  
+};
+</script>
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
 
-#nav a.router-link-exact-active {
-  color: #42b983;
+<style scoped>
+.logout {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
 }
 </style>
