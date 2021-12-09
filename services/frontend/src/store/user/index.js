@@ -72,7 +72,6 @@ const defaultState = {
                 await state.dispatch("actionCheckApiError", error);
             }
         },
-
         async actionCheckLoggedIn(state) {
             if (!state.state.isLoggedIn) {
                 let token = state.state.token;
@@ -95,20 +94,17 @@ const defaultState = {
                 }
             }
         },
-
         async actionLogOut(state) {
             removeLocalToken();
             state.commit("setToken", '');
             state.commit("setLoggedIn", false);
         },
-
         async actionCheckApiError(state, payload) {
             if (payload.response.status === 401) {
                 await state.dispatch("actionLogOut");
             }
         },
     },
-
     getters: {
         loginError: (state) => state.logInError,
         dashboardMiniDrawer: (state) => state.dashboardMiniDrawer,
