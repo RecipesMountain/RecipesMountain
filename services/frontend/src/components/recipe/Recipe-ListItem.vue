@@ -1,0 +1,1 @@
+// each recipe is represented as a small box
