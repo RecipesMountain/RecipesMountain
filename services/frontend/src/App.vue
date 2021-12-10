@@ -3,7 +3,6 @@
     <AppBar/>
     <v-main>
       <v-sheet
-      id="scrolling-techniques-3"
       class="overflow-y-auto"
       >
       <router-link to="/">Main</router-link> |

@@ -4,7 +4,6 @@
       absolute
       color="rgb(255, 202, 137)"
       elevate-on-scroll
-      scroll-target="#scrolling-techniques-7"
     >
 
         <v-img
@@ -31,7 +30,6 @@
 
       <v-spacer></v-spacer>
 
-
       <v-btn icon>
         <v-icon>mdi-food-variant</v-icon>
       </v-btn>
@@ -55,7 +53,7 @@
 
 <script>
 export default {
-
+  name: "AppBar",
 }
 </script>
 

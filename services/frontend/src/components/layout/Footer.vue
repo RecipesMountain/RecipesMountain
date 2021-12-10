@@ -1,12 +1,12 @@
 <template>
     <v-footer app class="footer">
-      <v-text>PIS 2021</v-text>
+      <div>PIS 2021</div>
     </v-footer>
 </template>
 
 <script>
 export default {
-
+  name: "AppFooter",
 }
 </script>
 
