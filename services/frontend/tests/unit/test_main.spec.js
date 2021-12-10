@@ -1,20 +1,9 @@
 import { createLocalVue, mount } from '@vue/test-utils'
-import HelloWorld from '@/components/HelloWorld.vue'
 import App from '@/App.vue'
+import AppBar from '@/components/layout/AppBar.vue'
 import Vuetify from 'vuetify'
-import Vue from 'vue'
 import VueRouter from 'vue-router'
-
-// describe('HelloWorld.vue', () => {
-//   it('renders props.msg when passed', () => {
-//     const msg = 'new message'
-//     const wrapper = mount(HelloWorld, {
-//       propsData: { msg: msg }
-//     })
-//     expect(wrapper.text()).toContain(msg)
-//   })
-// })
-
+import Vue from 'vue'
 
 describe('App mount layout', () => {
     const localVue = createLocalVue()
@@ -34,6 +23,19 @@ describe('App mount layout', () => {
         router,
       })
       const AppBar = wrapper.findComponent({name: 'AppBar'})
+      const Footer = wrapper.findComponent({name: 'AppFooter'})
       expect(AppBar.exists()).toBe(true)
+      expect(Footer.exists()).toBe(true)
     })
+
+    // it('appbar mount', () => {
+    //   const wrapper = mount(AppBar, {
+    //     localVue,
+    //     vuetify,
+    //     router,
+    //   })
+    //   const searchBar = wrapper.find('.v-text-field')
+    //   expect(AppBar.exists()).toBe(true)
+    //   expect(Footer.exists()).toBe(true)
+    // })
 })
