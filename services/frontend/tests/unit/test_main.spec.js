@@ -51,4 +51,15 @@ describe('App mount layout', () => {
       expect(buttons.length).toBe(4)
 
     })
+
+    // it('appbar mount', () => {
+    //   const wrapper = mount(AppBar, {
+    //     localVue,
+    //     vuetify,
+    //     router,
+    //   })
+    //   const searchBar = wrapper.find('.v-text-field')
+    //   expect(AppBar.exists()).toBe(true)
+    //   expect(Footer.exists()).toBe(true)
+    // })
 })
