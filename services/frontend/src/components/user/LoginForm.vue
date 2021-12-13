@@ -52,6 +52,7 @@ export default {
   methods: {
     submitLogIn() {
       console.log("Login", this.username, this.password);
+      this.$router.push("/")
     },
   },
 };
