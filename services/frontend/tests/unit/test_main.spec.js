@@ -3,7 +3,6 @@ import App from '@/App.vue'
 import AppBar from '@/components/layout/AppBar.vue'
 import Vuetify from 'vuetify'
 import VueRouter from 'vue-router'
-import Vue from 'vue'
 
 describe('App mount layout', () => {
     const localVue = createLocalVue()
