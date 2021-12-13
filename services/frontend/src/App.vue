@@ -6,7 +6,8 @@
       class="overflow-y-auto"
       >
       <router-link to="/">Main</router-link> |
-      <router-link to="/about">About</router-link>
+      <router-link to="/about">About</router-link> |
+      <router-link to="/register">Register-TEST</router-link>
       <router-view/>
       </v-sheet>
     </v-main>
