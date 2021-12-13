@@ -6,11 +6,11 @@ authors = ["noFrostoo <nofrost1a@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
-fastapi = "^0.65.2"
+fastapi = "^0.70.1"
 pydantic = {extras = ["email"], version = "^1.8.2"}
 SQLAlchemy = "^1.4.11"
 requests = "^2.25.1"
-uvicorn = "^0.13.4"
+uvicorn = "^0.16.0"
 python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 passlib = "^1.7.4"
 alembic = "^1.7.5"
@@ -19,8 +19,8 @@ coverage = "^6.1.2"
 python-multipart = "^0.0.5"
 
 [tool.poetry.dev-dependencies]
-mypy = "^0.901"
-pytest = "^5.2"
+mypy = "^0.910"
+pytest = "^6.2.5"
 black = "^21.11b1"
 
 [tool.poetry.scripts]
