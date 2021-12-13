@@ -28,14 +28,19 @@ describe('App mount layout', () => {
       expect(Footer.exists()).toBe(true)
     })
 
-    // it('appbar mount', () => {
-    //   const wrapper = mount(AppBar, {
-    //     localVue,
-    //     vuetify,
-    //     router,
-    //   })
-    //   const searchBar = wrapper.find('.v-text-field')
-    //   expect(AppBar.exists()).toBe(true)
-    //   expect(Footer.exists()).toBe(true)
-    // })
+    it('appbar proper mount', () => {
+      const wrapper = mount(AppBar, {
+        localVue,
+        vuetify,
+        router,
+      })
+      const searchBar = wrapper.find('.v-text-field')
+      const avatar = wrapper.find('.v-avatar')
+      const buttons = wrapper.findAll('.v-btn')
+      
+      expect(searchBar.exists()).toBe(true)
+      expect(avatar.exists()).toBe(true)
+      expect(buttons.length).toBe(4)
+
+    })
 })

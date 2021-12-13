@@ -6,27 +6,27 @@
       elevate-on-scroll
     >
 
-        <v-img
-            lazy-src="https://picsum.photos/id/11/10/6"
-            max-height="50"
-            max-width="100"
-            src="https://picsum.photos/id/11/500/300"
-        ></v-img>
+      <v-img
+          lazy-src="https://picsum.photos/id/11/10/6"
+          max-height="50"
+          max-width="100"
+          src="https://picsum.photos/id/11/500/300"
+      ></v-img>
 
-        <v-spacer></v-spacer>
+      <v-spacer></v-spacer>
 
-        <v-text-field
-            class="vertical-center"
-            label="Search"
-            placeholder="Enter food here"
-            filled
-            rounded
-            dense
-          ></v-text-field>
+      <v-text-field
+          class="vertical-center"
+          label="Search"
+          placeholder="Enter food here"
+          filled
+          rounded
+          dense
+        ></v-text-field>
 
-        <v-btn icon>
-            <v-icon>mdi-book-search-outline</v-icon>
-        </v-btn>
+      <v-btn icon>
+          <v-icon>mdi-book-search-outline</v-icon>
+      </v-btn>
 
       <v-spacer></v-spacer>
 
