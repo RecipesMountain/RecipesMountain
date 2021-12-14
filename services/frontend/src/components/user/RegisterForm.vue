@@ -11,25 +11,6 @@
               <v-row>
                 <v-col>
                   <v-text-field
-                    name="username"
-                    label="Username"
-                    id="id"
-                    v-model="username"
-                  ></v-text-field>
-                </v-col>
-                <v-col>
-                  <v-text-field
-                    name="email"
-                    type="email"
-                    label="E-mail"
-                    id="id"
-                    v-model="email"
-                  ></v-text-field>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col>
-                  <v-text-field
                     name="firstName"
                     label="First name"
                     id="id"
@@ -42,6 +23,18 @@
                     label="Surname"
                     id="id"
                     v-model="surname"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+
+              <v-row>
+                <v-col>
+                  <v-text-field
+                    name="email"
+                    type="email"
+                    label="E-mail"
+                    id="id"
+                    v-model="email"
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -83,7 +76,6 @@
 export default {
   data: () => ({
     passwordVisible: false,
-    username: "",
     email: "",
     password: "",
     passwordComfirm: "",
@@ -92,8 +84,14 @@ export default {
   }),
   methods: {
     submitRegister() {
-      console.log("Register", this.username, this.password);
-      this.$router.push('/')
+      let payload = {
+        email: this.email,
+        password: this.password,
+        full_Name: this.firstName + ' ' + this.surname,
+      }
+      console.log(payload)
+      this.$store.dispatch("actionRegister", payload)
+      this.$router.push('/login')
     },
   },
 };

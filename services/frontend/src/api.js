@@ -34,6 +34,9 @@ export const api = {
   async createUser(token, data) {
     return axios.post(`${APISUFFIX}/api/users/`, data, authHeaders(token));
   },
+  async createUserOpen(data) {
+    return axios.post(`${APISUFFIX}/api/users/open`, data);
+  },
   async passwordRecovery(email) {
     return axios.post(`${APISUFFIX}/api/password-recovery/${email}`);
   },
