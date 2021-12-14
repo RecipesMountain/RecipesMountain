@@ -3,6 +3,7 @@ import App from '@/App.vue'
 import AppBar from '@/components/layout/AppBar.vue'
 import Vuetify from 'vuetify'
 import VueRouter from 'vue-router'
+import s from '@/store'
 
 describe('App mount layout', () => {
     const localVue = createLocalVue()
@@ -15,11 +16,16 @@ describe('App mount layout', () => {
       
     })
 
+    const $store = s;
+
     it('mount basic layout', () => {
       const wrapper = mount(App, {
         localVue,
         vuetify,
         router,
+        mocks: {
+          $store
+        }
       })
       const AppBar = wrapper.findComponent({name: 'AppBar'})
       const Footer = wrapper.findComponent({name: 'AppFooter'})
@@ -32,6 +38,9 @@ describe('App mount layout', () => {
         localVue,
         vuetify,
         router,
+        mocks: {
+          $store
+        }
       })
       const searchBar = wrapper.find('.v-text-field')
       const avatar = wrapper.find('.v-avatar')

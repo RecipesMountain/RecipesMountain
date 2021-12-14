@@ -50,11 +50,20 @@ export default {
     password: "",
   }),
   methods: {
-    submitLogIn() {
+    async submitLogIn() {
       console.log("Login", this.username, this.password);
+      let payload = {
+        username: this.username,
+        password: this.password,
+      }
+      await this.$store.dispatch("actionLogIn", payload);
       this.$router.push("/")
     },
   },
+  mounted() {
+    this.$store.commit('setToken', 'xxx')
+    console.log(this.$store.getters['token']) 
+  }
 };
 </script>
 

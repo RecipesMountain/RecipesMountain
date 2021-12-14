@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios';
+import { userModule } from "./user";
 
 Vue.use(Vuex)
 
@@ -50,4 +51,7 @@ export default new Vuex.Store({
   mutations,
   actions,
   getters,
+  modules: {
+    user: userModule,
+  }
 })

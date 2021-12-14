@@ -24,7 +24,9 @@ export default {
     Footer,
     AppBar
   },
-  
+  mounted() {
+    this.$store.dispatch("actionCheckLoggedIn")
+  }
 };
 </script>
 
