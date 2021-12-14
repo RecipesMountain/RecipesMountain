@@ -4,18 +4,22 @@ from uuid import UUID
 
 #! name optional. content no ?
 class StageBase(BaseModel):
-    name: Optional[str] 
+    name: Optional[str]
     content: Optional[str]
 
+
 class StageCreate(StageBase):
-    name: str 
+    name: str
     content: Optional[str]
+
 
 class StageUpdate(StageBase):
     pass
 
-class StageWithProduct():
+
+class StageWithProduct:
     pass
+
 
 class Stage(StageCreate):
     pass

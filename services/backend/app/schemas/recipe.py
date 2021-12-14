@@ -5,9 +5,9 @@ from .tag import Tag
 from .comment import Comment
 from .stage import Stage
 
-#TODO: how picture use in model?
-#? send id or no?
-class RecpieBase(BaseModel):
+# TODO: how picture use in model?
+# ? send id or no?
+class RecipeBase(BaseModel):
     title: Optional[str]
     cookingTime: Optional[str]
     difficulty: Optional[str]
@@ -15,26 +15,31 @@ class RecpieBase(BaseModel):
     portion: Optional[int]
     rating: Optional[int]
 
-class RecpieWithTags(RecpieBase):
+
+class RecipeWithTags(RecipeBase):
     tags: List[Tag]
 
-class RecpieWithComments(RecpieBase):
+
+class RecipeWithComments(RecipeBase):
     comments: List[Comment]
 
-class RecpieWithStage(RecpieBase):
+
+class RecipeWithStage(RecipeBase):
     stages: List[Stage]
 
-class RecpieCreate(RecpieWithTags, RecpieWithStage):
+
+class RecipeCreate(RecipeWithTags, RecipeWithStage):
     pass
 
-class RecpieUpdate():
+
+class RecipeUpdate:
     pass
 
-class Recpie(RecpieWithTags, RecpieWithComments, RecpieWithStage):
+
+class Recipe(RecipeWithTags, RecipeWithComments, RecipeWithStage):
     title: str
     cookingTime: str
     difficulty: str
     calories: int
     portion: int
     rating: int
-
