@@ -3,6 +3,8 @@ import { api } from '@/api';
 const defaultState = {
     isLoggedIn: null,
     logInError: false,
+    registrationError: false,
+    registrationSuccess: false, 
     token: '',
     userID: null,
     username: null,
@@ -32,14 +34,20 @@ const defaultState = {
             state.fullName = payload;
         },
         setSuperUser(state, payload) {
-            state.isSuperUser = payload;
-        }
+            state.isSuperUser = payload
+        },
+        setRegistrationError(state, payload) {
+            state.registrationError = payload;
+        },
+        setRegistrationSuccess(state, payload) {
+            state.registrationSuccess = payload;
+        },
+
     },
     actions: {
         async actionLogIn(state, payload) {
             try {
                 const response = await api.logIn(payload.username, payload.password)
-                console.log(response)
                 const token = response.data.access_token;
                 if (token) {
                     saveLocalToken(token);
@@ -51,7 +59,8 @@ const defaultState = {
                     await state.dispatch("actionLogOut");
                 }
             } catch (err) {
-                state.commit("setLoggedIn", true)
+                state.commit("setLoggedIn", false)
+                state.commit("setLogInError", true)
                 console.log(err);
                 await state.dispatch("actionLogOut");
             }
@@ -107,6 +116,25 @@ const defaultState = {
                 await state.dispatch("actionLogOut");
             }
         },
+
+        async actionRegister(state, payload) {
+            try {
+                const response = await api.createUserOpen(payload)
+                if (response.status == 200) {
+                    state.commit("setRegistrationError", false)
+                    state.commit("setRegistrationSuccess", true)
+                    console.log(response);
+                } else {
+                    state.commit("setRegistrationError", true)
+                    state.commit("setRegistrationSuccess", false)
+                    console.log(response);
+                }
+            } catch (err) {
+                state.commit("setRegistrationError", true)
+                state.commit("setRegistrationSuccess", false)
+                console.log(err);
+            }
+        }
     },
 
     getters: {
