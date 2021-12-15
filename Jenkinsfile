@@ -52,9 +52,7 @@ pipeline {
       steps {
         script {
           sh """
-          export filehash=\$(find services/backend/ -type f -print0  | xargs -0 sha1sum | awk '{print \$1}' | sha1sum | awk '{print \$1}' )
-          export fileName="${env.BRANCH_NAME}-${BUILD_TIMESTAMP}-\$filehash"
-          echo \$fileName
+          export fileName="${env.BRANCH_NAME}-${BUILD_TIMESTAMP}"
           docker run -i  -v /shared:/shared --env-file backend.env  --network recipesmountain_ps-44-betterci_default --link  postgres-recipemountain:database backend-test '/bin/sh' '-c' "/venv/bin/coverage run -m pytest && mkdir -p /shared/\$fileName && /venv/bin/coverage html -d /shared/\$fileName" 
           """       
         }
@@ -82,7 +80,7 @@ pipeline {
   }
   post{
       success{
-        slackSend channel: 'jenkins-ci-sages-4', color: 'good', message:  partOfMess + ' finished with success.'
+        slackSend channel: 'jenkins-ci-sages-4', color: 'good', message:  partOfMess + " finished with success.  Coverage Raport: http://localhost:8000/${env.BRANCH_NAME}-${BUILD_TIMESTAMP}/"
       }
       
       failure{
