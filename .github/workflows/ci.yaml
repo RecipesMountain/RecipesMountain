@@ -32,7 +32,11 @@ jobs:
         env: 
           DOCKER_CONTAINER_NAME: "postgres-recipemountain"
         run: timeout 90s bash -c "until docker exec $DOCKER_CONTAINER_NAME pg_isready ; do sleep 5 ; done"
-      - name: Test frontend running
+      - name: show docker status
+        run: docker container ls
+      - name: show docker status
+        run: docker container logs 
+      - name: Test frontend running frontend-recipemountain
         run: timeout 300s bash -c "while !(curl localhost:8080); do sleep 1; done"
       - name: Run backend unit test test
         env:
