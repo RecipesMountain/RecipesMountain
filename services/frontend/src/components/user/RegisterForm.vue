@@ -87,7 +87,7 @@ export default {
       let payload = {
         email: this.email,
         password: this.password,
-        full_Name: this.firstName + ' ' + this.surname,
+        full_name: this.firstName + ' ' + this.surname,
       }
       console.log(payload)
       this.$store.dispatch("actionRegister", payload)
