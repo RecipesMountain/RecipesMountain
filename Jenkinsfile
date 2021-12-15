@@ -21,6 +21,7 @@ pipeline {
       steps {
         script {
           sh """
+          docker-compose up -d postgres
           cd services/backend
           docker build --target=test  -t backend-test .
           """
