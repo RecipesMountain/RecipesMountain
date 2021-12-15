@@ -6,7 +6,8 @@
       class="overflow-y-auto"
       >
       <router-link to="/">Main</router-link> |
-      <router-link to="/about">About</router-link>
+      <router-link to="/about">About</router-link> |
+      <router-link to="/register">Register-TEST</router-link>
       <router-view/>
       </v-sheet>
     </v-main>
@@ -24,7 +25,9 @@ export default {
     Footer,
     AppBar
   },
-  
+  mounted() {
+    this.$store.dispatch("actionCheckLoggedIn")
+  }
 };
 </script>
 
@@ -35,4 +38,13 @@ export default {
   flex-flow: column;
   height: 100%;
 }
+
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+}
+
 </style>

@@ -2,10 +2,14 @@ import { api } from '@/api';
 
 const defaultState = {
     isLoggedIn: null,
+    logInError: false,
+    registrationError: false,
+    registrationSuccess: false, 
     token: '',
     userID: null,
     username: null,
-    logInError: false,
+    isSuperUser: false,
+    fullName: null,
   };
   
   export const userModule = {
@@ -26,31 +30,51 @@ const defaultState = {
         setLogInError(state, payload) {
             state.logInError = payload;
         },
+        setFullName(state, payload) {
+            state.fullName = payload;
+        },
+        setSuperUser(state, payload) {
+            state.isSuperUser = payload;
+        },
+        setRegistrationError(state, payload) {
+            state.registrationError = payload;
+        },
+        setRegistrationSuccess(state, payload) {
+            state.registrationSuccess = payload;
+        },
+
     },
     actions: {
         async actionLogIn(state, payload) {
             try {
-                const response = await api.LogIn(payload)
+                const response = await api.logIn(payload.username, payload.password)
                 const token = response.data.access_token;
                 if (token) {
                     saveLocalToken(token);
                     state.commit("setToken", token);
                     state.commit("setLoggedIn", true)
-                    state.commit("setLoggedIn", false)
-                    await state.dispatch("actionGetUser"); //! this can not work, got to check this
+                    state.commit("setLogInError", false)
+                    await state.dispatch("actionGetMe"); //! this can not work, got to check this
                 } else {
                     await state.dispatch("actionLogOut");
                 }
             } catch (err) {
-                state.commit("setLoggedIn", true)
+                state.commit("setLogInError", true)
+                console.log(err);
                 await state.dispatch("actionLogOut");
             }
         },
-        async actionGetUser(state) {
+
+        async actionGetMe(state) {
             try {
-                const response = await api.getUser(state.state.token, state.state.userID)
+                const response = await api.getMe(state.state.token, state.state.userID)
                 if (response.data) {
-                    //TODO: SET USER DATA
+                    console.log(response.data)
+                    state.commit("setUserID", response.data.id);
+                    state.commit("setUsername", response.data.email);
+                    state.commit("setFullName", response.data.full_name);
+                    state.commit("setSuperUser", response.data.is_superuser);
+                    console.log(state)
                 }
             } catch (error) {
                 await state.dispatch("actionCheckApiError", error);
@@ -68,7 +92,7 @@ const defaultState = {
                 }
                 if (token) {
                     try {
-                        state.dispatch("actionGetUser");
+                        state.dispatch("actionGetMe");
                         state.commit("setLoggedIn", true)
                     } catch (error) {
                         await state.dispatch("actionLogOut");
@@ -88,12 +112,34 @@ const defaultState = {
                 await state.dispatch("actionLogOut");
             }
         },
+
+        async actionRegister(state, payload) {
+            try {
+                const response = await api.createUserOpen(payload)
+                if (response.status == 200) {
+                    state.commit("setRegistrationError", false)
+                    state.commit("setRegistrationSuccess", true)
+                    console.log(response);
+                } else {
+                    state.commit("setRegistrationError", true)
+                    state.commit("setRegistrationSuccess", false)
+                    console.log(response);
+                }
+            } catch (err) {
+                state.commit("setRegistrationError", true)
+                state.commit("setRegistrationSuccess", false)
+                console.log(err);
+            }
+        }
     },
     getters: {
         loginError: (state) => state.logInError,
         dashboardMiniDrawer: (state) => state.dashboardMiniDrawer,
         token: (state) => state.token,
         isLoggedIn: (state) => state.isLoggedIn,
+        username: (state) => state.username,
+        email: (state) => state.username,
+        fullName: (state) => state.fullName,
     },
   };
 

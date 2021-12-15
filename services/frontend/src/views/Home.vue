@@ -1,7 +1,8 @@
 
 <template>
-  <div class="bg">
+  <div >
       Home page fssssss
+      email: {{ email }} fullname: {{ fullName }}
   </div>
 </template>
 
@@ -9,6 +10,12 @@
 
 export default {
   name: 'Home',
+  data() {
+    return {
+    email: this.$store.getters["email"],
+    fullName: this.$store.getters["fullName"],
+    }
+  }
 }
 </script>
 
