@@ -34,7 +34,7 @@ const defaultState = {
             state.fullName = payload;
         },
         setSuperUser(state, payload) {
-            state.isSuperUser = payload;
+            state.isSuperUser = payload
         },
         setRegistrationError(state, payload) {
             state.registrationError = payload;
@@ -59,6 +59,7 @@ const defaultState = {
                     await state.dispatch("actionLogOut");
                 }
             } catch (err) {
+                state.commit("setLoggedIn", false)
                 state.commit("setLogInError", true)
                 console.log(err);
                 await state.dispatch("actionLogOut");
@@ -80,6 +81,7 @@ const defaultState = {
                 await state.dispatch("actionCheckApiError", error);
             }
         },
+
         async actionCheckLoggedIn(state) {
             if (!state.state.isLoggedIn) {
                 let token = state.state.token;
@@ -102,11 +104,13 @@ const defaultState = {
                 }
             }
         },
+
         async actionLogOut(state) {
             removeLocalToken();
             state.commit("setToken", '');
             state.commit("setLoggedIn", false);
         },
+
         async actionCheckApiError(state, payload) {
             if (payload.response.status === 401) {
                 await state.dispatch("actionLogOut");
@@ -132,6 +136,7 @@ const defaultState = {
             }
         }
     },
+
     getters: {
         loginError: (state) => state.logInError,
         dashboardMiniDrawer: (state) => state.dashboardMiniDrawer,
