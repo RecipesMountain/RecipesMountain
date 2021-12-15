@@ -10,6 +10,16 @@ COPY package.json .
 COPY package-lock.json .
 RUN npm install
 
+FROM base as test
+
+RUN npm install --include=dev
+
+COPY . .
+
+CMD ["npm", "run", "test:unit"]
+
+FROM base as final
+
 EXPOSE 8080
 
 CMD ["npm", "run", "serve"]
