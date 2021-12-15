@@ -1,4 +1,12 @@
 # RecipesMountain
 
-ps-1
-ffff
+Requiremtnes:
+* Docker
+* Docker-Compose
+
+Deployment:
+To start:
+```
+docker-compose up -d
+```
+
