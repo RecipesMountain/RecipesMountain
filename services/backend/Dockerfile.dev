@@ -5,9 +5,9 @@ ENV PYTHONFAULTHANDLER=1 \
     PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1
 
-FROM base as builder
-
 WORKDIR /app
+
+FROM base as builder
 
 ENV PIP_DEFAULT_TIMEOUT=100 \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
@@ -18,13 +18,6 @@ RUN pip install "poetry==$POETRY_VERSION" \
     && python -m venv /venv
 
 COPY pyproject.toml poetry.lock ./
-RUN . /venv/bin/activate && poetry install --no-interaction --no-dev --no-root
-
-COPY . .
-RUN poetry build && /venv/bin/pip install dist/*.whl
-
-FROM builder as test
-
 RUN . /venv/bin/activate && poetry install --no-interaction --no-root
 
 FROM base as final
@@ -34,4 +27,4 @@ COPY --from=builder --chown=user:user /venv /venv
 ENV PATH=/venv/bin:$PATH
 EXPOSE 5000
 USER user
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "5000"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "5000", "--reload"]

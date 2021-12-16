@@ -5,6 +5,7 @@
 
 # Node.js
 **/node_modules/
+**/dist/
 
 # Readme
 **/README
@@ -17,4 +18,6 @@
 # Docker
 **/.dockerignore
 **/Dockerfile
+**/Dockerfile.dev
 **/docker-compose.yml
+**/docker-compose.dev.yml
