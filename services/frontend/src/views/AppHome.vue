@@ -1,30 +1,33 @@
 <template>
-  <div>
+  <v-app>
+    <AppBar/>
+    <v-main>
       <router-view/>
-      <Footer/>
-  </div>
+    </v-main>
+  </v-app>
 </template>
 
 <script>
-import Footer from "@/components/layout/Footer.vue"
-import router from './router'
+import AppBar from "@/components/layout/AppBar.vue"
 
 export default {
-  name: 'App',
+  name: 'AppHome',
   components: {
-    Footer,
+    AppBar
   },
   async mounted() {
-    await this.$store.dispatch("actionCheckLoggedIn")
-        if(this.$store.getters["isLoggedIn"]){
-      router.push(`/app`)
-  }
+    this.$store.dispatch("actionGetMe")
   }
 };
 </script>
 
 
 <style scoped>
+.logout {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+}
 
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

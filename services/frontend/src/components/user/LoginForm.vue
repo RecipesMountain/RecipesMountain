@@ -57,7 +57,7 @@ export default {
         password: this.password,
       }
       await this.$store.dispatch("actionLogIn", payload);
-      this.$router.push("/")
+      this.$router.push("/app")
     },
   },
   mounted() {
