@@ -43,7 +43,7 @@ pipeline {
         script {
           sh """
           cd services/backend
-          docker run -i --env-file ../../postgres.env --env-file ../../backend.env  --network recipesmountain_jenkinsci_default --link  postgres-recipemountain:database backend-test '/venv/bin/pytest'
+          docker run -i --env-file ../../postgres.env --env-file ../../backend.env  --network recipesmountain_ps-44-betterci_default --link  postgres-recipemountain:database backend-test '/venv/bin/pytest'
           """
         }
       }
