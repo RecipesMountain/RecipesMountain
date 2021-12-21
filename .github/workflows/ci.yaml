@@ -24,18 +24,12 @@ jobs:
           ~/.poetry/bin/poetry install
       - name: Start dockers
         run: docker-compose up -d
-      - name: show backend logs
-        run:  docker container logs backend-recipemountain
       - name: Test backend running
         run: timeout 300s bash -c "while !(curl localhost:5000); do sleep 1; done"
       - name: Test DB running
         env: 
           DOCKER_CONTAINER_NAME: "postgres-recipemountain"
         run: timeout 90s bash -c "until docker exec $DOCKER_CONTAINER_NAME pg_isready ; do sleep 5 ; done"
-      - name: show docker status
-        run: docker container ls
-      - name: show docker status
-        run: docker container logs 
       - name: Test frontend running frontend-recipemountain
         run: timeout 300s bash -c "while !(curl localhost:8080); do sleep 1; done"
       - name: Run backend unit test test
