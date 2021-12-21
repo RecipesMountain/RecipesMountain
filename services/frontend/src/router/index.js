@@ -8,6 +8,7 @@ import Login from '@/views/UserViews/Login.vue'
 import Register from '@/views/UserViews/Register.vue'
 import SearchRecipe from "@/views/RecipeViews/SearchRecipes.vue"
 import MyAccount from "@/views/UserViews/MyAccount.vue"
+import store from '@/store'
 
 Vue.use(VueRouter)
 
@@ -31,6 +32,11 @@ const routes = [
     path: '/app/',
     name: 'App',
     component: AppHome,
+    beforeEnter: (to, from, next) => {
+      if(!store.getters["isLoggedIn"]){
+        next({ name: "Welcome"  })
+      } else next()
+    },
     children: [
       {
         path: '/',
