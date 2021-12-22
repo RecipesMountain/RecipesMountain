@@ -18,27 +18,35 @@ services:
       start_period: 60s
 
   backend:
-    build: ./services/backend
-    image: backend-recipemountain
+    build:
+      context: ./services/backend
+      dockerfile: Dockerfile.dev
+    image: backend-recipemountain-dev
     init: true
     links:
       - "postgres:database"
     env_file:
       - postgres.env
       - backend.env
+    volumes:
+      - ./services/backend/app:/app/app
     ports:
       - "5000:5000"
-    container_name: backend-recipemountain
+    container_name: backend-recipemountain-dev
     depends_on:
       postgres:
         condition: service_healthy
 
   frontend:
-    build: ./services/frontend
-    image: frontend-recipemountain
+    build:
+      context: ./services/frontend
+      dockerfile: Dockerfile.dev
+    image: frontend-recipemountain-dev
+    volumes:
+      - ./services/frontend:/app
     ports:
       - "8080:8080"
-    container_name: frontend-recipemountain
+    container_name: frontend-recipemountain-dev
 
 volumes:
   postgres:
