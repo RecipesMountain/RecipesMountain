@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="center">
       <LoginForm/>
   </div>
 </template>
@@ -14,5 +14,11 @@ export default {
 </script>
 
 <style>
+
+.center {
+  display: flex;
+  align-items: center;
+}
+
 
 </style>

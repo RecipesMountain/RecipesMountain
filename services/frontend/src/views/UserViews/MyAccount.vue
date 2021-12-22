@@ -1,1 +1,15 @@
-// manage your account like change password or change your email
+<template>
+  <div>
+      USER PAGE
+  </div>
+</template>
+
+<script>
+export default {
+
+}
+</script>
+
+<style>
+
+</style>

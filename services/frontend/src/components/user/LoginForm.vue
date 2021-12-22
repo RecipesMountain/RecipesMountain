@@ -1,8 +1,22 @@
 <template>
-  <v-container>
-    <v-row justify="center" class="">
-      <v-col cols="5">
-        <v-card class="text-center">
+  <v-container class="login-card">
+    <v-alert
+      dense
+      outlined
+      type="error"
+      v-if="error"
+    >
+      There was a problem with loging in 
+    </v-alert>
+    <v-alert
+      dense
+      outlined
+      type="error"
+      v-if="wrongPass"
+    >
+      Wrong credentians
+    </v-alert>
+        <v-card >
           <v-card-title primary-title>
             <p class="h6">Login</p>
           </v-card-title>
@@ -28,7 +42,7 @@
             </v-form>
           </v-card-text>
           <v-card-actions>
-            <v-btn color="success" outlined v-on:click.prevent="submitLogIn"
+            <v-btn color="success" outlined @click="submitLogIn"
               >Login</v-btn
             >
             <v-spacer></v-spacer>
@@ -37,8 +51,6 @@
             </router-link>
           </v-card-actions>
         </v-card>
-      </v-col>
-    </v-row>
   </v-container>
 </template>
 
@@ -48,6 +60,8 @@ export default {
     passwordVisible: false,
     username: "",
     password: "",
+    error: false,
+    wrongPass: false,
   }),
   methods: {
     async submitLogIn() {
@@ -57,15 +71,20 @@ export default {
         password: this.password,
       }
       await this.$store.dispatch("actionLogIn", payload);
-      this.$router.push("/")
+      if(this.$store.getters["isLoggedIn"])
+        this.$router.push("/app")
+      else if(this.$store.getters["loginError"])
+        this.error = true;
+      else this.wrongPass = true;
     },
   },
-  mounted() {
-    this.$store.commit('setToken', 'xxx')
-    console.log(this.$store.getters['token']) 
-  }
 };
 </script>
 
-<style>
+<style scoped>
+
+.login-card {
+  max-width: 400px;
+}
+
 </style>

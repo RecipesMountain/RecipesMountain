@@ -18,13 +18,13 @@
       dense
     ></v-text-field>
 
-    <v-btn icon>
+    <v-btn icon @click="search">
       <v-icon>mdi-book-search-outline</v-icon>
     </v-btn>
 
     <v-spacer></v-spacer>
 
-    <v-btn icon>
+    <v-btn icon >
       <v-icon>mdi-food-variant</v-icon>
     </v-btn>
 
@@ -34,20 +34,26 @@
 
     <v-divider vertical></v-divider>
 
-    <router-link to="/login">
-      <v-btn icon>
-        <!-- <v-icon>mdi-logout</v-icon> -->
-        <v-icon>mdi-login</v-icon>
+      <v-btn icon @click="logout">
+        <v-icon>mdi-logout</v-icon>
       </v-btn>
-    </router-link>
 
-    <v-avatar color="primary" size="56">PW</v-avatar>
+    <v-avatar @click="() => { this.$router.push('/app/account') }" color="primary" size="56">PW</v-avatar>
   </v-app-bar>
 </template>
 
 <script>
 export default {
   name: "AppBar",
+  methods: {
+    async logout() {
+      await this.$store.dispatch("actionLogOut")
+      this.$router.push("/")
+    },
+    async search() {
+      this.$router.push("/app/search")
+    }
+  }
 };
 </script>
 

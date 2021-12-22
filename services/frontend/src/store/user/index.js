@@ -94,7 +94,7 @@ const defaultState = {
                 }
                 if (token) {
                     try {
-                        state.dispatch("actionGetMe");
+                        await state.dispatch("actionGetMe");
                         state.commit("setLoggedIn", true)
                     } catch (error) {
                         await state.dispatch("actionLogOut");
@@ -113,6 +113,9 @@ const defaultState = {
 
         async actionCheckApiError(state, payload) {
             if (payload.response.status === 401) {
+                await state.dispatch("actionLogOut");
+            }
+            if (payload.response.status === 403) {
                 await state.dispatch("actionLogOut");
             }
         },
@@ -145,6 +148,8 @@ const defaultState = {
         username: (state) => state.username,
         email: (state) => state.username,
         fullName: (state) => state.fullName,
+        registrationError: (state) => state.registrationError,
+        registrationSuccess: (state) => state.registrationSuccess,
     },
   };
 

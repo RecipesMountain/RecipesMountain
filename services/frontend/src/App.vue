@@ -1,50 +1,29 @@
 <template>
-  <v-app>
-    <AppBar/>
-    <v-main>
-      <v-sheet
-      class="overflow-y-auto"
-      >
-      <router-link to="/">Main</router-link> |
-      <router-link to="/about">About</router-link> |
-      <router-link to="/register">Register-TEST</router-link>
+    <v-app>
       <router-view/>
-      </v-sheet>
-    </v-main>
-    <Footer/>
-  </v-app>
+      <Footer/>
+    </v-app>
 </template>
 
 <script>
 import Footer from "@/components/layout/Footer.vue"
-import AppBar from "@/components/layout/AppBar.vue"
+import router from './router'
 
 export default {
   name: 'App',
   components: {
     Footer,
-    AppBar
   },
-  mounted() {
-    this.$store.dispatch("actionCheckLoggedIn")
+  async mounted() {
+    await this.$store.dispatch("actionCheckLoggedIn")
+        if(this.$store.getters["isLoggedIn"]){
+      router.push(`/app`)
+  }
   }
 };
 </script>
 
 
-<style scoped>
-.logout {
-  display: flex;
-  flex-flow: column;
-  height: 100%;
-}
-
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<style>
 
 </style>
