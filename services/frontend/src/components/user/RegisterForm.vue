@@ -1,5 +1,13 @@
 <template>
   <v-container>
+      <v-alert
+        dense
+        outlined
+        type="error"
+        v-if="error"
+      >
+        There was a problem with registration
+      </v-alert>
         <v-card class="text-center">
           <v-card-title primary-title>
             <p class="h6">Register</p>
@@ -76,18 +84,22 @@ export default {
     password: "",
     passwordComfirm: "",
     firstName: "",
-    surname: ""
+    surname: "",
+    error: false,
   }),
   methods: {
-    submitRegister() {
+    async submitRegister() {
       let payload = {
         email: this.email,
         password: this.password,
         full_name: this.firstName + ' ' + this.surname,
       }
       console.log(payload)
-      this.$store.dispatch("actionRegister", payload)
-      this.$router.push('/login')
+      await this.$store.dispatch("actionRegister", payload)
+      if(this.$store.getters["registrationSuccess"])
+        this.$router.push('/login')
+      else if(this.$store.getters["registrationError"])
+        this.error = true
     },
   },
 };

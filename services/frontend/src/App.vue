@@ -1,8 +1,8 @@
 <template>
-  <div>
+    <v-app>
       <router-view/>
       <Footer/>
-  </div>
+    </v-app>
 </template>
 
 <script>
