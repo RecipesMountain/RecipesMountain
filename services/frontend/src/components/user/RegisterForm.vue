@@ -1,7 +1,5 @@
 <template>
   <v-container>
-    <v-row justify="center" class="my-3">
-      <v-col cols="6">
         <v-card class="text-center">
           <v-card-title primary-title>
             <p class="h6">Register</p>
@@ -67,8 +65,6 @@
             </router-link>
           </v-card-actions>
         </v-card>
-      </v-col>
-    </v-row>
   </v-container>
 </template>
 

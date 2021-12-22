@@ -1,8 +1,6 @@
 <template>
-  <v-container>
-    <v-row justify="center" class="">
-      <v-col cols="5">
-        <v-card class="text-center">
+  <v-container class="login-card">
+        <v-card >
           <v-card-title primary-title>
             <p class="h6">Login</p>
           </v-card-title>
@@ -37,8 +35,6 @@
             </router-link>
           </v-card-actions>
         </v-card>
-      </v-col>
-    </v-row>
   </v-container>
 </template>
 
@@ -67,5 +63,10 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+
+.login-card {
+  max-width: 400px;
+}
+
 </style>
