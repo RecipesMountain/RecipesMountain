@@ -31,7 +31,7 @@ def read_users(
 def create_user(
     *,
     db: Session = Depends(deps.get_db),
-    user_in: schemas.UserCreate,
+    c,
     current_user: models.User = Depends(deps.get_current_superuser),
 ) -> Any:
     """
