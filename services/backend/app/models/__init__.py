@@ -5,3 +5,4 @@ from .recipe import Recipe
 from .stage import Stage
 from .tag import Tag
 from .user import User
+from .stats import Stats

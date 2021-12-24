@@ -35,7 +35,7 @@ class CRUDRecpie(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
             q = q.filter(Recipe.tags.any(tag.name.contains(tag)))
         return q
 
-    #with_tags_or
+    #TODO with_tags_or
     
     def sort_popularity(self, q: Query) -> Query:
         return q.order_by(Recipe.popularityScore.desc())
@@ -49,5 +49,8 @@ class CRUDRecpie(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
     #TODO move offset and limit before sort
     def execQuery(self, q: Query, *, skip: int, limit: int) -> List[Recipe]:
         return q.offset(skip).limit(limit).all()
+
+    def get_all(self, db: Session):
+        return db.query(Recipe).all()
 
 recpie = CRUDRecpie(Recipe)
