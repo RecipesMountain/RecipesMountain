@@ -17,7 +17,7 @@ def search_recipes(
     skip: int = 0,
     limit: int = 100,
     sort: str = "popular",
-    tags: List[str] = [],
+    tags: str = "",
     tagsConnect: str = "and",
 ) -> Any:
     #TODO USE ENUM HERE
@@ -38,7 +38,9 @@ def search_recipes(
     if keywords != "":
         query = crud.recpie.with_keyword(query, keyword=keywords)
 
-    if tags != []:
+
+    if tags != "":
+        tags = tags.split(',')
         if tagsConnect == "and":
             query = crud.recpie.with_tags_and(query, tags=tags)
         else:

@@ -1,49 +1,59 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import axios from 'axios';
 import { userModule } from "./user";
+import { api } from '../api';
 
 Vue.use(Vuex)
 
 const state = { 
-  recipe: {
-    Title: "Pancakes",
-    Category: "Polish",
-    Description: "MM  pankcakes good",
-    Rating: 4.5,
-    RatingCount: 400,
-    steps: [
-      { number: 1, title: "Step one", description: "pour milk into bowl"},
-      { number: 2, title: "Step tow", description: "pour more milk into bowl"}
-    ]
-}
+  search: {
+    recipes: [],
+    tags: [],
+    keyword: null,
+  },
 }
 
 export const mutations = {
       //synchros
-      newRecipe (state, newRecipe) {
-        state.recipe = newRecipe;
+      setRecipes(state, newRecipes) {
+        state.search.recipes = newRecipes
       },
-      resetRecipe(state) {
-        state.recipe = null;
+      setTags(state, newTags) {
+        state.search.tags = newTags
       },
-      setUsers(state, newUsers) {
-        state.users = newUsers;
+      setKeyword(state, keyword) {
+        state.search.keyword = keyword
       }
 }
 
 export const actions = {
-  async getUsers(state) {
-    let users = await axios.get("users/?skip=0&limit=100").json();
-    console.log(users);
-    state.commit("setUsers", users);
- }
+ async search(context, payload) {
+   try {
+      let response = await api.search(context.state.user.token, payload.keyword, payload.tags, payload.sort, payload.skip, payload.limit);
+      console.log(response)
+      let recipes = response.data
+      context.commit("setRecipes", recipes)
+      console.log(recipes)
+      let tags = []
+      for(let recipe of recipes){
+        for(let tag of recipe.tags) {
+          if(!tags.includes(tag))
+            tags.push(tag)
+        }
+      }
+
+      context.commit("setTags", tags)
+   } catch (error) {
+     //TODO handle error correctly
+     console.log(error)
+   }
+  }
 }
 
 export const getters = {
-  getCurrentRecipe: state => state.recipe ,
-  hasRecipe: state => state.recipe === null ? false : true,
-  users: state => state.users === undefined ? false : state.users
+  getRecipes: (state) => state.search.recipes,
+  getTags: (state) => state.search.tags,
+  getKeyword: (state) => state.search.keyword,
 }
 
 export default new Vuex.Store({

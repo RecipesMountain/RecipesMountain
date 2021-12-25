@@ -8,6 +8,14 @@ function authHeaders(token) {
   };
 }
 
+function basicConfig(token, skip, limit) {
+  let config = authHeaders(token);
+  config["params"] = {}
+  config.params["skip"] = skip
+  config.params["limit"] = limit
+  return config
+}
+
 const APISUFFIX = ""
 
 export const api = {
@@ -45,6 +53,23 @@ export const api = {
       new_password: password,
       token,
     });
+  },
+  async getPopular(token, skip, limit){
+    return axios.get(`${APISUFFIX}/api/recipes/popular`, basicConfig(token, skip, limit))
+  },
+  async getBest(token, skip, limit){
+    return axios.get(`${APISUFFIX}/api/recipes/best`, basicConfig(token, skip, limit))
+  },
+  async search(token, keyword, tags, sort, skip, limit){
+    let config = basicConfig(token, skip, limit)
+    if (tags != null)
+      config.params["tags"] = tags
+    if (keyword != null && keyword != "")
+      config.params["keywords"] = keyword
+    if (sort != null)
+      config.params["sort"] = sort
+    config.params["tagsConnect"] = "and"
+    return axios.get(`${APISUFFIX}/api/recipes/search`, config)
   },
 
 };
