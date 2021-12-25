@@ -1,3 +1,4 @@
+from typing_extensions import IntVar
 from pydantic import BaseModel
 from typing import Optional
 from typing import List
@@ -39,6 +40,11 @@ class RecpieSearch(RecipeWithTags):
     id: Optional[UUID] = None
     class Config:
         orm_mode = True
+
+
+class SearchResult(BaseModel):
+    total: int
+    recpies: List[RecpieSearch]
 
 class RecipeCreate(RecipeWithTags, RecipeWithStage):
     pass
