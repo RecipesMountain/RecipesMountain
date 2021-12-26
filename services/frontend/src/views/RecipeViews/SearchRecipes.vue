@@ -15,10 +15,10 @@
         <SearchRes class="center search-bar" />
       </v-row>
       <v-row align="center" justify="center" >
-        <v-btn v-if="this.$store.getters['hasPreviousPage']" >
+        <v-btn @click="previosPage" v-if="hasPreviousPage" >
           Go Back
         </v-btn>
-        <v-btn v-if="this.$store.getters['hasNextPage']">
+        <v-btn @click="nextPage" v-if="hasNextPage">
           Next Page
         </v-btn>
       </v-row>
@@ -30,12 +30,20 @@ import SearchBar from "@/components/search/searchBar.vue"
 import SearchRes from "@/components/search/searchRes.vue"
 export default {
   components: {SearchBar, SearchRes},
-  metods: {
+  methods: {
     nextPage() {
       this.$store.dispatch("nextPage")
     },
     previosPage() {
       this.$store.dispatch("previousPage")
+    }
+  },
+  computed:{
+    hasPreviousPage() {
+      return this.$store.getters['hasPreviousPage']
+    },
+    hasNextPage() {
+      return this.$store.getters['hasNextPage']
     }
   }
 }

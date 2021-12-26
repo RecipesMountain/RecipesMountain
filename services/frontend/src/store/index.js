@@ -65,15 +65,17 @@ export const actions = {
     }
   },
   async previousPage(context) {
-    try {
-      context.commit("setPage", context.state.search.page - 1)
-      context.commit("setNextRecipes", context.state.search.recipes)
-      await doSearch(context);
-    } catch (error) {
-     //TODO handle error correctly
-     console.log(error)
+    if (context.state.search.page != 1) {
+      try {
+        context.commit("setPage", context.state.search.page - 1)
+        context.commit("setNextRecipes", context.state.search.recipes)
+        await doSearch(context);
+        } catch (error) {
+        //TODO handle error correctly
+        console.log(error)
+      }
     }
-  },
+  }
 }
 
 export const getters = {
@@ -96,8 +98,7 @@ export default new Vuex.Store({
 
 async function doSearch(context) {
   let skip = (context.state.search.page - 1) * context.state.search.perPage;
-  let limit = context.state.search.page * context.state.search.perPage;
-  let response = await api.search(context.state.user.token, context.state.search.keyword, context.state.search.tags, context.state.search.sort, skip, limit);
+  let response = await api.search(context.state.user.token, context.state.search.keyword, context.state.search.tags, context.state.search.sort, skip, context.state.search.perPage);
   let recipes = response.data;
   context.commit("setRecipes", recipes);
   return recipes;
@@ -105,8 +106,7 @@ async function doSearch(context) {
 
 async function getNextPage(context) {
   let skip = context.state.search.page * context.state.search.perPage;
-  let limit = (context.state.search.page + 1) * context.state.search.perPage;
-  let response = await api.search(context.state.user.token, context.state.search.keyword, context.state.search.tags, context.state.search.sort, skip, limit);
+  let response = await api.search(context.state.user.token, context.state.search.keyword, context.state.search.tags, context.state.search.sort, skip, context.state.search.perPage);
   let recipes = response.data;
   context.commit("setNextRecipes", recipes);
   return recipes;
