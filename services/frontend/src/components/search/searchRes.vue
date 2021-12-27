@@ -1,14 +1,14 @@
 <template>
   <v-row align="center" justify="center">
-      <v-col v-bind:key="recpie.id" v-for="recpie in recpies" align="center" justify="center" > 
+      <v-col v-bind:key="recipe.id" v-for="recipe in recpies" align="center" justify="center" > 
         <v-card
             color="rgb(25, 202, 137)"
             elevation="9"
             rounded
             shaped
-            class="recpie-card"
+            class="recipe-card"
         >
-            {{recpie.title}}
+            {{recipe.title}}
             <v-img
             lazy-src="http://t0.gstatic.com/licensed-image?q=tbn:ANd9GcSt6XaVwRYuoMvrzqceIm8UTAReg9pkdrytNvTXFz9QXdEbUgdmTDESypOL-8ln9DnwVjORUyBHqntjNHYUAro"
             max-height="400"
@@ -32,7 +32,7 @@ export default {
 
 <style>
 
-.recpie-card {
+.recipe-card {
     max-height: 400px;
     max-width: 400px;
 }
