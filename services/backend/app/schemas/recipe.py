@@ -30,14 +30,17 @@ class RecipeWithComments(RecipeBase):
 class RecipeWithStage(RecipeBase):
     stages: List[Stage]
 
+
 class RecpieInDB(RecipeWithTags, RecipeWithStage, RecipeWithComments):
     id: Optional[UUID] = None
 
     class Config:
         orm_mode = True
 
+
 class RecpieSearch(RecipeWithTags):
     id: Optional[UUID] = None
+
     class Config:
         orm_mode = True
 
@@ -45,6 +48,7 @@ class RecpieSearch(RecipeWithTags):
 class SearchResult(BaseModel):
     total: int
     recpies: List[RecpieSearch]
+
 
 class RecipeCreate(RecipeWithTags, RecipeWithStage):
     pass

@@ -8,12 +8,14 @@ from app.models.tag import Tag
 
 from app.schemas.tag import TagCreate, TagUpdate
 
+
 class CRUDTag(CRUDBase[Tag, TagCreate, TagUpdate]):
     def get_all(self, db: Session) -> List[Tag]:
         return db.query(Tag).all()
-    
-    #TODO rename
+
+    # TODO rename
     def get_page(self, db: Session, *, skip, limit) -> List[Tag]:
         return db.query(Tag).offset(skip).limit(limit)
+
 
 tag = CRUDTag(Tag)

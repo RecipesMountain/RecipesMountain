@@ -20,26 +20,25 @@ def search_recipes(
     tags: List[str] = Query([]),
     tagsConnect: str = "and",
 ) -> Any:
-    #TODO USE ENUM HERE
+    # TODO USE ENUM HERE
     if tagsConnect not in ["or", "and"]:
         raise HTTPException(
             status_code=400,
             detail="Bad tags connect",
         )
-    #TODO use enum
+    # TODO use enum
     if sort not in ["popular", "views", "best", "nosort"]:
         raise HTTPException(
             status_code=400,
             detail="Bad tags connect",
         )
-    
+
     keywords = keywords.replace("+", " ")
 
     query = crud.recpie.start_query(db)
 
     if keywords != "":
         query = crud.recpie.with_keyword(query, keyword=keywords)
-
 
     if tags != []:
         print(tags)
@@ -50,17 +49,16 @@ def search_recipes(
                 status_code=400,
                 detail="Not Implemented",
             )
-    
+
     if sort == "popular":
         query = crud.recpie.sort_popularity(query)
     elif sort == "views":
         query = crud.recpie.sort_views(query)
     elif sort == "best":
         query = crud.recpie.sort_best(query)
-    
+
     r = crud.recpie.execQuery(query, skip=skip, limit=limit)
     return r
-    
 
 
 @router.get("/popular", response_model=List[schemas.Recipe])

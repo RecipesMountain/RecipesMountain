@@ -7,9 +7,10 @@ from sqlalchemy.dialects.postgresql import UUID
 from app.db.base_class import Base
 from app.models.TSVector import TSVector
 
+
 class Recipe(Base):
-    
-    #TODO ADD decryption? 
+
+    # TODO ADD decryption?
     id = Column(UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4)
     title = Column(String)
     cookingTime = Column(Integer)
@@ -30,10 +31,11 @@ class Recipe(Base):
     stages = relationship("Stage", back_populates="recipe")
     comments = relationship("Comment", back_populates="recipe")
 
-    __ts_vector__ = Column(TSVector(),Computed(
-            "to_tsvector('english', title )",
-            persisted=True))
-    #"to_tsvector('english', title || ' ' || description)",
-    
-    __table_args__ = (Index('ix_recpie___ts_vector__',
-        __ts_vector__, postgresql_using='gin'),)
+    __ts_vector__ = Column(
+        TSVector(), Computed("to_tsvector('english', title )", persisted=True)
+    )
+    # "to_tsvector('english', title || ' ' || description)",
+
+    __table_args__ = (
+        Index("ix_recpie___ts_vector__", __ts_vector__, postgresql_using="gin"),
+    )

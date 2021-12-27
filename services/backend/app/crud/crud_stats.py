@@ -6,6 +6,6 @@ from sqlalchemy.sql.functions import func
 from app.crud.base import CRUDBase
 from app.models.stats import Stats
 
-class CRUDStats(CRUDBase[Stats]):
 
-    def get_
+class CRUDStats(CRUDBase[Stats]):
+    pass
