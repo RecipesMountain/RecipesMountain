@@ -54,7 +54,7 @@ const defaultState = {
                     context.commit("setToken", token);
                     context.commit("setLoggedIn", true)
                     context.commit("setLogInError", false)
-                    await context.dispatch("actionGetMe"); //! this can not work, got to check this
+                    await context.dispatch("actionGetMe");
                 } else {
                     await context.dispatch("actionLogOut");
                 }

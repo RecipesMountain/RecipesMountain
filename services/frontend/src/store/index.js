@@ -51,7 +51,7 @@ export const mutations = {
         state.snackbarOpen = false;
       }
 }
-
+//TODO reconsider if this is the best way to handle errors
 export const actions = {
  async search(context, payload) {
    try {
@@ -73,7 +73,7 @@ export const actions = {
       getNextPage(context);
       console.log(recipes)
    } catch (error) {
-     //TODO handle error correctly
+     
      context.commit("openSnackbar", "There has been an server error")
      console.log(error)
    }
@@ -84,7 +84,6 @@ export const actions = {
       context.commit("setRecipes", context.state.search.nextRecipes)
       getNextPage(context);
     } catch (error) {
-     //TODO handle error correctly
      context.commit("openSnackbar", "There has been an server error")
      console.log(error)
     }
@@ -96,7 +95,6 @@ export const actions = {
         context.commit("setNextRecipes", context.state.search.recipes)
         await doSearch(context);
         } catch (error) {
-        //TODO handle error correctly
         context.commit("openSnackbar", "There has been an server error")
         console.log(error)
       }
@@ -108,7 +106,6 @@ export const actions = {
       console.log(tags)
       context.commit("setTagsAvailable", tags.data)
     } catch (error) {
-        //TODO handle error correctly
         context.commit("openSnackbar", "There has been an server error")
         console.log(error)
     }
