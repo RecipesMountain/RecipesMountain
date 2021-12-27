@@ -16,6 +16,8 @@ const state = {
     page: 1,
     perPage: 20,
   },
+  snackbarOpen: false,
+  snackbarText: "",
 }
 
 export const mutations = {
@@ -40,6 +42,13 @@ export const mutations = {
       },
       setTagsAvailable(state, newTags) {
         state.search.tagsAvailable = newTags
+      },
+      openSnackbar(state, text) {
+        state.snackbarOpen = true;
+        state.snackbarText = text;
+      },
+      closeSnackbar(state) {
+        state.snackbarOpen = false;
       }
 }
 
@@ -54,7 +63,7 @@ export const actions = {
       getNextPage(context);
       console.log(recipes)
    } catch (error) {
-     //TODO handle error correctly
+     context.commit("openSnackbar", "There has been an server error")
      console.log(error)
    }
   },
@@ -65,6 +74,7 @@ export const actions = {
       console.log(recipes)
    } catch (error) {
      //TODO handle error correctly
+     context.commit("openSnackbar", "There has been an server error")
      console.log(error)
    }
   },
@@ -75,6 +85,7 @@ export const actions = {
       getNextPage(context);
     } catch (error) {
      //TODO handle error correctly
+     context.commit("openSnackbar", "There has been an server error")
      console.log(error)
     }
   },
@@ -86,6 +97,7 @@ export const actions = {
         await doSearch(context);
         } catch (error) {
         //TODO handle error correctly
+        context.commit("openSnackbar", "There has been an server error")
         console.log(error)
       }
     }
@@ -97,6 +109,7 @@ export const actions = {
       context.commit("setTagsAvailable", tags.data)
     } catch (error) {
         //TODO handle error correctly
+        context.commit("openSnackbar", "There has been an server error")
         console.log(error)
     }
   }
@@ -109,6 +122,8 @@ export const getters = {
   getTags: (state) => state.search.tags,
   getKeyword: (state) => state.search.keyword,
   getTagsAvailable: (state) => state.search.tagsAvailable,
+  isSnackbarOpened: (state) => state.snackbarOpen,
+  snackbarText: (state) => state.snackbarText,
 }
 
 export default new Vuex.Store({

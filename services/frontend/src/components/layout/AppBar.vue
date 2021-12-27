@@ -39,16 +39,28 @@
 
     <v-divider vertical></v-divider>
 
-      <v-btn icon @click="logout">
+      <v-btn v-if="isLoggedIn" icon @click="logout">
         <v-icon>mdi-logout</v-icon>
       </v-btn>
 
-    <v-avatar @click="() => { this.$router.push('/app/account') }" color="primary" size="56">PW</v-avatar>
+      <v-avatar v-if="isLoggedIn" @click="goToAccount" color="primary" size="56">PW</v-avatar>
+
+      <v-btn v-if="!isLoggedIn" icon @click="login">
+        <v-icon>mdi-login</v-icon>
+      </v-btn>
+
+      <v-btn v-if="!isLoggedIn" icon @click="register">
+        <v-icon>mdi-account-plus-outline</v-icon>
+      </v-btn>
+
+    
   </v-app-bar>
 </template>
 
 <script>
   import { api } from '@/api';
+  import { mover } from "@/mover";
+
 export default {
   
   name: "AppBar",
@@ -64,6 +76,9 @@ export default {
   computed: {
       items() {
           return this.recpies
+      },
+      isLoggedIn() {
+        return this.$store.getters["isLoggedIn"]
       }
   },
   watch: {
@@ -93,13 +108,22 @@ export default {
   methods: {
     async logout() {
       await this.$store.dispatch("actionLogOut")
-      this.$router.push("/")
+      mover.goToHome()
+    },
+    login() {
+      mover.goToLogin()
+    },
+    register() {
+      mover.goToRegister()
+    },
+    goToAccount(){
+      mover.goToAccount()
     },
     async goToSearch() {
       console.log(this.keyword)
       this.$store.commit("setKeyword", this.keyword)
       this.$store.dispatch("searchWithKeywordInState")
-      this.$router.push("/app/search")
+      mover.goToSearch()
     }
   }
 };
