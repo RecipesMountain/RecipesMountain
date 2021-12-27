@@ -41,7 +41,7 @@ const routes = [
       } else next()
     },
     children: [
-      {//duplicate to shot how to do sup routures 
+      {//duplicate to show how to do sup routures 
         path: '/account',
         name: 'MyAccount',
         component: MyAccount

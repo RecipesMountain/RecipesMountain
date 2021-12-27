@@ -75,7 +75,7 @@
                         elevation="2"
                         large
                         rounded
-                        @click="serach"
+                        @click="sendSearch"
                         >Search</v-btn>
                     </v-col>
                 </v-row>
@@ -98,18 +98,12 @@ export default {
         }
     },
     methods: {
-        serach() {
-        //TODO, handle skip and limit correctly 
+        sendSearch() {
         let payload = {
-            skip: 0,
-            limit: 20, 
             keyword: this.keyword,
             tags: this.tags,
             sort: this.sortBy,       
         }
-        console.log(this.keyword)
-        console.log(this.tags)
-        console.log(payload)
         this.$store.dispatch("search", payload)
     },
     },
@@ -128,10 +122,13 @@ export default {
 
         this.isLoading = true
 
-        await this.$store.dispatch("getTags")
-        this.tagsPosible = this.$store.getters["getTagsAvailable"]
-        console.log(this.tagsPosible)
-        //TODO ERROr handling
+        try {
+            await this.$store.dispatch("getTags")
+            this.tagsPosible = this.$store.getters["getTagsAvailable"]
+        } catch (error) {
+            this.$store.commit("openSnackbar", "There has been an error with getting tags from the server\n Try again later, or contact adminstator")
+        }
+     
         this.isLoading = false
       },
 }

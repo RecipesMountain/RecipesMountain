@@ -97,11 +97,13 @@ export default {
             sort: this.sortBy,       
         }
 
-        let response = await api.search(this.$store.getters["token"], payload.keyword, payload.tags, payload.sort, payload.skip, payload.limit);
-        console.log(response)  
-        this.recpies = response.data
-      
-        //TODO ERROr handling
+        try {
+          let response = await api.search(this.$store.getters["token"], payload.keyword, payload.tags, payload.sort, payload.skip, payload.limit);
+          this.recpies = response.data
+        } catch (error) {
+          this.$store.commit("openSnackbar", "There has been an error with getting results from the server\n You can go over to search page and try again, or contact adminstator")
+        }
+        
         this.isLoading = false
     },
   },
@@ -120,7 +122,6 @@ export default {
       mover.goToAccount()
     },
     async goToSearch() {
-      console.log(this.keyword)
       this.$store.commit("setKeyword", this.keyword)
       this.$store.dispatch("searchWithKeywordInState")
       mover.goToSearch()
