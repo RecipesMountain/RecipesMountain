@@ -45,6 +45,9 @@ export default {
     hasNextPage() {
       return this.$store.getters['hasNextPage']
     }
+  },
+  async mounted() {
+    this.$store.dispatch["getTags"]
   }
 }
 </script>

@@ -5,6 +5,7 @@ from sqlalchemy.sql.functions import func
 
 from app.crud.base import CRUDBase
 from app.models.recipe import Recipe
+from app.models.tag import Tag
 
 from app.schemas.recipe import RecipeCreate, RecipeUpdate
 
@@ -28,11 +29,11 @@ class CRUDRecpie(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
         return db.query(Recipe)
     
     def with_keyword(self, q: Query, *, keyword: str) -> Query:
-        return q.filter(Recipe.__ts_vector__.op('@@')(func.to_tsquery('english', f"{keyword}:*")))
+        return q.filter(Recipe.__ts_vector__.op('@@')(func.to_tsquery('english', f"{keyword.replace(' ', ' & ')}:*")))
     
-    def with_tags_and(self, q: Query, *, tags: List[Recipe]) -> Query:
+    def with_tags_and(self, q: Query, *, tags: List[str]) -> Query:
         for tag in tags:
-            q = q.filter(Recipe.tags.any(tag.name.contains(tag)))
+            q = q.filter(Recipe.tags.any(Tag.name == tag))
         return q
 
     #TODO with_tags_or

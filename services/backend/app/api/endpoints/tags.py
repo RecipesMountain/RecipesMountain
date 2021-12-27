@@ -4,7 +4,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from app import models, schemas
+from app import models, schemas, crud 
 from app.api import deps
 
 router = APIRouter()
@@ -13,20 +13,8 @@ router = APIRouter()
 @router.get("/", response_model=List[schemas.Tag])
 def get_all_tags(
     db: Session = Depends(deps.get_db),
-    skip: int = 0,
-    limit: int = 100,
 ) -> Any:
-    pass
-
-
-@router.get("/search", response_model=List[schemas.Tag])
-def search_tags(
-    db: Session = Depends(deps.get_db),
-    query: str = "",
-    skip: int = 0,
-    limit: int = 100,
-) -> Any:
-    pass
+    return crud.tag.get_all(db)
 
 
 @router.post("/", response_model=schemas.Tag)

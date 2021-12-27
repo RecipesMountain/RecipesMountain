@@ -1,4 +1,5 @@
 import axios from 'axios';
+import qs from 'qs';
 
 function authHeaders(token) {
   return {
@@ -62,14 +63,19 @@ export const api = {
   },
   async search(token, keyword, tags, sort, skip, limit){
     let config = basicConfig(token, skip, limit)
-    if (tags != null)
+    if (tags != null && tags != [])
       config.params["tags"] = tags
     if (keyword != null && keyword != "")
-      config.params["keywords"] = keyword
+      config.params["keywords"] = keyword.replace(" ","+")
     if (sort != null)
       config.params["sort"] = sort
     config.params["tagsConnect"] = "and"
+    config["paramsSerializer"] = (params) => {
+      return qs.stringify(params, { arrayFormat: 'repeat' })
+    }
     return axios.get(`${APISUFFIX}/api/recipes/search`, config)
   },
-
+  async getTags() {
+    return axios.get(`${APISUFFIX}/api/tags/`)
+  }
 };

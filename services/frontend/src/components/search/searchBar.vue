@@ -18,14 +18,21 @@
                     ></v-text-field>
                 </v-col>
                 <v-col>
-                    <v-text-field
+                    <v-autocomplete
                         label="Search by tags"
-                        placeholder="Split tags using comma(tag,tag)"
-                        v-model="tagsTyped"
+                        v-model="tags"
+                        :items="items"
+                        :loading="isLoading"
+                        :search-input.sync="search"
+                        item-text="name"
+                        item-value="name"
+                        chips
+                        clearable
                         filled
-                        dense
+                        multiple
                         rounded
-                    ></v-text-field>
+                        small-chips
+                    ></v-autocomplete>
                 </v-col>
             </v-row>
             <v-row no-gutters align="center" justify="center" >
@@ -35,7 +42,7 @@
                 <v-col no-gutters >
                     <v-checkbox
                         v-model="sortBy"
-                        value="popularity"
+                        value="popular"
                         label="Popularity"
                     ></v-checkbox>
                 </v-col>
@@ -51,6 +58,13 @@
                         v-model="sortBy"
                         value="views"
                         label="Most viewed"
+                    ></v-checkbox>
+                </v-col>
+                <v-col>
+                    <v-checkbox
+                        v-model="sortBy"
+                        value="nosort"
+                        label="No Sorting"
                     ></v-checkbox>
                 </v-col>
                 </v-row>
@@ -74,10 +88,13 @@
 export default {
     data() {
         return {
-            keyword: null,
-            tagsTyped: null,
+            keyword: this.$store.getters["getKeyword"],
+            tags: [],
             showMore: false,
-            sortBy: "popularity"
+            sortBy: "popular",
+            tagsPosible: [],
+            isLoading: false,
+            search: null,
         }
     },
     methods: {
@@ -85,17 +102,39 @@ export default {
         //TODO, handle skip and limit correctly 
         let payload = {
             skip: 0,
-            limit: 20,   
+            limit: 20, 
             keyword: this.keyword,
-            tags: this.tagsTyped,
-            sort: this.sort,       
+            tags: this.tags,
+            sort: this.sortBy,       
         }
         console.log(this.keyword)
-        console.log(this.tagsTyped)
+        console.log(this.tags)
         console.log(payload)
         this.$store.dispatch("search", payload)
     },
     },
+    computed: {
+        items() {
+            return this.tagsPosible
+        }
+    },
+    watch: {
+      async search () {
+        // Items have already been loaded
+        if (this.tagsPosible.length > 0) return
+
+        // Items have already been requested
+        if (this.isLoading) return
+
+        this.isLoading = true
+
+        await this.$store.dispatch("getTags")
+        this.tagsPosible = this.$store.getters["getTagsAvailable"]
+        console.log(this.tagsPosible)
+        //TODO ERROr handling
+        this.isLoading = false
+      },
+}
 }
 </script>
 

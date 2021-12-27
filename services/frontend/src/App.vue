@@ -19,6 +19,8 @@ export default {
         if(this.$store.getters["isLoggedIn"]){
       router.push(`/app`)
   }
+  //TODO consider when update tags
+  this.$store.getters["getTags"]
   }
 };
 </script>

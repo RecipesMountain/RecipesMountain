@@ -10,8 +10,9 @@ const state = {
     recipes: [],
     nextRecipes: [],
     tags: "",
+    tagsAvailable: [],
     keyword: null,
-    sort: "popularity",
+    sort: "popular",
     page: 1,
     perPage: 20,
   },
@@ -36,6 +37,9 @@ export const mutations = {
       },
       setSort(state, newSort) {
         state.search.sort = newSort
+      },
+      setTagsAvailable(state, newTags) {
+        state.search.tagsAvailable = newTags
       }
 }
 
@@ -46,6 +50,16 @@ export const actions = {
       context.commit("setTags", payload.tags)
       context.commit("setSort", payload.sort)
 
+      let recipes = await doSearch(context);
+      getNextPage(context);
+      console.log(recipes)
+   } catch (error) {
+     //TODO handle error correctly
+     console.log(error)
+   }
+  },
+  async searchWithKeywordInState(context) {
+    try {
       let recipes = await doSearch(context);
       getNextPage(context);
       console.log(recipes)
@@ -75,6 +89,16 @@ export const actions = {
         console.log(error)
       }
     }
+  },
+  async getTags(context) {
+    try {
+      let tags = await api.getTags()
+      console.log(tags)
+      context.commit("setTagsAvailable", tags.data)
+    } catch (error) {
+        //TODO handle error correctly
+        console.log(error)
+    }
   }
 }
 
@@ -84,6 +108,7 @@ export const getters = {
   hasPreviousPage: (state) => (state.search.page != 1) ? true : false,
   getTags: (state) => state.search.tags,
   getKeyword: (state) => state.search.keyword,
+  getTagsAvailable: (state) => state.search.tagsAvailable,
 }
 
 export default new Vuex.Store({

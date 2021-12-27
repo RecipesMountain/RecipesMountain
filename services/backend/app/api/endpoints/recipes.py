@@ -1,7 +1,7 @@
 from typing import Any, List
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Query, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app import models, schemas, crud
@@ -17,7 +17,7 @@ def search_recipes(
     skip: int = 0,
     limit: int = 100,
     sort: str = "popular",
-    tags: str = "",
+    tags: List[str] = Query([]),
     tagsConnect: str = "and",
 ) -> Any:
     #TODO USE ENUM HERE
@@ -27,11 +27,13 @@ def search_recipes(
             detail="Bad tags connect",
         )
     #TODO use enum
-    if sort not in ["popular", "views", "best","no sort"]:
+    if sort not in ["popular", "views", "best", "nosort"]:
         raise HTTPException(
             status_code=400,
             detail="Bad tags connect",
         )
+    
+    keywords = keywords.replace("+", " ")
 
     query = crud.recpie.start_query(db)
 
@@ -39,8 +41,8 @@ def search_recipes(
         query = crud.recpie.with_keyword(query, keyword=keywords)
 
 
-    if tags != "":
-        tags = tags.split(',')
+    if tags != []:
+        print(tags)
         if tagsConnect == "and":
             query = crud.recpie.with_tags_and(query, tags=tags)
         else:
