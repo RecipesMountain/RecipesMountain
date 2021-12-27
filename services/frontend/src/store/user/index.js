@@ -45,97 +45,95 @@ const defaultState = {
 
     },
     actions: {
-        async actionLogIn(state, payload) {
+        async actionLogIn(context, payload) {
             try {
                 const response = await api.logIn(payload.username, payload.password)
                 const token = response.data.access_token;
                 if (token) {
                     saveLocalToken(token);
-                    state.commit("setToken", token);
-                    state.commit("setLoggedIn", true)
-                    state.commit("setLogInError", false)
-                    await state.dispatch("actionGetMe"); //! this can not work, got to check this
+                    context.commit("setToken", token);
+                    context.commit("setLoggedIn", true)
+                    context.commit("setLogInError", false)
+                    await context.dispatch("actionGetMe");
                 } else {
-                    await state.dispatch("actionLogOut");
+                    await context.dispatch("actionLogOut");
                 }
             } catch (err) {
-                state.commit("setLoggedIn", false)
-                state.commit("setLogInError", true)
-                console.log(err);
-                await state.dispatch("actionLogOut");
+                context.commit("setLoggedIn", false)
+                context.commit("setLogInError", true)
+                await context.dispatch("actionLogOut");
             }
         },
 
-        async actionGetMe(state) {
+        async actionGetMe(context) {
             try {
-                const response = await api.getMe(state.state.token, state.state.userID)
+                const response = await api.getMe(context.state.token, context.state.userID)
                 if (response.data) {
-                    console.log(response.data)
-                    state.commit("setUserID", response.data.id);
-                    state.commit("setUsername", response.data.email);
-                    state.commit("setFullName", response.data.full_name);
-                    state.commit("setSuperUser", response.data.is_superuser);
-                    console.log(state)
+                    context.commit("setUserID", response.data.id);
+                    context.commit("setUsername", response.data.email);
+                    context.commit("setFullName", response.data.full_name);
+                    context.commit("setSuperUser", response.data.is_superuser);
                 }
             } catch (error) {
-                await state.dispatch("actionCheckApiError", error);
+                await context.dispatch("actionCheckApiError", error);
             }
         },
 
-        async actionCheckLoggedIn(state) {
-            if (!state.state.isLoggedIn) {
-                let token = state.state.token;
+        async actionCheckLoggedIn(context) {
+            if (!context.state.isLoggedIn) {
+                let token = context.state.token;
                 if (!token) {
                     const localToken = getLocalToken();
                     if (localToken) {
-                        state.commit("setToken", localToken);
+                        context.commit("setToken", localToken);
                         token = localToken;
                     }
                 }
                 if (token) {
                     try {
-                        await state.dispatch("actionGetMe");
-                        state.commit("setLoggedIn", true)
+                        await context.dispatch("actionGetMe");
+                        context.commit("setLoggedIn", true)
                     } catch (error) {
-                        await state.dispatch("actionLogOut");
+                        await context.dispatch("actionLogOut");
+                        context.commit("openSnackbar", "You're not logged in!")
                     }
                 } else {
-                    await state.dispatch("actionLogOut");
+                    await context.dispatch("actionLogOut");
+                    context.commit("openSnackbar", "You're not logged in!")
                 }
             }
         },
 
-        async actionLogOut(state) {
+        async actionLogOut(context) {
             removeLocalToken();
-            state.commit("setToken", '');
-            state.commit("setLoggedIn", false);
+            context.commit("setToken", '');
+            context.commit("setLoggedIn", false);
         },
 
-        async actionCheckApiError(state, payload) {
+        async actionCheckApiError(context, payload) {
             if (payload.response.status === 401) {
-                await state.dispatch("actionLogOut");
+                await context.dispatch("actionLogOut");
+                context.commit("openSnackbar", "Wrong credentials!")
             }
             if (payload.response.status === 403) {
-                await state.dispatch("actionLogOut");
+                await context.dispatch("actionLogOut");
+                context.commit("openSnackbar", "You're not logged in!")
             }
         },
 
-        async actionRegister(state, payload) {
+        async actionRegister(context, payload) {
             try {
                 const response = await api.createUserOpen(payload)
                 if (response.status == 200) {
-                    state.commit("setRegistrationError", false)
-                    state.commit("setRegistrationSuccess", true)
-                    console.log(response);
+                    context.commit("setRegistrationError", false)
+                    context.commit("setRegistrationSuccess", true)
                 } else {
-                    state.commit("setRegistrationError", true)
-                    state.commit("setRegistrationSuccess", false)
-                    console.log(response);
+                    context.commit("setRegistrationError", true)
+                    context.commit("setRegistrationSuccess", false)
                 }
             } catch (err) {
-                state.commit("setRegistrationError", true)
-                state.commit("setRegistrationSuccess", false)
-                console.log(err);
+                context.commit("setRegistrationError", true)
+                context.commit("setRegistrationSuccess", false)
             }
         }
     },

@@ -2,8 +2,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '@/views/Home.vue'
-import Welcome from '@/views/Welcome.vue'
-import AppHome from '@/views/AppHome.vue'
 import Login from '@/views/UserViews/Login.vue'
 import Register from '@/views/UserViews/Register.vue'
 import SearchRecipe from "@/views/RecipeViews/SearchRecipes.vue"
@@ -15,8 +13,8 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'Welcome',
-    component: Welcome
+    name: 'Home',
+    component: Home
   },
   {
     path: '/login',
@@ -29,27 +27,22 @@ const routes = [
     component: Register
   },
   {
-    path: '/app/',
-    name: 'App',
-    component: AppHome,
+    path: '/search',
+    name: 'Search',
+    component: SearchRecipe
+  },
+  {
+    path: '/user/',
+    name: 'MyAccount',
+    component: MyAccount,
     beforeEnter: (to, from, next) => {
       if(!store.getters["isLoggedIn"]){
-        next({ name: "Welcome"  })
+        next({ name: "Home"  })
       } else next()
     },
     children: [
-      {
-        path: '/',
-        name: 'Home',
-        component: Home
-      },
-      {
-        path: 'search',
-        name: 'Search',
-        component: SearchRecipe
-      },
-      {
-        path: 'account',
+      {//duplicate to show how to do sup routures 
+        path: '/account',
         name: 'MyAccount',
         component: MyAccount
       },
