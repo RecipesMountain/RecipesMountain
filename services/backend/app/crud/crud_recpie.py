@@ -10,7 +10,7 @@ from app.models.tag import Tag
 from app.schemas.recipe import RecipeCreate, RecipeUpdate
 
 
-class CRUDRecpie(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
+class CRUDRecipe(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
     def get_by_tags_and(self, db: Session, *, tags: List[Recipe]) -> List[Recipe]:
         q = db.query(Recipe)
         for tag in tags:
@@ -67,4 +67,4 @@ class CRUDRecpie(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
         return db.query(Recipe).all()
 
 
-recpie = CRUDRecpie(Recipe)
+recipe = CRUDRecipe(Recipe)

@@ -35,15 +35,15 @@ def search_recipes(
 
     keywords = keywords.replace("+", " ")
 
-    query = crud.recpie.start_query(db)
+    query = crud.recipe.start_query(db)
 
     if keywords != "":
-        query = crud.recpie.with_keyword(query, keyword=keywords)
+        query = crud.recipe.with_keyword(query, keyword=keywords)
 
     if tags != []:
         print(tags)
         if tagsConnect == "and":
-            query = crud.recpie.with_tags_and(query, tags=tags)
+            query = crud.recipe.with_tags_and(query, tags=tags)
         else:
             raise HTTPException(
                 status_code=400,
@@ -51,13 +51,13 @@ def search_recipes(
             )
 
     if sort == "popular":
-        query = crud.recpie.sort_popularity(query)
+        query = crud.recipe.sort_popularity(query)
     elif sort == "views":
-        query = crud.recpie.sort_views(query)
+        query = crud.recipe.sort_views(query)
     elif sort == "best":
-        query = crud.recpie.sort_best(query)
+        query = crud.recipe.sort_best(query)
 
-    r = crud.recpie.execQuery(query, skip=skip, limit=limit)
+    r = crud.recipe.execQuery(query, skip=skip, limit=limit)
     return r
 
 
@@ -67,9 +67,9 @@ def get_popular_recipes(
     skip: int = 0,
     limit: int = 100,
 ) -> Any:
-    query = crud.recpie.start_query(db)
-    query = crud.recpie.sort_popularity(query)
-    return crud.recpie.execQuery(query, skip=skip, limit=limit)
+    query = crud.recipe.start_query(db)
+    query = crud.recipe.sort_popularity(query)
+    return crud.recipe.execQuery(query, skip=skip, limit=limit)
 
 
 @router.get("/best", response_model=List[schemas.Recipe])
@@ -78,9 +78,9 @@ def get_best_recipes(
     skip: int = 0,
     limit: int = 100,
 ) -> Any:
-    query = crud.recpie.start_query(db)
-    query = crud.recpie.sort_best(query)
-    return crud.recpie.execQuery(query, skip=skip, limit=limit)
+    query = crud.recipe.start_query(db)
+    query = crud.recipe.sort_best(query)
+    return crud.recipe.execQuery(query, skip=skip, limit=limit)
 
 
 @router.get("/{recipe_id}", response_model=schemas.Recipe)
