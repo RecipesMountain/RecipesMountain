@@ -93,6 +93,10 @@ export default {
       comments: []
     };
   },
+  async mounted() {
+
+    this.$store.dispatch("actionGetRecipe", this.$route.params.id)
+  }
 };
 </script>
 

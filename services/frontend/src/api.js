@@ -77,5 +77,9 @@ export const api = {
   },
   async getTags() {
     return axios.get(`${APISUFFIX}/api/tags/`)
+  },
+  // new 
+  async getRecipe(id){
+    return axios.get(`${APISUFFIX}/api/recipes/` + id)
   }
 };

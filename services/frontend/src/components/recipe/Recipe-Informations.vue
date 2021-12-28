@@ -149,7 +149,7 @@
                   <div v-bind="attrs" v-on="on">
                     <v-btn
                       icon
-                      :ripple="F"
+                      :ripple="False"
                       plain
                       v-on:click="$vuetify.goTo('#comments')"
                     >
@@ -186,6 +186,7 @@ export default {
   components: { RecipeImageCarousel },
   data() {
     return {
+      False: false,
       recipeTitle: this.$store.getters["title"],
       recipeDesc: this.$store.getters["description"],
       recipeAuthor: this.$store.getters["author"],

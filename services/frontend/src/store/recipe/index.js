@@ -2,6 +2,7 @@ import { api } from "@/api";
 
 const defaultState = {
   recipe: {
+    Id: 0,
     Title: "Recipe Title",
     Description: "Recipe Description",
     Author: "Magda Krzesler",
@@ -38,7 +39,7 @@ const defaultState = {
         label: "Onion",
       },
     ],
-    Stages: [
+    Stages: [       
       {
         label: "Zapiekanka",
         ingredients: [
@@ -121,17 +122,26 @@ const defaultState = {
 
 export const recipeModule = {
   state: defaultState,
-  mutations: {},
+  mutations: {
+    setRecipeId(state, payload){
+        state.recipe.Id = payload
+    },
+    setTitle(state, payload) {
+        state.recipe.Title = payload
+    }
+  },
   actions: {
-    async actionGetRecipe(context) {
+    async actionGetRecipe(context, payload) {
       try {
-        const response = await api.getMe(
-          context.state.token,
-          context.state.userID
-        );
+        const response = await api.getRecipe(payload)
         if (response.data) {
-          console.log("Yest");
+            console.log("YEET");
+            context.commit("setTitle", response.data.title)
+            // context.commit();  
         }
+        else {
+            console.log("Something gone wrong")
+        }      
       } catch (error) {
         await context.dispatch("actionCheckApiError", error);
       }
