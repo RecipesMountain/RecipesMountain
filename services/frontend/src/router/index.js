@@ -6,7 +6,12 @@ import Login from '@/views/UserViews/Login.vue'
 import Register from '@/views/UserViews/Register.vue'
 import SearchRecipe from "@/views/RecipeViews/SearchRecipes.vue"
 import MyAccount from "@/views/UserViews/MyAccount.vue"
+
+import Recipe from "@/views/RecipeViews/Recipe.vue"
+
 import store from '@/store'
+
+
 
 Vue.use(VueRouter)
 
@@ -30,6 +35,11 @@ const routes = [
     path: '/search',
     name: 'Search',
     component: SearchRecipe
+  },
+  {
+    path: 'recipe/:id',
+    name: 'Recipe',
+    component: Recipe
   },
   {
     path: '/user/',

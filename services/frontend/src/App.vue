@@ -36,9 +36,10 @@ export default {
     AppBar
   },
   async mounted() {
-    await this.$store.dispatch("actionCheckLoggedIn")
-    if(this.$store.getters["isLoggedIn"])
-      this.$store.dispatch("actionGetMe")
+    // TODO uncomment this 
+    // await this.$store.dispatch("actionCheckLoggedIn")
+    // if(this.$store.getters["isLoggedIn"])
+    //   this.$store.dispatch("actionGetMe")
   },
   computed: {
     snackbar() {
