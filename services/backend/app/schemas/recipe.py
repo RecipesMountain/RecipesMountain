@@ -51,6 +51,7 @@ class SearchResult(BaseModel):
 
 
 class RecipeCreate(RecipeWithTags, RecipeWithStage):
+    
     pass
 
 

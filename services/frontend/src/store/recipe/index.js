@@ -1,47 +1,50 @@
 import { api } from "@/api";
 
 const defaultState = {
+  error: "",
+  errorStatus: false,
   recipe: {
     Id: 0,
-    Title: "Recipe Title",
-    Description: "Recipe Description",
-    Author: "Magda Krzesler",
+    Title: "",
+    Description: "",
+    Author: "Anonymous",
     AuthorId: 1,
     Time: 0.5,
-    Difficulty: 0,
-    Rating: 1,
+    Difficulty: "",
+    Rating: 4,
     RatingCount: 1000,
     Calories: 200,
     Servings: 3.5,
     Tags: [
       {
         id: 1,
-        label: "Pasta",
+        name: "Pasta",
       },
       {
         id: 2,
-        label: "In Oven",
+        name: "In Oven",
       },
       {
         id: 3,
-        label: "Tomatoes",
+        name: "Tomatoes",
       },
       {
         id: 4,
-        label: "Cheese",
+        name: "Cheese",
       },
       {
         id: 5,
-        label: "Oregano",
+        name: "Oregano",
       },
       {
         id: 6,
-        label: "Onion",
+        name: "Onion",
       },
     ],
     Stages: [       
       {
-        label: "Zapiekanka",
+        name: "Zapiekanka",
+        content: "",
         ingredients: [
           {
             label: "makaron świderki",
@@ -91,7 +94,7 @@ const defaultState = {
         ],
       },
       {
-        label: "Dodatki",
+        name: "Dodatki",
         ingredients: [
           {
             label: "ketchup",
@@ -128,24 +131,96 @@ export const recipeModule = {
     },
     setTitle(state, payload) {
         state.recipe.Title = payload
+    },
+    setDescription(state, payload) {
+        state.recipe.Description = payload
+    },
+    setAuthor(state, payload){
+      state.recipe.Author = payload
+    },
+    setAuthorId(state, payload){
+      state.recipe.AuthorId = payload
+    },
+    setTime(state, payload){
+      state.recipe.Time = payload 
+    },
+    setDifficulty(state, payload){
+      state.recipe.Difficulty = payload
+    },
+    setRating(state, payload){
+      state.recipe.Rating = payload
+    },
+    setRatingCount(state, payload){
+      state.recipe.RatingCount = payload
+    },
+    setCalories(state, payload){
+      state.recipe.Calories = payload
+    },
+    setServings(state, payload){
+      state.recipe.Servings = payload
+    },
+    setTags(state, payload){
+      state.recipe.Tags = payload
+    },
+    setStages(state, payload){
+      state.recipe.Stages = payload
+    },
+    setError(state, payload){
+      state.error = payload
+    },
+    setErrorStatus(state, payload){
+      state.errorStatus = payload
     }
+
+    // TODO TAGS AND STAGES
+    // set(state, payload){
+    //   state.recipe. = payload
+    // },
+
   },
   actions: {
     async actionGetRecipe(context, payload) {
       try {
         const response = await api.getRecipe(payload)
         if (response.data) {
-            console.log("YEET");
-            context.commit("setTitle", response.data.title)
-            // context.commit();  
+            context.commit("setTags", response.data.tags)
+            context.commit("setStages", response.data.stages)
         }
         else {
             console.log("Something gone wrong")
         }      
       } catch (error) {
-        await context.dispatch("actionCheckApiError", error);
+        context.commit("setErrorStatus", true)
+        context.commit("setError", error)
+        // await context.dispatch("actionCheckApiError", error);
       }
     },
+    async actionGetRecipeInfo(context, payload) {
+      try{
+        const response = await api.getRecipe(payload)
+        if(response.data) {
+          console.log(response.data)
+          context.commit("setTitle", response.data.title)
+          context.commit("setDescription", "")
+          context.commit("setTime", response.data.cookingTime)
+          context.commit("setDifficulty", response.data.difficulty)
+          context.commit("setRating", response.data.rating)
+          context.commit("setCalories", response.data.calories)
+          context.commit("setServings", response.data.portion)
+          context.commit("setTags", response.data.tags)
+          
+        }
+        else {
+          console.log("Something gone wrong")
+        }
+      }
+      catch(error) {
+        await console.log("error")
+        await context.commit("setErrorStatus", true)
+        // context.commit("setError", error)
+        // await context.dispatch("actionCheckApiError", error);
+      }
+    }
   },
   getters: {
     title: (state) => state.recipe.Title,
@@ -161,5 +236,6 @@ export const recipeModule = {
     tags: (state) => state.recipe.Tags,
     stages: (state) => state.recipe.Stages,
     images: (state) => state.recipe.ImageUrls,
+    errorStatus: (state) => state.errorStatus,
   },
 };

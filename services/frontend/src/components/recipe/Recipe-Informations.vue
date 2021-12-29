@@ -12,8 +12,9 @@
                 small
                 color="#e0bd70"
                 class="text-body-2 text-left px-2"
+                :href="'/tags/'+ tag.id"
               >
-                {{ tag.label }}
+                {{ tag.name }}
               </v-chip>
               <v-btn icon @click="$vuetify.goTo('#tags')">
                 <v-icon> mdi-dots-horizontal</v-icon>
@@ -38,15 +39,15 @@
               <v-tooltip top>
                 <template v-slot:activator="{ on, attrs }">
                   <div v-bind="attrs" v-on="on">
-                    <v-icon size="50" v-if="recipeTime < 2"
+                    <v-icon size="50" v-if="recipeTimeHours < 2"
                       >mdi-clock-outline</v-icon
                     >
                     <v-icon size="50" v-else>mdi-clock-plus-outline</v-icon>
                     <span class="font-weight-bold">
-                      <template v-if="recipeTime < 1">
-                        {{ recipeTime * 60 }} min</template
+                      <template v-if="recipeTimeHours < 1">
+                        {{ recipeTimeHours * 60 }} min</template
                       >
-                      <template v-else> {{ recipeTime }} h</template>
+                      <template v-else> {{ recipeTimeHours }} h</template>
                     </span>
                   </div>
                 </template>
@@ -83,12 +84,12 @@
                 <v-tooltip top class="mx-2">
                   <template v-slot:activator="{ on, attrs }">
                     <div v-bind="attrs" v-on="on">
-                      <template v-if="recipeDifficulty == 0">
+                      <template v-if="recipeDifficultyLevel == 0">
                         <v-icon size="40" color="success"
                           >mdi-chili-mild</v-icon
                         >
                       </template>
-                      <template v-else-if="recipeDifficulty == 1">
+                      <template v-else-if="recipeDifficultyLevel == 1">
                         <v-icon size="40" color="warning" class="mr-n6"
                           >mdi-chili-mild
                         </v-icon>
@@ -109,8 +110,8 @@
                   </template>
                   <span class="font-weight-bold"
                     >Recipe difficulty:
-                    <template v-if="recipeDifficulty == 0"> Easy </template>
-                    <template v-else-if="recipeDifficulty == 1"> Medium </template>
+                    <template v-if="recipeDifficultyLevel == 0"> Easy </template>
+                    <template v-else-if="recipeDifficultyLevel == 1"> Medium </template>
                     <template v-else> Hard </template>
                   </span>
                 </v-tooltip>
@@ -187,18 +188,18 @@ export default {
   data() {
     return {
       False: false,
-      recipeTitle: this.$store.getters["title"],
-      recipeDesc: this.$store.getters["description"],
-      recipeAuthor: this.$store.getters["author"],
-      recipeAuthorId: this.$store.getters["authorId"],
-      recipeTime: this.$store.getters["time"],
-      recipeDifficulty: this.$store.getters["difficulty"],
-      recipeRating: this.$store.getters["rating"],
-      recipeRatingCount: this.$store.getters["ratingCount"],
-      recipeCalories: this.$store.getters["calories"],
-      recipeServings: this.$store.getters["servings"],
-      tags: this.$store.getters["tags"],
-      stages: this.$store.getters["stages"],
+      // recipeTitle: this.$store.getters["title"],
+      // recipeDesc: this.$store.getters["description"],
+      // recipeAuthor: this.$store.getters["author"],
+      // recipeAuthorId: this.$store.getters["authorId"],
+      // recipeTime: this.$store.getters["time"],
+      // recipeDifficulty: this.$store.getters["difficulty"],
+      // recipeRating: this.$store.getters["rating"],
+      // recipeRatingCount: this.$store.getters["ratingCount"],
+      // recipeCalories: this.$store.getters["calories"],
+      // recipeServings: this.$store.getters["servings"],
+      // tags: this.$store.getters["tags"],
+      // stages: this.$store.getters["stages"],
     };
   },
   computed: {
@@ -209,7 +210,69 @@ export default {
         return this.tags;
       }
     },
+    recipeTitle(){
+      return this.$store.getters["title"]
+    },
+    recipeDesc(){
+      return this.$store.getters["description"]
+    },
+    recipeAuthor(){
+      return this.$store.getters["author"]
+    },
+    recipeAuthorId(){
+      return this.$store.getters["authorId"]
+    },
+    recipeTime(){
+      return this.$store.getters["time"]
+    },
+    recipeDifficulty(){
+      return this.$store.getters["difficulty"]
+    },
+    recipeRating(){
+      return this.$store.getters["rating"] / 2
+    },
+    recipeRatingCount(){
+      return this.$store.getters["ratingCount"]
+    },
+    recipeCalories(){
+      return this.$store.getters["calories"]
+    },
+    recipeServings(){
+      return this.$store.getters["servings"] / 2
+    },
+    tags(){
+      return this.$store.getters["tags"]
+    },
+    // stages(){
+    //   return this.$store.getters["stages"]
+    // },
+    recipeTimeHours(){
+      return this.recipeTime / 60
+    },
+    recipeDifficultyLevel(){
+      if(this.recipeDifficulty == 'Easy'){
+        return 0
+      }
+      else if(this.recipeDifficulty == 'Hard'){
+        return 2
+      }
+      else
+      {
+        return 1
+      }
+    },
+    errorStatus(){
+      return this.$store.getters["errorStatus"]
+    }
+
+
   },
+  async mounted() {
+    await this.$store.dispatch("actionGetRecipeInfo", this.$route.params.id)
+    if(this.errorStatus){
+      this.$router.push("/")
+    }
+  }
 };
 </script>
 

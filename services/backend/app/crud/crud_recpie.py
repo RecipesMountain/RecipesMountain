@@ -6,8 +6,14 @@ from sqlalchemy.sql.functions import func
 from app.crud.base import CRUDBase
 from app.models.recipe import Recipe
 from app.models.tag import Tag
+from app.models.stage import Stage
+
+# Test
+from app.models.recipe_tags import RecipeTags
 
 from app.schemas.recipe import RecipeCreate, RecipeUpdate
+
+from uuid import UUID
 
 
 class CRUDRecipe(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
@@ -65,6 +71,46 @@ class CRUDRecipe(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
 
     def get_all(self, db: Session):
         return db.query(Recipe).all()
+
+    def create(self, db: Session, *, obj_in: RecipeCreate, owner_id: UUID) -> Recipe:
+
+        db_obj = Recipe(
+            title=obj_in.title,
+            cookingTime=obj_in.cookingTime,
+            difficulty=obj_in.difficulty,
+            calories=obj_in.calories,
+            portion=obj_in.portion,
+            rating=obj_in.rating,
+            owner_id=owner_id
+        )
+        db.add(db_obj)
+        db.commit()
+        db.refresh(db_obj)
+        for stage in obj_in.stages:
+            db_stage_obj = Stage(
+                name=stage.name,
+                content=stage.content,
+                recipe=db_obj
+                # recipe_id=db_obj.id
+            )
+            db.add(db_stage_obj)
+            db.commit()
+            db.refresh(db_stage_obj)
+        
+        for tag in obj_in.tags:
+            # TODO check if tags are good
+            db_tag_recipe_obj = RecipeTags(
+                recipe_id=db_obj.id,
+                tag_id=tag.id
+            ) 
+            db.add(db_tag_recipe_obj)
+            db.commit()
+            db.refresh(db_tag_recipe_obj)
+
+        return db_obj
+    
+    def get_by_id(self, db: Session, *, recipe_id: UUID)-> Recipe:
+        return db.query(Recipe).filter(Recipe.id == recipe_id).first()
 
 
 recipe = CRUDRecipe(Recipe)

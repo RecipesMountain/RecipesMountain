@@ -13,11 +13,14 @@ class Recipe(Base):
     # TODO ADD decryption?
     id = Column(UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4)
     title = Column(String)
+    # description = Column(String)
     cookingTime = Column(Integer)
     difficulty = Column(String)
     calories = Column(Integer)
     portion = Column(Integer)
     rating = Column(Integer)
+
+
     totalViews = Column(Integer, default=0)
     viewsLast24 = Column(Integer, default=0)
     popularityScore = Column(Integer, default=0)

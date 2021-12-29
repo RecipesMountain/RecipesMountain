@@ -36,7 +36,8 @@
                   class="flex-column"
                 >
                   <v-col>
-                    <RecipeStage :ingredients="stage.ingredients" :steps="stage.steps" :stageLabel="stage.label"/>
+                    <!-- TODO poprawic -->
+                    <RecipeStage :ingredients="[]" :stageContent="stage.content" :stageLabel="stage.name"/>
                   </v-col>
                 </v-row>
                 <!-- stages end -->
@@ -53,7 +54,7 @@
                         color="#e0bd70"
                         class="text-body-2 text-left px-2"
                       >
-                        {{ tag.label }}
+                        {{ tag.name }}
                       </v-chip>
                     </v-chip-group>
                   </v-col>
@@ -88,14 +89,27 @@ export default {
   components: { RecipeInformations, RecipeStage},
   data() {
     return {
-      tags: this.$store.getters["tags"],
-      stages: this.$store.getters["stages"],
+      // tags: this.$store.getters["tags"],
+      // stages: this.$store.getters["stages"],
       comments: []
     };
   },
-  async mounted() {
+  computed: {
+    error(){
+      return this.$store.getters["error"]
+    },
+    tags(){
+      return this.$store.getters["tags"]
+    },
+    stages(){
+      return this.$store.getters["stages"]
+    }
 
-    this.$store.dispatch("actionGetRecipe", this.$route.params.id)
+  },
+  async mounted() {
+    // TODO move all fetch data to recipe
+    await this.$store.dispatch("actionGetRecipe", this.$route.params.id)
+    
   }
 };
 </script>

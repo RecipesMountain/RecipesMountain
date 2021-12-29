@@ -10,7 +10,7 @@
       class="fill-height"
       min-height="300px"
     >
-      <v-card color="transparent" flat>
+      <!-- <v-card color="transparent" flat>
         <div id="stage-title" v-if="steps.length > 0">
           <p class="text-h6 text-left font-weight-medium">
             Opis przygotowanie - {{ stageLabel }}
@@ -26,6 +26,13 @@
             {{ step.content }}
           </p>
         </div>
+      </v-card> -->
+      <v-card color="transparent" flat>
+        <!-- <div id="stage-title" v-if="steps.length > 0"> -->
+          <p class="text-h6 text-left font-weight-medium">
+            Opis przygotowanie - {{ stageLabel }}
+          </p>
+          <p class="text-subtitle-1 text-left px-2"> {{stageContent}} </p>
       </v-card>
     </v-lazy>
   </div>
@@ -33,7 +40,7 @@
 
 <script>
 export default {
-  props: ["stageLabel", "steps"],
+  props: ["stageLabel", "stageContent"],
 
   data() {
     return {

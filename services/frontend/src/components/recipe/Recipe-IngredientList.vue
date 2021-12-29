@@ -13,8 +13,7 @@
         <v-list dense color="transparent">
           <v-list-item >
             <v-list-item-title class="text-left subtitle-1 font-weight-black">
-                <!-- Ingredients:  -  -->
-              {{ stageLabel }}
+                Ingredients - {{ stageLabel }}
             </v-list-item-title>
           </v-list-item>
           <v-list-item
@@ -26,7 +25,7 @@
                 class="text-wrap text-left body-1 font-weight-medium"
               >
                 <v-icon class="mx-n2" color="black">mdi-circle-small</v-icon>
-                {{ ingredient.label }}
+                Ingredients: {{ ingredient.label }}
               </v-list-item-title>
             </v-list-item-content>
             <v-tooltip right>

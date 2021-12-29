@@ -6,7 +6,7 @@
       </v-col>
       <v-col lg="9" cols="12">
         <v-divider/>
-        <RecipeStepList :steps="steps" :stageLabel="stageLabel"/>
+        <RecipeStepList :stageContent="stageContent" :stageLabel="stageLabel"/>
       </v-col>
     </v-row>
   </div>
@@ -16,13 +16,8 @@
 import RecipeIngredientList from './Recipe-IngredientList.vue'
 import RecipeStepList from './Recipe-StepList.vue'
 export default {
-    props:['ingredients', 'steps', 'stageLabel'],
+  props:['ingredients', 'stageContent', 'stageLabel'],
   components: { RecipeIngredientList, RecipeStepList },
-  data(){
-    return{
-      id: this.$route.params.id
-    }
-  }
 }
 </script>
 

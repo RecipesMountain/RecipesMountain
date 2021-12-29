@@ -1,7 +1,7 @@
 from typing import Any, List
 from uuid import UUID
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app import models, schemas, crud
@@ -19,10 +19,19 @@ def get_all_tags(
 
 @router.post("/", response_model=schemas.Tag)
 def create_tag(
+    *,
     db: Session = Depends(deps.get_db),
+    tag_in: schemas.TagCreate,
     current_user: models.User = Depends(deps.get_current_superuser),
 ) -> Any:
-    pass
+    tag = crud.tag.get_by_name(db=db, name=tag_in.name)
+    if tag:
+        raise HTTPException(
+            status_code=400,
+            detail="Tag with this name already exists in the system",
+        )
+    tag = crud.tag.create(db=db, obj_in=tag_in)
+    return tag
 
 
 @router.put("/{tag_id}", response_model=schemas.Tag)

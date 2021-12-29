@@ -7,6 +7,9 @@ class StageBase(BaseModel):
     name: Optional[str]
     content: Optional[str]
 
+    class Config:
+        orm_mode = True
+
 
 class StageCreate(StageBase):
     name: str
