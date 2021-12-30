@@ -8,118 +8,17 @@ const defaultState = {
     Title: "",
     Description: "",
     Author: "Anonymous",
-    AuthorId: 1,
-    Time: 0.5,
+    AuthorId: 0,
+    Time: 0,
     Difficulty: "",
-    Rating: 4,
-    RatingCount: 1000,
-    Calories: 200,
-    Servings: 3.5,
-    Tags: [
-      {
-        id: 1,
-        name: "Pasta",
-      },
-      {
-        id: 2,
-        name: "In Oven",
-      },
-      {
-        id: 3,
-        name: "Tomatoes",
-      },
-      {
-        id: 4,
-        name: "Cheese",
-      },
-      {
-        id: 5,
-        name: "Oregano",
-      },
-      {
-        id: 6,
-        name: "Onion",
-      },
-    ],
-    Stages: [       
-      {
-        name: "Zapiekanka",
-        content: "",
-        ingredients: [
-          {
-            label: "makaron świderki",
-            amount: "100",
-            unit: "g",
-            unitHint: "grams",
-          },
-          {
-            label: "rosół z kury Knorr",
-            amount: "1",
-            unit: "pc.",
-            unitHint: "piece",
-          },
-          {
-            label: "filet z kurczaka",
-            amount: "1",
-            unit: "pc.",
-            unitHint: "piece",
-          },
-          {
-            label: "pomidor",
-            amount: "1",
-            unit: "pc.",
-            unitHint: "piece",
-          },
-          {
-            label: "przecier pomidorowy",
-            amount: "2",
-            unit: "tbsp",
-            unitHint: "table spoon",
-          },
-        ],
-        steps: [
-          {
-            content:
-              "Cebulę pokrój w piórka, czosnek przeciśnij przez praskę. Podsmaż je na oleju.",
-          },
-          { content: "Ugotuj makaron na sposób al dente." },
-          {
-            content:
-              "Warzywa pokrój w paski i wraz z kurczakiem dodaj do całości. Duś około 15 minut. Następnie podlej szklanką wody i dodaj kostkę Rosołu z kury Knorr oraz przecier pomidorowy.",
-          },
-          {
-            content:
-              "Makaron wyłóż do naczynia żaroodpornego, zalej sosem i posyp startym serem. Włóż do piekarnika nagrzanego do 180 stopni na 20 minut. Następnie podawaj.",
-          },
-        ],
-      },
-      {
-        name: "Dodatki",
-        ingredients: [
-          {
-            label: "ketchup",
-            amount: "100",
-            unit: "g",
-            unitHint: "grams",
-          },
-          {
-            label: "musztarda",
-            amount: "200",
-            unit: "g",
-            unitHint: "grams",
-          },
-        ],
-        steps: [
-            
-          ]
-      },
-    ],
-    // TO CHANGE
-    ImageUrls: [
-      {
-        src: "https://s3.przepisy.pl/przepisy3ii/img/variants/800x0/zapiekanka-makaronowa-pychotka.jpg",
-      },
-    ],
+    Rating: 0,
+    RatingCount: 0,
+    Calories: 0,
+    Servings: 0,
+    Tags: [],
+    Stages: [],
+    Image: "https://s3.przepisy.pl/przepisy3ii/img/variants/800x0/zapiekanka-makaronowa-pychotka.jpg",
+
   },
 };
 
@@ -170,13 +69,10 @@ export const recipeModule = {
     },
     setErrorStatus(state, payload){
       state.errorStatus = payload
+    },
+    setImage(state, payload){
+      state.recipe.Image = payload
     }
-
-    // TODO TAGS AND STAGES
-    // set(state, payload){
-    //   state.recipe. = payload
-    // },
-
   },
   actions: {
     async actionGetRecipe(context, payload) {
@@ -192,7 +88,6 @@ export const recipeModule = {
       } catch (error) {
         context.commit("setErrorStatus", true)
         context.commit("setError", error)
-        // await context.dispatch("actionCheckApiError", error);
       }
     },
     async actionGetRecipeInfo(context, payload) {
@@ -220,6 +115,17 @@ export const recipeModule = {
         // context.commit("setError", error)
         // await context.dispatch("actionCheckApiError", error);
       }
+    },
+    async actionGetRecipeImg(context, payload){
+      try{
+        const imageLink = await api.getRecipeImage(payload)
+        
+        context.commit("setImage", imageLink)
+        
+      }
+      catch(error){
+        console.log(error)
+      }
     }
   },
   getters: {
@@ -235,7 +141,8 @@ export const recipeModule = {
     servings: (state) => state.recipe.Servings,
     tags: (state) => state.recipe.Tags,
     stages: (state) => state.recipe.Stages,
-    images: (state) => state.recipe.ImageUrls,
     errorStatus: (state) => state.errorStatus,
+
+    imageLink: (state) => state.recipe.Image,
   },
 };

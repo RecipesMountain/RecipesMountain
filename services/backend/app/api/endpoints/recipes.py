@@ -110,6 +110,7 @@ def create_recipe(
     *,
     db: Session = Depends(deps.get_db),
     recipe_in: schemas.RecipeCreate,
+    # image: Optional[bytes] = File(None),
     current_user: models.User = Depends(deps.get_current_user),
 ) -> Any:
     """
@@ -119,15 +120,40 @@ def create_recipe(
     return recipe
     # pass
 
-@router.post("/uploadfiles/")
-def post_recipe_image(file: Optional[bytes] = File(None)):
-    # contents = file.read()
-    # return {"filename": contents }
-    return Response(content=file, media_type="image/png")
+@router.post("/img/{recipe_id}")
+def add_image(
+    *, 
+    db: Session = Depends(deps.get_db), 
+    recipe_id: UUID, 
+    image: Optional[bytes] = File(None),
+    current_user: models.User = Depends(deps.get_current_user),
+):
+    recipe = crud.recipe.get_by_id(db=db, recipe_id=recipe_id)
+    if recipe:
+        crud.recipe.add_image(db=db, recipe_id=recipe_id, file=image)
+    else:
+        raise HTTPException(status_code=400, detail="Recipe not exists.")
+
+    return Response(content=image, media_type="image/png")
 
 @router.get("/img/{recipe_id}")
-def get_recipe_img() -> Any:
-    pass
+def get_recipe_img(
+    recipe_id: UUID,
+    db: Session = Depends(deps.get_db),
+) -> Any:
+    """
+    Get image for recipe
+    """
+    recipe = crud.recipe.get_by_id(db=db, recipe_id=recipe_id)
+
+    if recipe:
+        recipe_img = recipe.image_blob
+        
+        return Response(content=recipe_img, media_type="image/png")
+    
+    return {"imageStatus": "empty" }
+    # pass
+
 
 @router.put("/{recipe_id}", response_model=schemas.Recipe)
 def update_recipe(

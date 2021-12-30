@@ -126,5 +126,12 @@ class CRUDRecipe(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
     def get_by_id(self, db: Session, *, recipe_id: UUID)-> Recipe:
         return db.query(Recipe).filter(Recipe.id == recipe_id).first()
 
+    def add_image(self, db: Session, *, recipe_id: UUID, file: bytes):
+        recipe = db.query(Recipe).filter(Recipe.id == recipe_id).first()
+        recipe.image_blob = file
+        db.add(recipe)
+        db.commit()
+        db.refresh(recipe)
+        return recipe
 
 recipe = CRUDRecipe(Recipe)

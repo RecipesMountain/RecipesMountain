@@ -7,6 +7,7 @@ from .comment import Comment
 from .stage import Stage
 from uuid import UUID
 
+
 # TODO: how picture use in model?
 # ? send id or no?
 class RecipeBase(BaseModel):
@@ -30,9 +31,13 @@ class RecipeWithComments(RecipeBase):
 class RecipeWithStage(RecipeBase):
     stages: List[Stage]
 
+class RecipeWithImage(RecipeBase):
+    pass
+
 
 class RecpieInDB(RecipeWithTags, RecipeWithStage, RecipeWithComments):
     id: Optional[UUID] = None
+    # image_blob: Optional[bytes]
 
     class Config:
         orm_mode = True
@@ -50,7 +55,7 @@ class SearchResult(BaseModel):
     recpies: List[RecpieSearch]
 
 
-class RecipeCreate(RecipeWithTags, RecipeWithStage):
+class RecipeCreate(RecipeWithTags, RecipeWithStage, RecipeWithImage):
     
     pass
 

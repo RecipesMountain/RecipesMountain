@@ -81,5 +81,9 @@ export const api = {
   // new 
   async getRecipe(id){
     return axios.get(`${APISUFFIX}/api/recipes/` + id)
+  },
+  async getRecipeImage(id){
+    return axios.defaults.baseURL+`${APISUFFIX}api/recipes/img/` + id
   }
+
 };

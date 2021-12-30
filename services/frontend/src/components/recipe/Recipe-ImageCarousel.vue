@@ -11,16 +11,13 @@
       class="rounded-l-lg"
     >
       <v-carousel-item
-        v-for="(item, i) in images"
-        :key="i"
-        :src="item.src"
+        :src="imageUrl"
         reverse-transition="fade-transition"
         transition="hide-delimiters"
         ripple
       >
       </v-carousel-item>
     </v-carousel>
-    <!-- {{ id }} -->
   </div>
 </template>
 
@@ -32,6 +29,14 @@ export default {
       images: this.$store.getters["images"],
     };
   },
+  async mounted(){
+    await this.$store.dispatch("actionGetRecipeImg", this.$route.params.id)
+  },
+  computed:{
+    imageUrl(){
+      return this.$store.getters["imageLink"]
+    }
+  }
 };
 </script>
 
