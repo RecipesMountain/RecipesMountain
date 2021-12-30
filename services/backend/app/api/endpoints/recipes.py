@@ -128,6 +128,7 @@ def add_image(
     image: Optional[bytes] = File(None),
     current_user: models.User = Depends(deps.get_current_user),
 ):
+
     recipe = crud.recipe.get_by_id(db=db, recipe_id=recipe_id)
     if recipe:
         crud.recipe.add_image(db=db, recipe_id=recipe_id, file=image)

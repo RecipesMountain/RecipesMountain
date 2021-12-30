@@ -8,6 +8,7 @@ import SearchRecipe from "@/views/RecipeViews/SearchRecipes.vue"
 import MyAccount from "@/views/UserViews/MyAccount.vue"
 
 import Recipe from "@/views/RecipeViews/Recipe.vue"
+import AddRecipe from "@/views/RecipeViews/AddRecipe.vue"
 
 import store from '@/store'
 
@@ -42,6 +43,11 @@ const routes = [
     component: Recipe
   },
   {
+    path: '/addRecipe',
+    name: 'AddRecipe',
+    component: AddRecipe
+  },
+  {
     path: '/user/',
     name: 'MyAccount',
     component: MyAccount,
@@ -51,11 +57,12 @@ const routes = [
       } else next()
     },
     children: [
-      {//duplicate to show how to do sup routures 
-        path: '/account',
-        name: 'MyAccount',
-        component: MyAccount
+      {
+        path: '/addRecipe',
+        name: 'AddRecipe',
+        component: AddRecipe
       },
+      
     ]
   },
 ]
