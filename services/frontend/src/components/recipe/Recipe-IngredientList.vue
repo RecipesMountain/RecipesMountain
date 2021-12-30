@@ -25,7 +25,7 @@
                 class="text-wrap text-left body-1 font-weight-medium"
               >
                 <v-icon class="mx-n2" color="black">mdi-circle-small</v-icon>
-                Ingredients: {{ ingredient.label }}
+                {{ ingredient.name }}
               </v-list-item-title>
             </v-list-item-content>
             <v-tooltip right>
@@ -35,11 +35,13 @@
                     v-on="on"
                     class="text-right body-1 font-weight-black"
                   >
-                    {{ ingredient.amount }} {{ ingredient.unit }}
+                    {{ ingredient.amount }} {{shortUnit(ingredient.amount_unit)}}
+                    <!-- {{ ingredient.unit }} -->
+
                   </v-list-item-subtitle>
                 </v-list-item-content>
               </template>
-              {{ ingredient.unitHint }}
+              {{ ingredient.amount_unit }}
             </v-tooltip>
           </v-list-item>
         </v-list>
@@ -56,6 +58,11 @@ export default {
       isActive: false,
     };
   },
+  methods:{
+    shortUnit(ingredient){
+      return ingredient.slice(0,1) + '.'
+    }
+  }
 };
 </script>
 

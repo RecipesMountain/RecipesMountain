@@ -10,6 +10,7 @@ from app.models.stage import Stage
 
 # Test
 from app.models.recipe_tags import RecipeTags
+from app.models.products_in_stages import ProductsInStages
 
 from app.schemas.recipe import RecipeCreate, RecipeUpdate
 
@@ -96,6 +97,19 @@ class CRUDRecipe(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
             db.add(db_stage_obj)
             db.commit()
             db.refresh(db_stage_obj)
+
+            for product in stage.products:
+                print(product.name)
+                db_product_stage_obj = ProductsInStages(
+                    product_id=product.product_id,
+                    stage_id=db_stage_obj.id,
+                    amount=product.amount,
+                    amount_unit=product.amount_unit
+                )
+                db.add(db_product_stage_obj)
+                db.commit()
+                db.refresh(db_product_stage_obj)
+
         
         for tag in obj_in.tags:
             # TODO check if tags are good
@@ -106,7 +120,7 @@ class CRUDRecipe(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
             db.add(db_tag_recipe_obj)
             db.commit()
             db.refresh(db_tag_recipe_obj)
-
+        db.refresh(db_obj)
         return db_obj
     
     def get_by_id(self, db: Session, *, recipe_id: UUID)-> Recipe:

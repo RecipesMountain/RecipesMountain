@@ -37,7 +37,7 @@
                 >
                   <v-col>
                     <!-- TODO poprawic -->
-                    <RecipeStage :ingredients="[]" :stageContent="stage.content" :stageLabel="stage.name"/>
+                    <RecipeStage :ingredients="stage.products" :stageContent="stage.content" :stageLabel="stage.name"/>
                   </v-col>
                 </v-row>
                 <!-- stages end -->
@@ -89,8 +89,6 @@ export default {
   components: { RecipeInformations, RecipeStage},
   data() {
     return {
-      // tags: this.$store.getters["tags"],
-      // stages: this.$store.getters["stages"],
       comments: []
     };
   },

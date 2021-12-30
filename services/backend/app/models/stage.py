@@ -15,6 +15,9 @@ class Stage(Base):
 
     recipe = relationship("Recipe", back_populates="stages")
     # steps = relationship("Step", back_populates="stage")
-    products = relationship(
-        "Product", secondary="products_in_stages", back_populates="stages"
-    )
+
+    # products = relationship(
+    #     "Product", secondary="products_in_stages", back_populates="stages"
+    # )
+    products = relationship("ProductsInStages", back_populates="stage")
+

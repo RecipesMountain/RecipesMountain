@@ -10,6 +10,7 @@
       class="fill-height"
       min-height="300px"
     >
+    <!-- for point steps -->
       <!-- <v-card color="transparent" flat>
         <div id="stage-title" v-if="steps.length > 0">
           <p class="text-h6 text-left font-weight-medium">
@@ -28,7 +29,6 @@
         </div>
       </v-card> -->
       <v-card color="transparent" flat>
-        <!-- <div id="stage-title" v-if="steps.length > 0"> -->
           <p class="text-h6 text-left font-weight-medium">
             Opis przygotowanie - {{ stageLabel }}
           </p>

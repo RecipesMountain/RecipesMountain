@@ -12,6 +12,7 @@ class Product(Base):
     name = Column(String, nullable=False)
     price = Column(Integer, nullable=False)
 
-    stages = relationship(
-        "Stage", secondary="products_in_stages", back_populates="products"
-    )
+    # stages = relationship(
+    #     "Stage", secondary="products_in_stages", back_populates="products"
+    # )
+    stages = relationship("ProductsInStages", back_populates="product")

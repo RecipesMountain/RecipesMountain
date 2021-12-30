@@ -1,11 +1,18 @@
-from typing import Any, List
+from typing import Any, List, Optional
 from uuid import UUID
 
 from fastapi import APIRouter, Query, Depends, HTTPException
+
+from fastapi import File, UploadFile
+
 from sqlalchemy.orm import Session
 
 from app import models, schemas, crud
 from app.api import deps
+
+from fastapi.responses import Response
+
+
 
 router = APIRouter()
 
@@ -112,6 +119,15 @@ def create_recipe(
     return recipe
     # pass
 
+@router.post("/uploadfiles/")
+def post_recipe_image(file: Optional[bytes] = File(None)):
+    # contents = file.read()
+    # return {"filename": contents }
+    return Response(content=file, media_type="image/png")
+
+@router.get("/img/{recipe_id}")
+def get_recipe_img() -> Any:
+    pass
 
 @router.put("/{recipe_id}", response_model=schemas.Recipe)
 def update_recipe(
