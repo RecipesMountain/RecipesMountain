@@ -23,7 +23,12 @@
         </v-row>
         <v-row>
           <div class="horiz-scroll">
-            <RecipeSnippet class="card ma-4" v-for="i in 10" :key="i" :recipe="exampleRecipe"></RecipeSnippet>
+            <RecipeSnippet
+                class="card ma-4"
+                v-for="(recipe, i) in $store.getters[`${name.toLowerCase()}Recipes`]"
+                :key="i"
+                :recipe="recipe"
+            ></RecipeSnippet>
           </div>
         </v-row>
       </div>
@@ -39,21 +44,9 @@ export default {
   components: {
     RecipeSnippet
   },
-  data() {
-    return {
-      exampleRecipe: {
-        id: "465038e4-2b5e-492b-83d7-61397fa483ad",
-        image_url: "https://cdn.pixabay.com/photo/2017/09/16/19/21/salad-2756467_960_720.jpg",
-        title: "Recipe",
-        description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam purus erat, ultricies in urna vitae, lobortis semper erat. Nullam vestibulum libero sed vulputate sodales. Maecenas at velit a sapien venenatis tempor a sit amet orci.`,
-        rating: 3.5,
-        rating_count: undefined,
-        owner: {
-          first_name: "John",
-          last_name: "Smith"
-        }
-      }
-    }
+  created: function() {
+    this.$store.dispatch("getPopularRecipes", { limit: 10 });
+    this.$store.dispatch("getBestRecipes", { limit: 10 });
   }
 }
 </script>

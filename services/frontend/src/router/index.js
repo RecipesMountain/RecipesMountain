@@ -33,6 +33,11 @@ const routes = [
     component: SearchRecipe
   },
   {
+    path: "/explore/:sort",
+    name: "ExploreRecipes",
+    component: ExploreRecipes
+  },
+  {
     path: '/user/',
     name: 'MyAccount',
     component: MyAccount,
@@ -46,11 +51,6 @@ const routes = [
         path: '/account',
         name: 'MyAccount',
         component: MyAccount
-      },
-      {
-        path: "/explore/:sort",
-        name: "ExploreRecipes",
-        component: ExploreRecipes
       },
     ]
   },
