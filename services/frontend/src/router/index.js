@@ -4,6 +4,7 @@ import VueRouter from 'vue-router'
 import Home from '@/views/Home.vue'
 import Login from '@/views/UserViews/Login.vue'
 import Register from '@/views/UserViews/Register.vue'
+import ExploreRecipes from "@/views/RecipeViews/ExploreRecipes.vue"
 import SearchRecipe from "@/views/RecipeViews/SearchRecipes.vue"
 import MyAccount from "@/views/UserViews/MyAccount.vue"
 import store from '@/store'
@@ -46,6 +47,11 @@ const routes = [
         name: 'MyAccount',
         component: MyAccount
       },
+      {
+        path: "/explore/:sort",
+        name: "ExploreRecipes",
+        component: ExploreRecipes
+      },
     ]
   },
 ]
@@ -53,7 +59,10 @@ const routes = [
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
-  routes
+  routes,
+  scrollBehavior() {
+    return { x: 0, y: 0 }
+  },
 })
 
 export default router
