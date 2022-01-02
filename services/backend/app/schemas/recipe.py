@@ -1,45 +1,53 @@
-from typing_extensions import IntVar
+from typing import List, Optional
+from uuid import UUID
+
 from pydantic import BaseModel
-from typing import Optional
-from typing import List
-from .tag import Tag
+
 from .comment import Comment
 from .stage import Stage
-from uuid import UUID
+from .tag import Tag
+from .user import User
+
 
 # TODO: how picture use in model?
 # ? send id or no?
 class RecipeBase(BaseModel):
     title: Optional[str]
-    cookingTime: Optional[int]
-    difficulty: Optional[str]
-    calories: Optional[int]
-    portion: Optional[int]
+    description: Optional[str]
     rating: Optional[int]
     totalViews: Optional[int]
 
 
-class RecipeWithTags(RecipeBase):
+class RecipeWithInfo(RecipeBase):
+    cookingTime: Optional[int]
+    difficulty: Optional[str]
+    calories: Optional[int]
+    portion: Optional[int]
+
+
+class RecipeWithTags(RecipeWithInfo):
     tags: List[Tag]
 
 
-class RecipeWithComments(RecipeBase):
+class RecipeWithComments(RecipeWithInfo):
     comments: List[Comment]
 
 
-class RecipeWithStage(RecipeBase):
+class RecipeWithStage(RecipeWithInfo):
     stages: List[Stage]
 
 
-class RecpieInDB(RecipeWithTags, RecipeWithStage, RecipeWithComments):
+class RecipeInDB(RecipeWithTags, RecipeWithStage, RecipeWithComments):
     id: Optional[UUID] = None
+    owner: Optional[User]
 
     class Config:
         orm_mode = True
 
 
-class RecpieSearch(RecipeWithTags):
+class RecipeSearch(RecipeBase):
     id: Optional[UUID] = None
+    owner: Optional[User]
 
     class Config:
         orm_mode = True
@@ -47,7 +55,7 @@ class RecpieSearch(RecipeWithTags):
 
 class SearchResult(BaseModel):
     total: int
-    recpies: List[RecpieSearch]
+    recipes: List[RecipeSearch]
 
 
 class RecipeCreate(RecipeWithTags, RecipeWithStage):
@@ -58,8 +66,9 @@ class RecipeUpdate:
     pass
 
 
-class Recipe(RecpieInDB):
+class Recipe(RecipeInDB):
     title: str
+    description: str
     cookingTime: int
     difficulty: str
     calories: int

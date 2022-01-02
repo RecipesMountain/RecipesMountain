@@ -5,7 +5,7 @@
       :src="recipe.image_url"
     ></v-img>
     <v-card-title>{{ recipe.title }}</v-card-title>
-    <v-card-subtitle>{{ ownerName }}</v-card-subtitle>
+    <v-card-subtitle>{{ recipe.owner ? recipe.owner.full_name : '' }}</v-card-subtitle>
     <v-card-text>
       <v-row align="center" class="mx-0 my-0">
         <v-rating
@@ -28,11 +28,6 @@ export default {
   name: "RecipeSnippet",
   props: {
     "recipe": Object
-  },
-  computed: {
-    ownerName: function() {
-      return this.recipe.owner != undefined ? `${this.recipe.owner.first_name} ${this.recipe.owner.last_name}` : '';
-    },
   },
 };
 </script>
