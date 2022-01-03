@@ -101,7 +101,7 @@ def get_recipe_by_id(
     if recipe:
         return recipe
     else:
-        raise HTTPException(status_code=400, detail="Recipe not exists.")
+        raise HTTPException(status_code=404, detail="Recipe not exists.")
 
 
 @router.post("/", response_model=schemas.Recipe)
@@ -131,7 +131,7 @@ def add_image(
     if recipe:
         crud.recipe.add_image(db=db, recipe_id=recipe_id, file=image)
     else:
-        raise HTTPException(status_code=400, detail="Recipe not exists.")
+        raise HTTPException(status_code=404, detail="Recipe not exists.")
 
     return Response(content=image, media_type="image/png")
 
@@ -164,7 +164,7 @@ def update_recipe(
 ) -> Any:
     recipe = crud.recipe.get_by_id(db=db, recipe_id=recipe_id)
     if not recipe:
-        raise HTTPException(status_code=400, detail="Recipe not found.")
+        raise HTTPException(status_code=404, detail="Recipe not found.")
     # TODO: check if this is correct user
     else:
         recipe = crud.recipe.update(db=db, obj_in=recipe_in, recipe_id=recipe_id)

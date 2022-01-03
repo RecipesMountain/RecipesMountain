@@ -106,7 +106,6 @@ class CRUDRecipe(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
                 db.refresh(db_product_stage_obj)
 
         for tag in obj_in.tags:
-            # TODO check if tags are good
             db_tag_recipe_obj = RecipeTags(recipe_id=db_obj.id, tag_id=tag.id)
             db.add(db_tag_recipe_obj)
             db.commit()
