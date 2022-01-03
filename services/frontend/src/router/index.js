@@ -39,6 +39,11 @@ const routes = [
     component: SearchRecipe
   },
   {
+    path: "/explore/:sort",
+    name: 'EditRecipe',
+    component: ExploreRecipes
+  },
+  {
     path: '/recipe/:id',
     name: 'Recipe',
     component: Recipe
