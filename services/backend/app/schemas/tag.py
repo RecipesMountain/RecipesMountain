@@ -1,7 +1,6 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
 from uuid import UUID
-
 
 class TagBase(BaseModel):
     name: Optional[str] = None
@@ -12,7 +11,7 @@ class TagCreate(TagBase):
 
 
 class TagUpdate(TagBase):
-    pass
+    recipes: Optional[List[str]]
 
 
 class TagInDBBase(TagBase):
