@@ -8,6 +8,7 @@ from app.core.config import settings
 from app.schemas.tag import TagCreate
 from app.tests.utils.utils import random_lower_string
 
+
 def test_create_tag(
     client: TestClient, superuser_token_headers: dict, db: Session
 ) -> None:
@@ -24,7 +25,9 @@ def test_create_tag(
     assert tag
     assert tag.name == created_tag["name"]
 
-#TODO update tag test
+
+# TODO update tag test
+
 
 def test_get_tags(
     client: TestClient, superuser_token_headers: dict, db: Session

@@ -17,7 +17,7 @@ class CRUDTag(CRUDBase[Tag, TagCreate, TagUpdate]):
 
     def get_by_name(self, db: Session, name: str) -> Tag:
         return db.query(Tag).filter(Tag.name == name).first()
-    
+
     def get_by_id(self, db: Session, id: UUID) -> Tag:
         return db.query(Tag).filter(Tag.id == id).first()
 
@@ -26,9 +26,7 @@ class CRUDTag(CRUDBase[Tag, TagCreate, TagUpdate]):
         return db.query(Tag).offset(skip).limit(limit)
 
     def create(self, db: Session, *, obj_in: TagCreate) -> Tag:
-        db_obj = Tag(
-            name=obj_in.name
-        )
+        db_obj = Tag(name=obj_in.name)
         db.add(db_obj)
         db.commit()
         db.refresh(db_obj)
@@ -55,8 +53,9 @@ class CRUDTag(CRUDBase[Tag, TagCreate, TagUpdate]):
         return db_obj
 
     def delete(self, db: Session, *, id: UUID) -> bool:
-        rows = db.query(Tag).filter(Tag.id==id).delete()
+        rows = db.query(Tag).filter(Tag.id == id).delete()
         db.commit()
         return rows != 0
+
 
 tag = CRUDTag(Tag)

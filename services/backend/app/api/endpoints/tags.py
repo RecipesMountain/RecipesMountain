@@ -49,6 +49,7 @@ def update_tag(
     tag = crud.tag.update(db, db_obj=tag, obj_in=tag_in)
     return tag
 
+
 @router.delete("/{tag_id}", response_model=bool)
 def delete_tag(
     tag_id: UUID,
