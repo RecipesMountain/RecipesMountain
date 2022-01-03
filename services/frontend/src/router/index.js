@@ -11,7 +11,6 @@ import MyAccount from "@/views/UserViews/MyAccount.vue"
 import Recipe from "@/views/RecipeViews/Recipe.vue"
 import AddRecipe from "@/views/RecipeViews/AddRecipe.vue"
 import EditRecipe from "@/views/RecipeViews/EditRecipe.vue"
-import ExploreRecipes from "@/views/RecipeViews/ExploreRecipes.vue"
 
 import store from '@/store'
 
