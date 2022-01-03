@@ -39,18 +39,7 @@ class CRUDTag(CRUDBase[Tag, TagCreate, TagUpdate]):
             update_data = obj_in
         else:
             update_data = obj_in.dict(exclude_unset=True)
-        if update_data.get("name", False):
-            db_obj.name = update_data["name"]
-        if update_data.get("recipes", False):
-            for recpie in update_data["recipes"]:
-                r = db.query(Recipe).filter(Recipe.id == recpie).first()
-                print(r)
-                db_obj.recipes.append(r)
-            del update_data["recipes"]
-        db.add(db_obj)
-        db.commit()
-        db.refresh(db_obj)
-        return db_obj
+        return super().update(db, db_obj=db_obj, obj_in=update_data)
 
     def delete(self, db: Session, *, id: UUID) -> bool:
         rows = db.query(Tag).filter(Tag.id == id).delete()

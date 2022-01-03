@@ -12,6 +12,15 @@ def test_create_tag(db: Session) -> None:
     tag = crud.tag.create(db, obj_in=tag_in)
     assert tag.name == name
 
+def test_update_tag(db: Session) -> None:
+    name = random_lower_string()
+    tag_in = TagCreate(name=name)
+    tag = crud.tag.create(db, obj_in=tag_in)
+    newName = random_lower_string()
+    tag_in = TagUpdate(name=newName, id=tag.id)
+    tag = crud.tag.update(db, db_obj=tag, obj_in=tag_in)
+    assert tag.name == newName
+
 
 def test_create_tag_get(db: Session) -> None:
     name = random_lower_string()

@@ -26,7 +26,28 @@ def test_create_tag(
     assert tag.name == created_tag["name"]
 
 
-# TODO update tag test
+def test_update_tag(
+    client: TestClient, superuser_token_headers: dict, db: Session
+) -> None:
+    name = random_lower_string()
+    tag_in = TagCreate(name=name)
+    tag = crud.tag.create(db, obj_in=tag_in)
+    newName = random_lower_string()
+    r = client.put(
+        f"{settings.API_V1_STR}/tags/{tag.id}",
+        headers=superuser_token_headers,
+        json={"name": newName},
+    )
+
+    assert 200 <= r.status_code < 300
+    updated_tag = r.json()
+    db.refresh(tag)
+    print(tag.id)
+    print(newName)
+    print(name)
+    assert updated_tag
+    assert newName == updated_tag["name"]
+    assert newName == tag.name
 
 
 def test_get_tags(
