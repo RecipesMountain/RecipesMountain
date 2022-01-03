@@ -110,7 +110,6 @@ def create_recipe(
     *,
     db: Session = Depends(deps.get_db),
     recipe_in: schemas.RecipeCreate,
-    # image: Optional[bytes] = File(None),
     current_user: models.User = Depends(deps.get_current_user),
 ) -> Any:
     """
@@ -118,7 +117,6 @@ def create_recipe(
     """
     recipe = crud.recipe.create(db, obj_in=recipe_in, owner_id=current_user.id)
     return recipe
-    # pass
 
 @router.post("/img/{recipe_id}")
 def add_image(
@@ -158,11 +156,21 @@ def get_recipe_img(
 
 @router.put("/{recipe_id}", response_model=schemas.Recipe)
 def update_recipe(
+    *,
     recipe_id: UUID,
     db: Session = Depends(deps.get_db),
+    recipe_in: schemas.RecipeUpdate,
     current_user: models.User = Depends(deps.get_current_user),
 ) -> Any:
-    pass
+    recipe = crud.recipe.get_by_id(db=db, recipe_id=recipe_id)
+    if not recipe:
+        raise HTTPException(status_code=400, detail="Recipe not found.")
+    # TODO: check if this is correct user
+    # elif 
+    else:
+        recipe = crud.recipe.update(db=db, obj_in=recipe_in, recipe_id=recipe_id)
+    
+    return recipe
 
 
 @router.delete("/{recipe_id}", response_model=bool)

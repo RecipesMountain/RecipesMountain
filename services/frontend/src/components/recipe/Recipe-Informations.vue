@@ -12,7 +12,7 @@
                 small
                 color="#e0bd70"
                 class="text-body-2 text-left px-2"
-                :href="'/tags/'+ tag.id"
+                :href="'/tags/' + tag.id"
               >
                 {{ tag.name }}
               </v-chip>
@@ -110,8 +110,12 @@
                   </template>
                   <span class="font-weight-bold"
                     >Recipe difficulty:
-                    <template v-if="recipeDifficultyLevel == 0"> Easy </template>
-                    <template v-else-if="recipeDifficultyLevel == 1"> Medium </template>
+                    <template v-if="recipeDifficultyLevel == 0">
+                      Easy
+                    </template>
+                    <template v-else-if="recipeDifficultyLevel == 1">
+                      Medium
+                    </template>
                     <template v-else> Hard </template>
                   </span>
                 </v-tooltip>
@@ -150,7 +154,7 @@
                   <div v-bind="attrs" v-on="on">
                     <v-btn
                       icon
-                      :ripple="False"
+                      :ripple="false"
                       plain
                       v-on:click="$vuetify.goTo('#comments')"
                     >
@@ -163,7 +167,9 @@
               <v-tooltip top>
                 <template v-slot:activator="{ on, attrs }">
                   <div v-bind="attrs" v-on="on">
-                    <v-icon size="50">mdi-cards-heart-outline</v-icon>
+                    <v-btn icon :ripple="false" plain>
+                      <v-icon size="50">mdi-cards-heart-outline</v-icon>
+                    </v-btn>
                     <!-- <v-icon size="50">mdi-cards-heart</v-icon> -->
                   </div>
                 </template>
@@ -185,23 +191,7 @@ import RecipeImageCarousel from "@/components/recipe/Recipe-ImageCarousel.vue";
 
 export default {
   components: { RecipeImageCarousel },
-  data() {
-    return {
-      False: false,
-      // recipeTitle: this.$store.getters["title"],
-      // recipeDesc: this.$store.getters["description"],
-      // recipeAuthor: this.$store.getters["author"],
-      // recipeAuthorId: this.$store.getters["authorId"],
-      // recipeTime: this.$store.getters["time"],
-      // recipeDifficulty: this.$store.getters["difficulty"],
-      // recipeRating: this.$store.getters["rating"],
-      // recipeRatingCount: this.$store.getters["ratingCount"],
-      // recipeCalories: this.$store.getters["calories"],
-      // recipeServings: this.$store.getters["servings"],
-      // tags: this.$store.getters["tags"],
-      // stages: this.$store.getters["stages"],
-    };
-  },
+  props: [],
   computed: {
     shortTags() {
       if (this.tags.length > 4) {
@@ -210,69 +200,52 @@ export default {
         return this.tags;
       }
     },
-    recipeTitle(){
-      return this.$store.getters["title"]
+    recipeTitle() {
+      return this.$store.getters["title"];
     },
-    recipeDesc(){
-      return this.$store.getters["description"]
+    recipeDesc() {
+      return this.$store.getters["description"];
     },
-    recipeAuthor(){
-      return this.$store.getters["author"]
+    recipeAuthor() {
+      return this.$store.getters["author"];
     },
-    recipeAuthorId(){
-      return this.$store.getters["authorId"]
+    recipeAuthorId() {
+      return this.$store.getters["authorId"];
     },
-    recipeTime(){
-      return this.$store.getters["time"]
+    recipeTime() {
+      return this.$store.getters["time"];
     },
-    recipeDifficulty(){
-      return this.$store.getters["difficulty"]
+    recipeDifficulty() {
+      return this.$store.getters["difficulty"];
     },
-    recipeRating(){
-      return this.$store.getters["rating"] / 2
+    recipeRating() {
+      return this.$store.getters["rating"] / 2;
     },
-    recipeRatingCount(){
-      return this.$store.getters["ratingCount"]
+    recipeRatingCount() {
+      return this.$store.getters["ratingCount"];
     },
-    recipeCalories(){
-      return this.$store.getters["calories"]
+    recipeCalories() {
+      return this.$store.getters["calories"];
     },
-    recipeServings(){
-      return this.$store.getters["servings"] / 2
+    recipeServings() {
+      return this.$store.getters["servings"] / 2;
     },
-    tags(){
-      return this.$store.getters["tags"]
+    recipeTimeHours() {
+      return this.recipeTime / 60;
     },
-    // stages(){
-    //   return this.$store.getters["stages"]
-    // },
-    recipeTimeHours(){
-      return this.recipeTime / 60
-    },
-    recipeDifficultyLevel(){
-      if(this.recipeDifficulty == 'Easy'){
-        return 0
-      }
-      else if(this.recipeDifficulty == 'Hard'){
-        return 2
-      }
-      else
-      {
-        return 1
+    recipeDifficultyLevel() {
+      if (this.recipeDifficulty == "Easy") {
+        return 0;
+      } else if (this.recipeDifficulty == "Hard") {
+        return 2;
+      } else {
+        return 1;
       }
     },
-    errorStatus(){
-      return this.$store.getters["errorStatus"]
-    }
-
-
+    tags() {
+      return this.$store.getters["tags"];
+    },
   },
-  async mounted() {
-    await this.$store.dispatch("actionGetRecipeInfo", this.$route.params.id)
-    if(this.errorStatus){
-      this.$router.push("/")
-    }
-  }
 };
 </script>
 

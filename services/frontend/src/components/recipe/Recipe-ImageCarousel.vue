@@ -1,20 +1,20 @@
 <template>
   <div id="image-carousel">
     <v-carousel
-      mx-4
       hide-delimiter-background
       hide-delimiters
-      light
       vertical
       continuous
-      show-arrows-on-hover
       class="rounded-l-lg"
+      :prev-icon="false"
+      :next-icon="false"
     >
+      <!-- Possible place for multiple pictures -->
       <v-carousel-item
         :src="imageUrl"
         reverse-transition="fade-transition"
         transition="hide-delimiters"
-        ripple
+        :ripple="false"
       >
       </v-carousel-item>
     </v-carousel>
@@ -23,20 +23,14 @@
 
 <script>
 export default {
-  data() {
-    return {
-      id: this.$route.params.id,
-      images: this.$store.getters["images"],
-    };
+  async mounted() {
+    await this.$store.dispatch("actionGetRecipeImg", this.$route.params.id);
   },
-  async mounted(){
-    await this.$store.dispatch("actionGetRecipeImg", this.$route.params.id)
+  computed: {
+    imageUrl() {
+      return this.$store.getters["imageLink"];
+    },
   },
-  computed:{
-    imageUrl(){
-      return this.$store.getters["imageLink"]
-    }
-  }
 };
 </script>
 

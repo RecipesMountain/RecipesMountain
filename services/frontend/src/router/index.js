@@ -9,6 +9,7 @@ import MyAccount from "@/views/UserViews/MyAccount.vue"
 
 import Recipe from "@/views/RecipeViews/Recipe.vue"
 import AddRecipe from "@/views/RecipeViews/AddRecipe.vue"
+import EditRecipe from "@/views/RecipeViews/EditRecipe.vue"
 
 import store from '@/store'
 
@@ -45,7 +46,12 @@ const routes = [
   {
     path: '/addRecipe',
     name: 'AddRecipe',
-    component: AddRecipe
+    component: AddRecipe,
+  },
+  {
+    path: '/editRecipe/:id?',
+    name: 'EditRecipe',
+    component: EditRecipe,
   },
   {
     path: '/user/',
@@ -56,14 +62,7 @@ const routes = [
         next({ name: "Home"  })
       } else next()
     },
-    children: [
-      {
-        path: '/addRecipe',
-        name: 'AddRecipe',
-        component: AddRecipe
-      },
-      
-    ]
+    children: []
   },
 ]
 

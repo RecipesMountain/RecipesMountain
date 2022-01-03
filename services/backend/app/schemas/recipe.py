@@ -37,7 +37,6 @@ class RecipeWithImage(RecipeBase):
 
 class RecpieInDB(RecipeWithTags, RecipeWithStage, RecipeWithComments):
     id: Optional[UUID] = None
-    # image_blob: Optional[bytes]
 
     class Config:
         orm_mode = True
@@ -55,13 +54,14 @@ class SearchResult(BaseModel):
     recpies: List[RecpieSearch]
 
 
-class RecipeCreate(RecipeWithTags, RecipeWithStage, RecipeWithImage):
-    
+class RecipeCreate(RecipeWithTags, RecipeWithStage):
     pass
 
 
-class RecipeUpdate:
-    pass
+class RecipeUpdate(RecipeBase):
+    tags: Optional[List[Tag]]
+    stages: Optional[List[Stage]]
+
 
 
 class Recipe(RecpieInDB):

@@ -101,6 +101,9 @@ export const api = {
   async createRecipe(token, data){
     return axios.post(`${APISUFFIX}/api/recipes/`, data, authHeaders(token))
   },
+  async updateRecipe(token, data, id){
+    return axios.put(`${APISUFFIX}/api/recipes/`+ id, data, authHeaders(token))
+  },
   async sendImage(token, data, id){
     return axios.post(`${APISUFFIX}/api/recipes/img/`+ id, data, ImageHeaders(token))
   }

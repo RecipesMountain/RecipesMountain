@@ -4,6 +4,25 @@ const defaultState = {
   error: "",
   errorStatus: false,
   submitStatus: false,
+  recipe: {
+    Id: "0",
+    Title: "",
+    Description: "",
+    Author: "Anonymous",
+    AuthorId: 0,
+    Time: 0,
+    Difficulty: "",
+    Rating: 0,
+    RatingCount: 0,
+    Calories: 0,
+    Servings: 0,
+    Tags: [],
+    Stages: [],
+    Image: "https://s3.przepisy.pl/przepisy3ii/img/variants/800x0/zapiekanka-makaronowa-pychotka.jpg",
+
+  },
+  allProducts: [],
+  allTags: [],
   units: [
     {
       label: "gram",
@@ -50,25 +69,6 @@ const defaultState = {
       shortcut: "ml",
     },
   ],
-  recipe: {
-    Id: "0",
-    Title: "",
-    Description: "",
-    Author: "Anonymous",
-    AuthorId: 0,
-    Time: 0,
-    Difficulty: "",
-    Rating: 0,
-    RatingCount: 0,
-    Calories: 0,
-    Servings: 0,
-    Tags: [],
-    Stages: [],
-    Image: "https://s3.przepisy.pl/przepisy3ii/img/variants/800x0/zapiekanka-makaronowa-pychotka.jpg",
-
-  },
-  allProducts: [],
-  allTags: [],
 };
 
 export const recipeModule = {
@@ -138,7 +138,7 @@ export const recipeModule = {
       try{
         const response = await api.getProducts()
         if(response.data){
-          console.log(response.data)
+          // console.log(response.data)
           context.commit("setAllProducts", response.data)
         }
         else {
@@ -165,26 +165,11 @@ export const recipeModule = {
         context.commit("setError", error)
       }
     },
+
     async actionGetRecipe(context, payload) {
       try {
         const response = await api.getRecipe(payload)
         if (response.data) {
-            context.commit("setTags", response.data.tags)
-            context.commit("setStages", response.data.stages)
-        }
-        else {
-            console.log("Something gone wrong")
-        }      
-      } catch (error) {
-        context.commit("setErrorStatus", true)
-        context.commit("setError", error)
-      }
-    },
-    async actionGetRecipeInfo(context, payload) {
-      try{
-        const response = await api.getRecipe(payload)
-        if(response.data) {
-          console.log(response.data)
           context.commit("setTitle", response.data.title)
           context.commit("setDescription", "")
           context.commit("setTime", response.data.cookingTime)
@@ -193,17 +178,16 @@ export const recipeModule = {
           context.commit("setCalories", response.data.calories)
           context.commit("setServings", response.data.portion)
           context.commit("setTags", response.data.tags)
-          
+          context.commit("setTags", response.data.tags)
+          context.commit("setStages", response.data.stages)
         }
         else {
-          console.log("Something gone wrong")
-        }
-      }
-      catch(error) {
-        await console.log("error")
-        await context.commit("setErrorStatus", true)
-        // context.commit("setError", error)
-        // await context.dispatch("actionCheckApiError", error);
+            console.log("Something gone wrong")
+        }      
+      } catch (error) {
+        context.commit("setErrorStatus", true)
+        context.commit("setError", error)
+        context.commit("openSnackbar", "Recipe not found")
       }
     },
     async actionGetRecipeImg(context, payload){
@@ -220,30 +204,51 @@ export const recipeModule = {
     async actionSubmitRecipe(context, payload){
       try {
         const response = await api.createRecipe(context.rootState.user.token, payload)
-        console.log(response)
+        // console.log(response)
         if(response.status == 200)
         {
-          console.log("success")
           context.commit("setSubmitStatus", true)
           context.commit("setRecipeId", response.data.id)
+          context.commit("openSnackbar", "Succesfully added new recipe")
         }
         else{
           context.commit("setSubmitStatus", false)
           context.commit("setErrorStatus", true)
+          context.commit("openSnackbar", "Something went wrong")
         }
       }
       catch(error){
         console.log(error)
+        context.commit("openSnackbar", "Server error")
+      }
+    },
+    async actionUpdateRecipe(context, payload){
+      try{
+        const response  = await api.updateRecipe(context.rootState.user.token, payload, context.state.recipe.Id)
+        // console.log(response)
+        if(response.status == 200){
+          context.commit("setSubmitStatus", true)
+          context.commit("setRecipeId", response.data.id)
+          context.commit("openSnackbar", "Succesfully updated recipe")
+
+        }
+        else{
+          console.log("something went wrong")
+          context.commit("setErrorStatus", true)
+          context.commit("openSnackbar", "Something went wrong")
+        }
+      }
+      catch(error){
+        console.log(error)
+        context.commit("openSnackbar", "Server error")
       }
     },
     async actionAddRecipeImage(context, payload)
     {
       try{
-        // console.log(context.state)
         const response = await api.sendImage(context.rootState.user.token, payload, context.state.recipe.Id)
         if(response.status == 200)
         {
-          console.log("success")
           context.commit("setSubmitStatus", true)
         }
         else{
@@ -272,9 +277,7 @@ export const recipeModule = {
     tags: (state) => state.recipe.Tags,
     stages: (state) => state.recipe.Stages,
     errorStatus: (state) => state.errorStatus,
-
     imageLink: (state) => state.recipe.Image,
-
     units: (state) => state.units,
     allTags: (state) => state.allTags,
     allProducts: (state) => state.allProducts,

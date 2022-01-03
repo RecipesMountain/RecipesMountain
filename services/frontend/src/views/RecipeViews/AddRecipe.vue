@@ -22,7 +22,6 @@ export default {
 
 <style scoped>
 #addForm {
-  /* background-color: #fff8e8; */
   background-image: linear-gradient(
     to bottom,
     #ffe6cf,

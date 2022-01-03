@@ -37,10 +37,11 @@
                             outlined
                             clearable
                             label="Product"
-                            :items="products"
+                            :items="productsCopy"
                             item-text="name"
                             item-value="id"
                             v-model="product.product_id"
+                            :rules="ingredientRules"
                           ></v-autocomplete>
                         </v-col>
                         <v-col md="4">
@@ -101,8 +102,10 @@ export default {
   props: ["stage", "products"],
   data() {
     return {
-      ingredients: [],
       numberOfIngredients: 0,
+      ingredientRules: [
+        v => !!v || 'Product is required',
+      ],
     };
   },
   methods: {
@@ -116,7 +119,6 @@ export default {
         amount_unit: "gram",
       });
       this.numberOfIngredients += 1;
-      // console.log(this.stage);
     },
     deleteIngredient(no){
       this.stage.products = this.stage.products.filter(item => item.no != no)
@@ -126,13 +128,11 @@ export default {
     units() {
       return this.$store.getters["units"];
     },
+    productsCopy(){
+      return this.products
+      // return this.products.filter(product => !this.stage.products.some(x => x.product_id == product.id))
+    }
   },
-  mounted() {
-    // console.log(this.products);
-  },
-  //   async mounted(){
-  //     await this.$store.dispatch("actionGetProducts")
-  //   }
 };
 </script>
 

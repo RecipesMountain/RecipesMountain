@@ -7,13 +7,13 @@
       }"
       transition="scroll-y-transition"
       class="fill-height"
-      min-height="300px"
+      min-height="100px"
     >
-      <v-card  color="rgba(0, 0, 0, 0.06)" shaped>
+      <v-card color="rgba(0, 0, 0, 0.06)" shaped>
         <v-list dense color="transparent">
-          <v-list-item >
+          <v-list-item>
             <v-list-item-title class="text-left subtitle-1 font-weight-black">
-                Ingredients - {{ stageLabel }}
+              Ingredients - {{ stageLabel }}
             </v-list-item-title>
           </v-list-item>
           <v-list-item
@@ -35,9 +35,8 @@
                     v-on="on"
                     class="text-right body-1 font-weight-black"
                   >
-                    {{ ingredient.amount }} {{shortUnit(ingredient.amount_unit)}}
-                    <!-- {{ ingredient.unit }} -->
-
+                    {{ ingredient.amount }}
+                    {{ shortUnit(ingredient.amount_unit) }}
                   </v-list-item-subtitle>
                 </v-list-item-content>
               </template>
@@ -52,17 +51,23 @@
 
 <script>
 export default {
-    props:  ['stageLabel', 'ingredients'],
+  props: ["stageLabel", "ingredients"],
   data() {
     return {
       isActive: false,
     };
   },
-  methods:{
-    shortUnit(ingredient){
-      return ingredient.slice(0,1) + '.'
-    }
-  }
+  methods: {
+    shortUnit(ingredient) {
+      return this.unitsList.filter((item) => item.label == ingredient)[0]
+        .shortcut;
+    },
+  },
+  computed: {
+    unitsList() {
+      return this.$store.getters["units"];
+    },
+  },
 };
 </script>
 
