@@ -17,5 +17,5 @@ class ProductsInStages(Base):
     stage = relationship("Stage", back_populates="products")
 
     # proxies
-    name = association_proxy(target_collection="product", attr='name')
-    price = association_proxy(target_collection="product", attr='price')
+    name = association_proxy(target_collection="product", attr="name")
+    price = association_proxy(target_collection="product", attr="price")

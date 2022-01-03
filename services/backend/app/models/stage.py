@@ -20,4 +20,3 @@ class Stage(Base):
     #     "Product", secondary="products_in_stages", back_populates="stages"
     # )
     products = relationship("ProductsInStages", back_populates="stage")
-

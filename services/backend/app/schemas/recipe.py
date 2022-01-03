@@ -9,7 +9,6 @@ from .tag import Tag
 from .user import User
 
 
-
 # TODO: how picture use in model?
 # ? send id or no?
 class RecipeBase(BaseModel):
@@ -36,6 +35,7 @@ class RecipeWithComments(RecipeWithInfo):
 
 class RecipeWithStage(RecipeWithInfo):
     stages: List[Stage]
+
 
 class RecipeWithImage(RecipeBase):
     pass
@@ -69,7 +69,6 @@ class RecipeCreate(RecipeWithTags, RecipeWithStage):
 class RecipeUpdate(RecipeBase):
     tags: Optional[List[Tag]]
     stages: Optional[List[Stage]]
-
 
 
 class Recipe(RecipeInDB):

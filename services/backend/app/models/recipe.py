@@ -1,6 +1,15 @@
 import uuid
 
-from sqlalchemy import Column, ForeignKey, Integer, String, desc, Index, Computed, LargeBinary
+from sqlalchemy import (
+    Column,
+    ForeignKey,
+    Integer,
+    String,
+    desc,
+    Index,
+    Computed,
+    LargeBinary,
+)
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import UUID
 
@@ -20,13 +29,12 @@ class Recipe(Base):
     portion = Column(Integer)
     rating = Column(Integer)
 
-
     totalViews = Column(Integer, default=0)
     viewsLast24 = Column(Integer, default=0)
     popularityScore = Column(Integer, default=0)
 
     image_blob = Column(LargeBinary, nullable=True)
-    
+
     owner_id = Column(UUID(as_uuid=True), ForeignKey("user.id"))
 
     owner = relationship("User", back_populates="recipes")

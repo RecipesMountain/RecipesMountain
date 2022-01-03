@@ -13,7 +13,6 @@ from app.api import deps
 from fastapi.responses import Response
 
 
-
 router = APIRouter()
 
 
@@ -118,11 +117,12 @@ def create_recipe(
     recipe = crud.recipe.create(db, obj_in=recipe_in, owner_id=current_user.id)
     return recipe
 
+
 @router.post("/img/{recipe_id}")
 def add_image(
-    *, 
-    db: Session = Depends(deps.get_db), 
-    recipe_id: UUID, 
+    *,
+    db: Session = Depends(deps.get_db),
+    recipe_id: UUID,
     image: Optional[bytes] = File(None),
     current_user: models.User = Depends(deps.get_current_user),
 ):
@@ -134,6 +134,7 @@ def add_image(
         raise HTTPException(status_code=400, detail="Recipe not exists.")
 
     return Response(content=image, media_type="image/png")
+
 
 @router.get("/img/{recipe_id}")
 def get_recipe_img(
@@ -147,11 +148,10 @@ def get_recipe_img(
 
     if recipe:
         recipe_img = recipe.image_blob
-        
+
         return Response(content=recipe_img, media_type="image/png")
-    
-    return {"imageStatus": "empty" }
-    # pass
+
+    return {"imageStatus": "empty"}
 
 
 @router.put("/{recipe_id}", response_model=schemas.Recipe)
@@ -166,10 +166,9 @@ def update_recipe(
     if not recipe:
         raise HTTPException(status_code=400, detail="Recipe not found.")
     # TODO: check if this is correct user
-    # elif 
     else:
         recipe = crud.recipe.update(db=db, obj_in=recipe_in, recipe_id=recipe_id)
-    
+
     return recipe
 
 

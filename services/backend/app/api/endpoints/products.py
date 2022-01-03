@@ -20,12 +20,13 @@ def search_products(
 ) -> Any:
     pass
 
-# Get products list 
+
 @router.get("/", response_model=List[schemas.Product])
 def get_all_products(
-    db:Session = Depends(deps.get_db),
+    db: Session = Depends(deps.get_db),
 ) -> Any:
     return crud.product.get_all(db)
+
 
 @router.post("/", response_model=schemas.Product)
 def create_product(
