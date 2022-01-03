@@ -13,7 +13,7 @@ class Recipe(Base):
     # TODO ADD decryption?
     id = Column(UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4)
     title = Column(String)
-    # description = Column(String)
+    description = Column(String)
     cookingTime = Column(Integer)
     difficulty = Column(String)
     calories = Column(Integer)
@@ -43,5 +43,5 @@ class Recipe(Base):
     # "to_tsvector('english', title || ' ' || description)",
 
     __table_args__ = (
-        Index("ix_recpie___ts_vector__", __ts_vector__, postgresql_using="gin"),
+        Index("ix_recipe___ts_vector__", __ts_vector__, postgresql_using="gin"),
     )

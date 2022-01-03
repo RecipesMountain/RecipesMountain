@@ -4,6 +4,8 @@ import { userModule } from "./user";
 import { recipeModule } from './recipe';
 import { api } from '../api';
 
+// TODO: clean up this mess plz
+
 Vue.use(Vuex)
 
 const state = { 
@@ -17,45 +19,53 @@ const state = {
     page: 1,
     perPage: 20,
   },
+  popularRecipes: [],
+  bestRecipes: [],
   snackbarOpen: false,
   snackbarText: "",
 }
 
 export const mutations = {
-      //synchros
-      setRecipes(state, newRecipes) {
-        state.search.recipes = newRecipes
-      },
-      setNextRecipes(state, newRecipes) {
-        state.search.nextRecipes = newRecipes
-      },
-      setTags(state, newTags) {
-        state.search.tags = newTags
-      },
-      setKeyword(state, keyword) {
-        state.search.keyword = keyword
-      },
-      setPage(state, newPage) {
-        state.search.page = newPage
-      },
-      setSort(state, newSort) {
-        state.search.sort = newSort
-      },
-      setTagsAvailable(state, newTags) {
-        state.search.tagsAvailable = newTags
-      },
-      openSnackbar(state, text) {
-        state.snackbarOpen = true;
-        state.snackbarText = text;
-      },
-      closeSnackbar(state) {
-        state.snackbarOpen = false;
-      }
+  //synchros
+  setRecipes(state, newRecipes) {
+    state.search.recipes = newRecipes
+  },
+  setNextRecipes(state, newRecipes) {
+    state.search.nextRecipes = newRecipes
+  },
+  setTags(state, newTags) {
+    state.search.tags = newTags
+  },
+  setKeyword(state, keyword) {
+    state.search.keyword = keyword
+  },
+  setPage(state, newPage) {
+    state.search.page = newPage
+  },
+  setSort(state, newSort) {
+    state.search.sort = newSort
+  },
+  setTagsAvailable(state, newTags) {
+    state.search.tagsAvailable = newTags
+  },
+  setPopularRecipes(state, newRecipes) {
+    state.popularRecipes = newRecipes;
+  },
+  setBestRecipes(state, newRecipes) {
+    state.bestRecipes = newRecipes;
+  },
+  openSnackbar(state, text) {
+    state.snackbarOpen = true;
+    state.snackbarText = text;
+  },
+  closeSnackbar(state) {
+    state.snackbarOpen = false;
+  }
 }
 //TODO reconsider if this is the best way to handle errors
 export const actions = {
- async search(context, payload) {
-   try {
+  async search(context, payload) {
+    try {
       context.commit("setKeyword", payload.keyword)
       context.commit("setTags", payload.tags)
       context.commit("setSort", payload.sort)
@@ -63,10 +73,10 @@ export const actions = {
       let recipes = await doSearch(context);
       getNextPage(context);
       console.log(recipes)
-   } catch (error) {
-     context.commit("openSnackbar", "There has been an server error")
-     console.log(error)
-   }
+    } catch (error) {
+      context.commit("openSnackbar", "There has been an server error")
+      console.log(error)
+    }
   },
   async searchWithKeywordInState(context) {
     try {
@@ -74,7 +84,7 @@ export const actions = {
       getNextPage(context);
       console.log(recipes)
    } catch (error) {
-     
+
      context.commit("openSnackbar", "There has been an server error")
      console.log(error)
    }
@@ -110,7 +120,23 @@ export const actions = {
         context.commit("openSnackbar", "There has been an server error")
         console.log(error)
     }
-  }
+  },
+  async getPopularRecipes(context, payload) {
+    try {
+      context.commit("setPopularRecipes", (await api.getPopular(context.state.user.token, 0, payload.limit)).data);
+    } catch (e) {
+      context.commit("openSnackbar", "A server error has occurred");
+      console.log(e);
+    }
+  },
+  async getBestRecipes(context, payload) {
+    try {
+      context.commit("setBestRecipes", (await api.getBest(context.state.user.token, 0, payload.limit)).data);
+    } catch (e) {
+      context.commit("openSnackbar", "A server error has occurred");
+      console.log(e);
+    }
+  },
 }
 
 export const getters = {
@@ -122,6 +148,8 @@ export const getters = {
   getTagsAvailable: (state) => state.search.tagsAvailable,
   isSnackbarOpened: (state) => state.snackbarOpen,
   snackbarText: (state) => state.snackbarText,
+  popularRecipes: state => state.popularRecipes,
+  bestRecipes: state => state.bestRecipes,
 }
 
 export default new Vuex.Store({

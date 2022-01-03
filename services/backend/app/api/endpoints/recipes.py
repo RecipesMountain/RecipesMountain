@@ -17,7 +17,7 @@ from fastapi.responses import Response
 router = APIRouter()
 
 
-@router.get("/search", response_model=List[schemas.RecpieSearch])
+@router.get("/search", response_model=List[schemas.RecipeSearch])
 def search_recipes(
     db: Session = Depends(deps.get_db),
     keywords: str = "",
@@ -68,7 +68,7 @@ def search_recipes(
     return r
 
 
-@router.get("/popular", response_model=List[schemas.Recipe])
+@router.get("/popular", response_model=List[schemas.RecipeSearch])
 def get_popular_recipes(
     db: Session = Depends(deps.get_db),
     skip: int = 0,
@@ -79,7 +79,7 @@ def get_popular_recipes(
     return crud.recipe.execQuery(query, skip=skip, limit=limit)
 
 
-@router.get("/best", response_model=List[schemas.Recipe])
+@router.get("/best", response_model=List[schemas.RecipeSearch])
 def get_best_recipes(
     db: Session = Depends(deps.get_db),
     skip: int = 0,

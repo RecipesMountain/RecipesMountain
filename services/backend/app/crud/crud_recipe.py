@@ -6,9 +6,9 @@ from sqlalchemy.sql.functions import func
 from app.crud.base import CRUDBase
 from app.models.recipe import Recipe
 from app.models.tag import Tag
+
 from app.models.stage import Stage
 
-# Test
 from app.models.recipe_tags import RecipeTags
 from app.models.products_in_stages import ProductsInStages
 
@@ -72,6 +72,7 @@ class CRUDRecipe(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
 
     def get_all(self, db: Session):
         return db.query(Recipe).all()
+
 
     def create(self, db: Session, *, obj_in: RecipeCreate, owner_id: UUID) -> Recipe:
 
