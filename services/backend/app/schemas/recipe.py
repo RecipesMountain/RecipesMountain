@@ -23,6 +23,7 @@ class RecipeWithInfo(RecipeBase):
     difficulty: Optional[str]
     calories: Optional[int]
     portion: Optional[int]
+    owner: Optional[User]
 
 
 class RecipeWithTags(RecipeWithInfo):
@@ -67,13 +68,17 @@ class RecipeCreate(RecipeWithTags, RecipeWithStage):
 
 
 class RecipeUpdate(RecipeBase):
+    cookingTime: Optional[int]
+    difficulty: Optional[str]
+    calories: Optional[int]
+    portion: Optional[int]
     tags: Optional[List[Tag]]
     stages: Optional[List[Stage]]
 
 
 class Recipe(RecipeInDB):
     title: str
-    description: str
+    description: Optional[str]
     cookingTime: int
     difficulty: str
     calories: int

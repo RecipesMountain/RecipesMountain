@@ -356,7 +356,7 @@ export default {
           let fileData = new FormData();
           fileData.append("image", this.recipeImage);
           await this.$store.dispatch("actionAddRecipeImage", fileData);
-          this.$router.push("/recipe/" + this.NewRecipeId);
+          this.$router.push("/recipes/" + this.NewRecipeId);
         }
       } else if (this.isForEdit) {
         this.$store.commit("setRecipeId", this.$route.params.id);
@@ -366,7 +366,7 @@ export default {
           fileData.append("image", this.recipeImage);
           await this.$store.dispatch("actionAddRecipeImage", fileData);
         }
-        this.$router.push("/recipe/" + this.NewRecipeId);
+        this.$router.push("/recipes/" + this.NewRecipeId);
       }
     },
   },

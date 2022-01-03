@@ -170,6 +170,7 @@ export const recipeModule = {
       try {
         const response = await api.getRecipe(payload)
         if (response.data) {
+          context.commit("setAuthor", response.data.owner)
           context.commit("setTitle", response.data.title)
           context.commit("setDescription", "")
           context.commit("setTime", response.data.cookingTime)

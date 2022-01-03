@@ -30,7 +30,7 @@
             <p class="text-left text-body-1">{{ recipeDesc }}</p>
           </v-col>
           <v-col cols="12">
-            <p class="text-left text-subtitle-2">Author: {{ recipeAuthor }}</p>
+            <p class="text-left text-subtitle-2">Author: {{ recipeAuthor.full_name }}</p>
           </v-col>
         </v-row>
         <v-row class="flex-column">

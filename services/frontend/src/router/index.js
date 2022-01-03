@@ -45,7 +45,7 @@ const routes = [
     component: ExploreRecipes
   },
   {
-    path: '/recipe/:id',
+    path: '/recipes/:id',
     name: 'Recipe',
     component: Recipe
   },
