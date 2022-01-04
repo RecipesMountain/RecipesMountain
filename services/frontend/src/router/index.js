@@ -7,7 +7,14 @@ import Register from '@/views/UserViews/Register.vue'
 import ExploreRecipes from "@/views/RecipeViews/ExploreRecipes.vue"
 import SearchRecipe from "@/views/RecipeViews/SearchRecipes.vue"
 import MyAccount from "@/views/UserViews/MyAccount.vue"
+
+import Recipe from "@/views/RecipeViews/Recipe.vue"
+import AddRecipe from "@/views/RecipeViews/AddRecipe.vue"
+import EditRecipe from "@/views/RecipeViews/EditRecipe.vue"
+
 import store from '@/store'
+
+
 
 Vue.use(VueRouter)
 
@@ -38,6 +45,21 @@ const routes = [
     component: ExploreRecipes
   },
   {
+    path: '/recipes/:id',
+    name: 'Recipe',
+    component: Recipe
+  },
+  {
+    path: '/addRecipe',
+    name: 'AddRecipe',
+    component: AddRecipe,
+  },
+  {
+    path: '/editRecipe/:id?',
+    name: 'EditRecipe',
+    component: EditRecipe,
+  },
+  {
     path: '/user/',
     name: 'MyAccount',
     component: MyAccount,
@@ -46,13 +68,7 @@ const routes = [
         next({ name: "Home"  })
       } else next()
     },
-    children: [
-      {//duplicate to show how to do sup routures 
-        path: '/account',
-        name: 'MyAccount',
-        component: MyAccount
-      },
-    ]
+    children: []
   },
 ]
 

@@ -1,11 +1,17 @@
-from typing import Any, List
+from typing import Any, List, Optional
 from uuid import UUID
 
 from fastapi import APIRouter, Query, Depends, HTTPException
+
+from fastapi import File, UploadFile
+
 from sqlalchemy.orm import Session
 
 from app import models, schemas, crud
 from app.api import deps
+
+from fastapi.responses import Response
+
 
 router = APIRouter()
 
@@ -88,24 +94,82 @@ def get_recipe_by_id(
     recipe_id: UUID,
     db: Session = Depends(deps.get_db),
 ) -> Any:
-    pass
+    """
+    Get recipe by id
+    """
+    recipe = crud.recipe.get_by_id(db=db, recipe_id=recipe_id)
+    if recipe:
+        return recipe
+    else:
+        raise HTTPException(status_code=404, detail="Recipe not exists.")
 
 
 @router.post("/", response_model=schemas.Recipe)
 def create_recipe(
+    *,
     db: Session = Depends(deps.get_db),
+    recipe_in: schemas.RecipeCreate,
     current_user: models.User = Depends(deps.get_current_user),
 ) -> Any:
-    pass
+    """
+    Create recipe
+    """
+    recipe = crud.recipe.create(db, obj_in=recipe_in, owner_id=current_user.id)
+    return recipe
+
+
+@router.post("/img/{recipe_id}")
+def add_image(
+    *,
+    db: Session = Depends(deps.get_db),
+    recipe_id: UUID,
+    image: Optional[bytes] = File(None),
+    current_user: models.User = Depends(deps.get_current_user),
+):
+
+    recipe = crud.recipe.get_by_id(db=db, recipe_id=recipe_id)
+    if recipe:
+        crud.recipe.add_image(db=db, recipe_id=recipe_id, file=image)
+    else:
+        raise HTTPException(status_code=404, detail="Recipe not exists.")
+
+    return Response(content=image, media_type="image/png")
+
+
+@router.get("/img/{recipe_id}")
+def get_recipe_img(
+    recipe_id: UUID,
+    db: Session = Depends(deps.get_db),
+) -> Any:
+    """
+    Get image for recipe
+    """
+    recipe = crud.recipe.get_by_id(db=db, recipe_id=recipe_id)
+
+    if recipe:
+        recipe_img = recipe.image_blob
+
+        return Response(content=recipe_img, media_type="image/png")
+
+    return {"imageStatus": "empty"}
 
 
 @router.put("/{recipe_id}", response_model=schemas.Recipe)
 def update_recipe(
+    *,
     recipe_id: UUID,
     db: Session = Depends(deps.get_db),
+    recipe_in: schemas.RecipeUpdate,
     current_user: models.User = Depends(deps.get_current_user),
 ) -> Any:
-    pass
+    recipe = crud.recipe.get_by_id(db=db, recipe_id=recipe_id)
+    if not recipe:
+        raise HTTPException(status_code=404, detail="Recipe not found.")
+    # TODO: check if this is correct user
+    else:
+        recipe = crud.recipe.update(db=db, obj_in=recipe_in, recipe_id=recipe_id)
+
+    return recipe
 
 
 @router.delete("/{recipe_id}", response_model=bool)

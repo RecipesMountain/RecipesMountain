@@ -1,14 +1,24 @@
 from pydantic import BaseModel
 from typing import Optional
+from typing import List
 from uuid import UUID
 
-#! name optional. content no ?
+from .product import ProductWithAmount, Product
+
+
 class StageBase(BaseModel):
     name: Optional[str]
     content: Optional[str]
 
+    class Config:
+        orm_mode = True
 
-class StageCreate(StageBase):
+
+class StageWithIngredients(StageBase):
+    products: Optional[List[ProductWithAmount]]
+
+
+class StageCreate(StageWithIngredients):
     name: str
     content: Optional[str]
 
@@ -17,16 +27,13 @@ class StageUpdate(StageBase):
     pass
 
 
-class StageWithProduct:
-    pass
-
-
 class Stage(StageCreate):
     pass
 
 
-class StageInDBBase(Stage):
-    id: Optional[UUID] = None
+class StageInDB(StageWithIngredients):
+    name: str
+    content: Optional[str]
 
     class Config:
         orm_mode = True

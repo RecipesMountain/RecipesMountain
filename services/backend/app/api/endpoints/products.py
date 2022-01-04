@@ -1,10 +1,10 @@
 from typing import Any, List
 from uuid import UUID
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from app import models, schemas
+from app import models, schemas, crud
 from app.api import deps
 
 router = APIRouter()
@@ -21,12 +21,28 @@ def search_products(
     pass
 
 
+@router.get("/", response_model=List[schemas.Product])
+def get_all_products(
+    db: Session = Depends(deps.get_db),
+) -> Any:
+    return crud.product.get_all(db)
+
+
 @router.post("/", response_model=schemas.Product)
 def create_product(
+    *,
     db: Session = Depends(deps.get_db),
+    product_in: schemas.ProductCreate,
     current_user: models.User = Depends(deps.get_current_superuser),
 ) -> Any:
-    pass
+    product = crud.product.get_by_name(db=db, name=product_in.name)
+    if product:
+        raise HTTPException(
+            status_code=400,
+            detail="Product with this name already exists in the system",
+        )
+    product = crud.product.create(db=db, obj_in=product_in)
+    return product
 
 
 @router.put("/{product_id}", response_model=schemas.Product)

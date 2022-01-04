@@ -9,6 +9,15 @@ function authHeaders(token) {
   };
 }
 
+function ImageHeaders(token) {
+  return {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "multipart/form-data;"
+    },
+  };
+}
+
 function basicConfig(token, skip, limit) {
   let config = authHeaders(token);
   config["params"] = {}
@@ -77,5 +86,27 @@ export const api = {
   },
   async getTags() {
     return axios.get(`${APISUFFIX}/api/tags/`)
+  },
+
+  // new 
+  async getProducts(){
+    return axios.get(`${APISUFFIX}/api/products/`)
+  },
+  async getRecipe(id){
+    return axios.get(`${APISUFFIX}/api/recipes/` + id)
+  },
+  async getRecipeImage(id){
+    return axios.defaults.baseURL+`${APISUFFIX}api/recipes/img/` + id
+  },
+  async createRecipe(token, data){
+    return axios.post(`${APISUFFIX}/api/recipes/`, data, authHeaders(token))
+  },
+  async updateRecipe(token, data, id){
+    return axios.put(`${APISUFFIX}/api/recipes/`+ id, data, authHeaders(token))
+  },
+  async sendImage(token, data, id){
+    return axios.post(`${APISUFFIX}/api/recipes/img/`+ id, data, ImageHeaders(token))
   }
+  
+
 };

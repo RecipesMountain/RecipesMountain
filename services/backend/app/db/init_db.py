@@ -23,3 +23,47 @@ def init_db(db: Session) -> None:
             is_superuser=True,
         )
         user = crud.user.create(db, obj_in=user_in)
+
+    # Add tags and products -> TODO move to seperate file
+    initialTags = [
+        "Pasta",
+        "Tomatoes",
+        "Mushrooms",
+        "Soups",
+        "In oven",
+        "Chinese cuisine",
+        "Italian cuisine",
+        "Polish cuisine",
+        "Vege",
+        "Gluten Free",
+        "Fast",
+        "Onion",
+        "Cheese",
+    ]
+    for tag in initialTags:
+        db_tag = crud.tag.get_by_name(db=db, name=tag)
+        if not db_tag:
+            tag_in = schemas.TagCreate(name=tag)
+            crud.tag.create(db=db, obj_in=tag_in)
+
+    initialProducts = [
+        "pasta",
+        "onion",
+        "pepper",
+        "tomatoes",
+        "garlic",
+        "olive oil",
+        "water",
+        "meat",
+        "seasoning",
+        "salt",
+        "black pepper",
+        "mozarella",
+    ]
+
+    for product in initialProducts:
+        db_product = crud.product.get_by_name(db=db, name=product)
+        if not db_product:
+            product_in = schemas.ProductCreate(name=product, price=1)
+            crud.product.create(db=db, obj_in=product_in)
+    # crud.recipe.add_image(db=db, recipe_id='f7677a97-f892-4017-bbac-a598fbe59001', file='sdklhaskldhajklshklds')

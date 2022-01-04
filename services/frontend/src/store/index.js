@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { userModule } from "./user";
+import { recipeModule } from './recipe';
 import { api } from '../api';
 
 // TODO: clean up this mess plz
@@ -158,6 +159,7 @@ export default new Vuex.Store({
   getters,
   modules: {
     user: userModule,
+    recipe: recipeModule
   }
 })
 
