@@ -32,7 +32,6 @@ class CRUDTag(CRUDBase[Tag, TagCreate, TagUpdate]):
         db.refresh(db_obj)
         return db_obj
 
-
     def update(
         self, db: Session, *, db_obj: Tag, obj_in: Union[TagUpdate, Dict[str, Any]]
     ) -> Tag:
