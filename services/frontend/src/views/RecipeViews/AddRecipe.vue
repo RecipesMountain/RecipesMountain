@@ -5,7 +5,11 @@
         <v-row justify="center">
           <v-col cols="10">
             <p class="text-h3 text-left">Add new recipe</p>
-            <RecipeForm />
+            <RecipeForm
+              :isForEdit="false"
+              :tags="allTags"
+              :products="allProducts"
+            />
           </v-col>
         </v-row>
       </v-container>
@@ -17,6 +21,19 @@
 import RecipeForm from "../../components/recipe/Recipe-Form.vue";
 export default {
   components: { RecipeForm },
+
+  created: function () {
+    this.$store.dispatch("actionGetTags");
+    this.$store.dispatch("actionGetProducts");
+  },
+  computed: {
+    allTags() {
+      return this.$store.getters["allTags"];
+    },
+    allProducts() {
+      return this.$store.getters["allProducts"];
+    },
+  },
 };
 </script>
 

@@ -6,7 +6,7 @@
           <v-row align-content="center">
             <v-col sm="1" class="d-none d-lg-block"></v-col>
             <v-col lg="10" sm="12">
-              <Recipe />
+              <Recipe/>
             </v-col>
             <v-col sm="1" class="d-none d-lg-block"></v-col>
           </v-row>
@@ -21,6 +21,8 @@ import Recipe from "@/components/recipe/Recipe.vue";
 
 export default {
   components: { Recipe },
+
+  
 };
 </script>
 

@@ -24,13 +24,15 @@
         </v-row>
         <v-row>
           <v-col cols="12">
-            <p class="text-h4 text-left">{{ recipeTitle }}</p>
+            <p class="text-h4 text-left">{{ recipe.title }}</p>
           </v-col>
           <v-col cols="12">
-            <p class="text-left text-body-1">{{ recipeDesc }}</p>
+            <p class="text-left text-body-1">{{ recipe.description }}</p>
           </v-col>
           <v-col cols="12">
-            <p class="text-left text-subtitle-2">Author: {{ recipeAuthor.full_name }}</p>
+            <p class="text-left text-subtitle-2">
+              Author: {{ recipe.author.full_name }}
+            </p>
           </v-col>
         </v-row>
         <v-row class="flex-column">
@@ -74,7 +76,7 @@
                   <div v-bind="attrs" v-on="on">
                     <v-icon size="40" class="mr-n2">mdi-fire </v-icon>
                     <span class="font-weight-bold">
-                      {{ recipeCalories }}kcal
+                      {{recipe.calories}}kcal
                     </span>
                   </div>
                 </template>
@@ -180,7 +182,7 @@
         </v-row>
       </v-col>
       <v-col md="7" cols="12">
-        <RecipeImageCarousel />
+        <RecipeImageCarousel :image="recipe.image"/>
       </v-col>
     </v-row>
   </div>
@@ -191,60 +193,33 @@ import RecipeImageCarousel from "@/components/recipe/Recipe-ImageCarousel.vue";
 
 export default {
   components: { RecipeImageCarousel },
-  props: [],
+  props: ["recipe"],
   computed: {
     shortTags() {
-      if (this.tags.length > 4) {
-        return this.tags.slice(0, 4);
+      if (this.recipe.tags.length > 4) {
+        return this.recipe.tags.slice(0, 4);
       } else {
-        return this.tags;
+        return this.recipe.tags;
       }
     },
-    recipeTitle() {
-      return this.$store.getters["title"];
-    },
-    recipeDesc() {
-      return this.$store.getters["description"];
-    },
-    recipeAuthor() {
-      return this.$store.getters["author"];
-    },
-    recipeAuthorId() {
-      return this.$store.getters["authorId"];
-    },
-    recipeTime() {
-      return this.$store.getters["time"];
-    },
-    recipeDifficulty() {
-      return this.$store.getters["difficulty"];
-    },
-    recipeRating() {
-      return this.$store.getters["rating"] / 2;
-    },
-    recipeRatingCount() {
-      return this.$store.getters["ratingCount"];
-    },
-    recipeCalories() {
-      return this.$store.getters["calories"];
-    },
-    recipeServings() {
-      return this.$store.getters["servings"] / 2;
-    },
     recipeTimeHours() {
-      return this.recipeTime / 60;
+      return this.recipe.time / 60;
     },
     recipeDifficultyLevel() {
-      if (this.recipeDifficulty == "Easy") {
+      if (this.recipe.difficulty == "Easy") {
         return 0;
-      } else if (this.recipeDifficulty == "Hard") {
+      } else if (this.recipe.difficulty == "Hard") {
         return 2;
       } else {
         return 1;
       }
     },
-    tags() {
-      return this.$store.getters["tags"];
+    recipeRating() {
+      return this.recipe.rating / 2;
     },
+    recipeServings() {
+      return this.recipe.servings / 2;
+    }
   },
 };
 </script>

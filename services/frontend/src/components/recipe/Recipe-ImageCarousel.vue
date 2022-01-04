@@ -11,7 +11,7 @@
     >
       <!-- Possible place for multiple pictures -->
       <v-carousel-item
-        :src="imageUrl"
+        :src="image"
         reverse-transition="fade-transition"
         transition="hide-delimiters"
         :ripple="false"
@@ -23,14 +23,7 @@
 
 <script>
 export default {
-  async mounted() {
-    await this.$store.dispatch("actionGetRecipeImg", this.$route.params.id);
-  },
-  computed: {
-    imageUrl() {
-      return this.$store.getters["imageLink"];
-    },
-  },
+  props:["image"],
 };
 </script>
 

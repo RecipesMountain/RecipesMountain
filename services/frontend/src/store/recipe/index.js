@@ -5,20 +5,20 @@ const defaultState = {
   errorStatus: false,
   submitStatus: false,
   recipe: {
-    Id: "0",
-    Title: "",
-    Description: "",
-    Author: "Anonymous",
-    AuthorId: 0,
-    Time: 0,
-    Difficulty: "",
-    Rating: 0,
-    RatingCount: 0,
-    Calories: 0,
-    Servings: 0,
-    Tags: [],
-    Stages: [],
-    Image: "https://s3.przepisy.pl/przepisy3ii/img/variants/800x0/zapiekanka-makaronowa-pychotka.jpg",
+    id: "0",
+    title: "",
+    description: "",
+    author: "Anonymous",
+    authorId: 0,
+    time: 0,
+    difficulty: "",
+    rating: 0,
+    ratingCount: 0,
+    calories: 0,
+    servings: 0,
+    tags: [],
+    stages: [],
+    image: "https://s3.przepisy.pl/przepisy3ii/img/variants/800x0/zapiekanka-makaronowa-pychotka.jpg",
 
   },
   allProducts: [],
@@ -75,43 +75,43 @@ export const recipeModule = {
   state: defaultState,
   mutations: {
     setRecipeId(state, payload){
-        state.recipe.Id = payload
+        state.recipe.id = payload
     },
     setTitle(state, payload) {
-        state.recipe.Title = payload
+        state.recipe.title = payload
     },
     setDescription(state, payload) {
-        state.recipe.Description = payload
+        state.recipe.description = payload
     },
     setAuthor(state, payload){
-      state.recipe.Author = payload
+      state.recipe.author = payload
     },
     setAuthorId(state, payload){
-      state.recipe.AuthorId = payload
+      state.recipe.authorId = payload
     },
     setTime(state, payload){
-      state.recipe.Time = payload 
+      state.recipe.time = payload 
     },
     setDifficulty(state, payload){
-      state.recipe.Difficulty = payload
+      state.recipe.difficulty = payload
     },
     setRating(state, payload){
-      state.recipe.Rating = payload
+      state.recipe.rating = payload
     },
     setRatingCount(state, payload){
-      state.recipe.RatingCount = payload
+      state.recipe.ratingCount = payload
     },
     setCalories(state, payload){
-      state.recipe.Calories = payload
+      state.recipe.calories = payload
     },
     setServings(state, payload){
-      state.recipe.Servings = payload
+      state.recipe.servings = payload
     },
     setTags(state, payload){
-      state.recipe.Tags = payload
+      state.recipe.tags = payload
     },
     setStages(state, payload){
-      state.recipe.Stages = payload
+      state.recipe.stages = payload
     },
     setError(state, payload){
       state.error = payload
@@ -120,7 +120,7 @@ export const recipeModule = {
       state.errorStatus = payload
     },
     setImage(state, payload){
-      state.recipe.Image = payload
+      state.recipe.image = payload
     },
     setAllTags(state, payload){
       state.allTags = payload
@@ -181,6 +181,7 @@ export const recipeModule = {
           context.commit("setTags", response.data.tags)
           context.commit("setTags", response.data.tags)
           context.commit("setStages", response.data.stages)
+          context.commit("setErrorStatus", false)
         }
         else {
             console.log("Something gone wrong")
@@ -209,8 +210,10 @@ export const recipeModule = {
         if(response.status == 200)
         {
           context.commit("setSubmitStatus", true)
+          console.log("new recipe id: ", response.data.id)
           context.commit("setRecipeId", response.data.id)
           context.commit("openSnackbar", "Succesfully added new recipe")
+          context.commit("setErrorStatus", false)
         }
         else{
           context.commit("setSubmitStatus", false)
@@ -225,7 +228,7 @@ export const recipeModule = {
     },
     async actionUpdateRecipe(context, payload){
       try{
-        const response  = await api.updateRecipe(context.rootState.user.token, payload, context.state.recipe.Id)
+        const response  = await api.updateRecipe(context.rootState.user.token, payload, context.state.recipe.id)
         // console.log(response)
         if(response.status == 200){
           context.commit("setSubmitStatus", true)
@@ -247,7 +250,7 @@ export const recipeModule = {
     async actionAddRecipeImage(context, payload)
     {
       try{
-        const response = await api.sendImage(context.rootState.user.token, payload, context.state.recipe.Id)
+        const response = await api.sendImage(context.rootState.user.token, payload, context.state.recipe.id)
         if(response.status == 200)
         {
           context.commit("setSubmitStatus", true)
@@ -264,21 +267,22 @@ export const recipeModule = {
 
   },
   getters: {
-    recipeId: (state) => state.recipe.Id,
-    title: (state) => state.recipe.Title,
-    description: (state) => state.recipe.Description,
-    author: (state) => state.recipe.Author,
-    authorId: (state) => state.recipe.AuthorId,
-    time: (state) => state.recipe.Time,
-    difficulty: (state) => state.recipe.Difficulty,
-    rating: (state) => state.recipe.Rating,
-    ratingCount: (state) => state.recipe.RatingCount,
-    calories: (state) => state.recipe.Calories,
-    servings: (state) => state.recipe.Servings,
-    tags: (state) => state.recipe.Tags,
-    stages: (state) => state.recipe.Stages,
+    recipe: (state) => state.recipe,
+    recipeId: (state) => state.recipe.id,
+    title: (state) => state.recipe.title,
+    description: (state) => state.recipe.description,
+    author: (state) => state.recipe.author,
+    authorId: (state) => state.recipe.authorId,
+    time: (state) => state.recipe.time,
+    difficulty: (state) => state.recipe.difficulty,
+    rating: (state) => state.recipe.rating,
+    ratingCount: (state) => state.recipe.ratingCount,
+    calories: (state) => state.recipe.calories,
+    servings: (state) => state.recipe.servings,
+    tags: (state) => state.recipe.tags,
+    stages: (state) => state.recipe.stages,
     errorStatus: (state) => state.errorStatus,
-    imageLink: (state) => state.recipe.Image,
+    imageLink: (state) => state.recipe.image,
     units: (state) => state.units,
     allTags: (state) => state.allTags,
     allProducts: (state) => state.allProducts,

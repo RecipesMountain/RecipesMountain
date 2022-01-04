@@ -8,9 +8,9 @@
     outlined
     color="transparent"
   >
-    <RecipeInformations />
+    <RecipeInformations :recipe="recipe" />
     <v-row><v-col sm="12" class="d-none d-lg-block"> </v-col></v-row>
-    <v-row v-for="stage in stages" :key="stage.name" class="flex-column">
+    <v-row v-for="stage in recipe.stages" :key="stage.name" class="flex-column">
       <v-col>
         <RecipeStage
           :ingredients="stage.products"
@@ -25,7 +25,7 @@
         <p class="text-overline text-left mb-n3">Tags:</p>
         <v-chip-group column>
           <v-chip
-            v-for="tag in tags"
+            v-for="tag in recipe.tags"
             :key="tag.id"
             pill
             small
@@ -56,31 +56,27 @@
 import RecipeInformations from "@/components/recipe/Recipe-Informations.vue";
 import RecipeStage from "@/components/recipe/Recipe-Stage.vue";
 export default {
-    components: { RecipeInformations, RecipeStage },
-    data() {
+  components: { RecipeInformations, RecipeStage },
+  data() {
     return {
       comments: [],
     };
   },
-  computed: {
-    error() {
-      return this.$store.getters["error"];
-    },
-    tags() {
-      return this.$store.getters["tags"];
-    },
-    stages() {
-      return this.$store.getters["stages"];
-    },
-    errorStatus() {
-      return this.$store.getters["errorStatus"];
-    },
-  },
   async mounted() {
     await this.$store.dispatch("actionGetRecipe", this.$route.params.id);
-    if (this.errorStatus) {
+    await this.$store.dispatch("actionGetRecipeImg", this.$route.params.id);
+    if (this.error) {
+      console.log("error", "pushing");
       this.$router.push("/");
     }
+  },
+  computed: {
+    recipe() {
+      return this.$store.getters["recipe"];
+    },
+    error() {
+      return this.$store.getters["errorStatus"];
+    },
   },
 };
 </script>

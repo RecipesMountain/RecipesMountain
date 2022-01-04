@@ -4,8 +4,12 @@
       <v-container fluid>
         <v-row justify="center">
           <v-col cols="10">
-            <p class="text-h3 text-left">Edit recipe - {{recipeTitle}}</p>
-            <RecipeForm :isForEdit="true"/>
+            <p class="text-h3 text-left">Edit recipe - {{ recipe.title }}</p>
+            <RecipeForm
+              :isForEdit="true"
+              :tags="allTags"
+              :products="allProducts"
+            />
           </v-col>
         </v-row>
       </v-container>
@@ -17,11 +21,24 @@
 import RecipeForm from "@/components/recipe/Recipe-Form.vue";
 export default {
   components: { RecipeForm },
-  computed:{
-      recipeTitle(){
-          return this.$store.getters["title"]
-      }
-  }
+
+  created: function () {
+    this.$store.dispatch("actionGetTags");
+    this.$store.dispatch("actionGetProducts");
+  },
+
+  computed: {
+    recipe() {
+      console.log(this.$store.getters["recipe"]);
+      return this.$store.getters["recipe"];
+    },
+    allTags() {
+      return this.$store.getters["allTags"];
+    },
+    allProducts() {
+      return this.$store.getters["allProducts"];
+    },
+  },
 };
 </script>
 

@@ -51,6 +51,7 @@
                       ></v-text-field>
                     </v-col>
                     <v-col md="6" cols="12">
+                      
                       <v-img
                         :src="previeImage"
                         contain
@@ -58,6 +59,10 @@
                         v-if="isImage"
                       >
                       </v-img>
+                      <v-img v-else-if="isForEdit" 
+                      :src="oldImage"
+                        contain
+                        height="150px"></v-img>
                       <v-file-input
                         show-size
                         chips
@@ -173,7 +178,7 @@
                       <v-window-item v-for="stage in stages" :key="stage.no">
                         <RecipeFormStage
                           :stage="stage"
-                          :products="AllProducts"
+                          :products="products"
                         />
                       </v-window-item>
                     </v-window>
@@ -203,7 +208,7 @@
                       chips
                       deletable-chips
                       v-model="pickedTags"
-                      :items="AllTags"
+                      :items="tags"
                       item-text="name"
                       item-value="id"
                     ></v-autocomplete>
@@ -214,7 +219,7 @@
             </v-card-text>
           </v-card>
           <v-btn color="success" @click="submitRecipe"
-            >Submit your recipe</v-btn
+            >{{submitButtonLabel}}</v-btn
           >
           <v-btn text color="primary" @click="formStep = 2">Back</v-btn>
         </v-stepper-content>
@@ -226,10 +231,12 @@
 <script>
 import RecipeFormStage from "./Recipe-FormStage.vue";
 export default {
-  props: ["isForEdit"],
+  props: ["isForEdit", "tags", "products"],
   components: { RecipeFormStage },
   data() {
     return {
+      oldRecipe: undefined,
+      oldImage: "",
       recipeTitle: "",
       preparationTime: 0.5,
       difficulty: 0,
@@ -257,11 +264,6 @@ export default {
       recipeImage: undefined,
       previeImage: undefined,
 
-      emptyStage: {
-        name: "",
-        content: "",
-        products: [],
-      },
       stageNumber: 1,
       stageWindow: 0,
 
@@ -358,7 +360,8 @@ export default {
           await this.$store.dispatch("actionAddRecipeImage", fileData);
           this.$router.push("/recipes/" + this.NewRecipeId);
         }
-      } else if (this.isForEdit) {
+      } 
+      if (this.isForEdit) {
         this.$store.commit("setRecipeId", this.$route.params.id);
         await this.$store.dispatch("actionUpdateRecipe", payload);
         if(this.recipeImage != undefined){
@@ -371,11 +374,11 @@ export default {
     },
   },
   computed: {
-    AllTags() {
-      return this.$store.getters["allTags"];
-    },
-    AllProducts() {
-      return this.$store.getters["allProducts"];
+    submitButtonLabel(){
+      if(this.isForEdit)
+        return "Update your recipe"
+      else
+        return "Submit your recipe"
     },
     ErrorStatus() {
       return this.$store.getters["errorStatus"];
@@ -383,27 +386,29 @@ export default {
     NewRecipeId() {
       return this.$store.getters["recipeId"];
     },
-    OldImage(){
-      return this.$store.getters["imageLink"];
-    }
   },
-  async mounted() {
-    await this.$store.dispatch("actionGetTags");
-    await this.$store.dispatch("actionGetProducts");
 
+  async mounted() {
     if (this.isForEdit) {
       await this.$store.dispatch("actionGetRecipe", this.$route.params.id);
       await this.$store.dispatch("actionGetRecipeImg", this.$route.params.id);
-      this.recipeTitle = this.$store.getters["title"];
-      this.preparationTime = this.$store.getters["time"] / 30;
+      
+      this.oldRecipe = this.$store.getters["recipe"]
+
+      this.oldImage = this.oldRecipe.image
+
+      this.recipeTitle = this.oldRecipe.title;
+      this.preparationTime = this.oldRecipe.time / 30;
+
       this.difficulty = this.tickDiffLabels.indexOf(
-        this.$store.getters["difficulty"]
+        this.oldRecipe.difficulty
       );
-      this.caloriesBillans = this.$store.getters["calories"];
-      this.servings = this.$store.getters["servings"] / 2;
+
+      this.caloriesBillans = this.oldRecipe.calories;
+      this.servings = this.oldRecipe.servings / 2;
       
       this.stages = []
-      this.$store.getters["stages"].forEach((stage) => {
+      this.oldRecipe.stages.forEach((stage) => {
         var prod = []
         var numberOfProducts = 0;
         stage.products.forEach((product)=>{
@@ -426,7 +431,7 @@ export default {
         this.stageNumber += 1;
       });
       this.pickedTags = [];
-      this.$store.getters["tags"].forEach((tag) =>
+      this.oldRecipe.tags.forEach((tag) =>
         this.pickedTags.push(tag.id)
       );
     }
