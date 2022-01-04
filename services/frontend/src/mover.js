@@ -15,6 +15,9 @@ export const mover = {
     },
     goToRegister() {
         router.push("/register")
+    },
+    goToAddRecipe() {
+        router.push("/addRecipe")
     }
 
 }

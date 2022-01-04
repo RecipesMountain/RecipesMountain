@@ -97,7 +97,7 @@ def get_recipe_by_id(
     """
     Get recipe by id
     """
-    recipe = crud.recipe.get_by_id(db=db, recipe_id=recipe_id)
+    recipe = crud.recipe.get_and_incrementViews(db=db, recipe_id=recipe_id)
     if recipe:
         return recipe
     else:

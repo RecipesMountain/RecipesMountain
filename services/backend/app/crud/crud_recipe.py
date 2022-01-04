@@ -186,5 +186,15 @@ class CRUDRecipe(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
         db.refresh(recipe)
         return recipe
 
+    def get_and_incrementViews(self, db: Session, *, recipe_id: UUID) -> Recipe:
+        recipe = db.query(Recipe).filter(Recipe.id == recipe_id).first()
+        if not recipe:
+            return None
+        recipe.totalViews += 1
+        recipe.popularityScore += 1
+        db.add(recipe)
+        db.commit()
+        db.refresh(recipe)
+        return recipe
 
 recipe = CRUDRecipe(Recipe)
