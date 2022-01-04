@@ -18,8 +18,6 @@ from app.models.TSVector import TSVector
 
 
 class Recipe(Base):
-
-    # TODO ADD decryption?
     id = Column(UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4)
     title = Column(String)
     description = Column(String)
