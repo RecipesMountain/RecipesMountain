@@ -62,8 +62,8 @@ spec:
                 configMapKeyRef:
                   key: USERS_OPEN_REGISTRATION
                   name: backend-env
-          image: europe-central2-docker.pkg.dev/wus-21/backend
-          name: backend-recipemountain
+          image: europe-central2-docker.pkg.dev/wus-21/spring/backend
+          name: europe-central2-docker.pkg.dev/$PROJECT_ID/spring/backend
           ports:
             - containerPort: 5000
           resources: {}
