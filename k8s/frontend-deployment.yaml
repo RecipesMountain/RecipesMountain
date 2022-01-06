@@ -21,7 +21,7 @@ spec:
         io.kompose.service: frontend
     spec:
       containers:
-        - image: frontend-recipemountain
+        - image: europe-central2-docker.pkg.dev/wus-21/frontend
           name: frontend-recipemountain
           ports:
             - containerPort: 8080

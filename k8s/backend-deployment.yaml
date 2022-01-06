@@ -62,7 +62,7 @@ spec:
                 configMapKeyRef:
                   key: USERS_OPEN_REGISTRATION
                   name: backend-env
-          image: backend-recipemountain
+          image: europe-central2-docker.pkg.dev/wus-21/backend
           name: backend-recipemountain
           ports:
             - containerPort: 5000
