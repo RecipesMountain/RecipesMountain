@@ -1,4 +1,4 @@
-  steps:
+steps:
   # running docker-compose
   - name: 'gcr.io/cloud-builders/docker'
     args:
