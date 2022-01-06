@@ -1,0 +1,13 @@
+apiVersion: v1
+data:
+  FIRST_SUPERUSER: admin@example.com
+  FIRST_SUPERUSER_PASSWORD: admin
+  POSTGRES_SERVER: database:5432
+  PROJECT_NAME: RecipeMountain
+  USERS_OPEN_REGISTRATION: "1"
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: backend-backend-env
+  name: backend-env
