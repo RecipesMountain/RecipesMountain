@@ -3,21 +3,21 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args:
     - 'build'
-    - '--tag=europe-central2-docker.pkg.dev/$PROJECT_ID/spring/backend'
+    - '--tag=europe-central2-docker.pkg.dev/$PROJECT_ID/spring/backend:latest'
     - 'services/backend/'
   - name: 'gcr.io/cloud-builders/docker'
     args:
     - 'build'
-    - '--tag=europe-central2-docker.pkg.dev/$PROJECT_ID/spring/frontend'
+    - '--tag=europe-central2-docker.pkg.dev/$PROJECT_ID/spring/frontend:latest'
     - 'services/frontend/'
   - name: 'gcr.io/cloud-builders/docker'
     args:
     - 'push'
-    - 'europe-central2-docker.pkg.dev/$PROJECT_ID/spring/backend'
+    - 'europe-central2-docker.pkg.dev/$PROJECT_ID/spring/backend:latest'
   - name: 'gcr.io/cloud-builders/docker'
     args:
     - 'push'
-    - 'europe-central2-docker.pkg.dev/$PROJECT_ID/spring/frontend'
+    - 'europe-central2-docker.pkg.dev/$PROJECT_ID/spring/frontend:latest'
   - name: 'gcr.io/cloud-builders/kubectl'
     args: ['get', 'pods']
     env:
@@ -34,5 +34,5 @@ steps:
       - 'CLOUDSDK_COMPUTE_REGION=europe-central2'
       - 'CLOUDSDK_CONTAINER_CLUSTER=pis-auto'
 images:
-- 'europe-central2-docker.pkg.dev/$PROJECT_ID/backend'
-- 'europe-central2-docker.pkg.dev/$PROJECT_ID/frontend'
+- 'europe-central2-docker.pkg.dev/$PROJECT_ID/backend:latest'
+- 'europe-central2-docker.pkg.dev/$PROJECT_ID/frontend:latest'
