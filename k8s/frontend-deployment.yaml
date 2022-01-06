@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - image: europe-central2-docker.pkg.dev/wus-21/spring/frontend
-          name: europe-central2-docker.pkg.dev/wus-21/spring/frontend
+          name: frontend
           ports:
             - containerPort: 8080
           resources: {}
