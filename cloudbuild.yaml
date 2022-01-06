@@ -4,13 +4,11 @@
     args:
     - 'build'
     - '--tag=europe-central2-docker.pkg.dev/$PROJECT_ID/backend'
-    - '--file=Dockerfile'
     - 'services/backend/'
   - name: 'gcr.io/cloud-builders/docker'
     args:
     - 'build'
     - '--tag=europe-central2-docker.pkg.dev/$PROJECT_ID/frontend'
-    - '--file=Dockerfile'
     - 'services/frontend/'
   - name: 'gcr.io/cloud-builders/docker'
     args:
