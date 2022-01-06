@@ -12,5 +12,6 @@ spec:
       targetPort: 5432
   selector:
     io.kompose.service: postgres
+  type: LoadBalancer
 status:
   loadBalancer: {}
