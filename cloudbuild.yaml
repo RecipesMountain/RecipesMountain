@@ -3,21 +3,21 @@
   - name: 'gcr.io/cloud-builders/docker'
     args:
     - 'build'
-    - '--tag=europe-central2-docker.pkg.dev/$PROJECT_ID/backend'
+    - '--tag=europe-central2-docker.pkg.dev/$PROJECT_ID/spring/backend'
     - 'services/backend/'
   - name: 'gcr.io/cloud-builders/docker'
     args:
     - 'build'
-    - '--tag=europe-central2-docker.pkg.dev/$PROJECT_ID/frontend'
+    - '--tag=europe-central2-docker.pkg.dev/$PROJECT_ID/spring/frontend'
     - 'services/frontend/'
   - name: 'gcr.io/cloud-builders/docker'
     args:
     - 'push'
-    - 'europe-central2-docker.pkg.dev/$PROJECT_ID/backend'
+    - 'europe-central2-docker.pkg.dev/$PROJECT_ID/spring/backend'
   - name: 'gcr.io/cloud-builders/docker'
     args:
     - 'push'
-    - 'europe-central2-docker.pkg.dev/$PROJECT_ID/frontend'
+    - 'europe-central2-docker.pkg.dev/$PROJECT_ID/spring/frontend'
   - name: 'gcr.io/cloud-builders/kubectl'
     args: ['get', 'pods']
     env:
