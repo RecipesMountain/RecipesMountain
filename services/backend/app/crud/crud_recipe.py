@@ -24,17 +24,12 @@ class CRUDRecipe(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
             q = q.filter(Recipe.tags.any(tag.name.contains(tag)))
         return q.all()
 
-    # def get_by_tags_or(self, db: Session, *, tags: List[Recipe]) -> List[Recipe]:
-    #     q = db.query(Recipe)
-    #     for tag in tags:
-    #         q = q.i
-
     def get_by_keyword(self, db: Session, *, keyword: str) -> List[Recipe]:
         return (
             db.query(Recipe)
             .filter(
                 Recipe.__ts_vector__.op("@@")(
-                    func.to_tsquery("english", f"{keyword}:*")
+                    func.to_tsquery("english", f"{keyword.replace(' ', ' & ')}:*")
                 )
             )
             .all()
@@ -54,8 +49,6 @@ class CRUDRecipe(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
         for tag in tags:
             q = q.filter(Recipe.tags.any(Tag.name == tag))
         return q
-
-    # TODO with_tags_or
 
     def sort_popularity(self, q: Query) -> Query:
         return q.order_by(Recipe.popularityScore.desc())
@@ -196,5 +189,6 @@ class CRUDRecipe(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
         db.commit()
         db.refresh(recipe)
         return recipe
+
 
 recipe = CRUDRecipe(Recipe)

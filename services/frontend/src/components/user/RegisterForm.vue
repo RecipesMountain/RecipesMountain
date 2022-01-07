@@ -9,25 +9,26 @@
         There was a problem with registration
       </v-alert>
         <v-card class="text-center">
+          <v-form ref="form" v-model="valid" @submit="(e) => {e.preventDefault(); submitRegister();}" @keyup.enter="submitLogIn">
           <v-card-title primary-title>
             <p class="h6">Register</p>
           </v-card-title>
           <v-card-text>
-            <v-form>
               <v-row>
                 <v-col>
                   <v-text-field
                     name="firstName"
                     label="First name"
-                    id="id"
+                    id="fistName"
                     v-model="firstName"
+                    :rules="firstNameRules"
                   ></v-text-field>
                 </v-col>
                 <v-col>
                   <v-text-field
                     name="surname"
                     label="Surname"
-                    id="id"
+                    id="surName"
                     v-model="surname"
                   ></v-text-field>
                 </v-col>
@@ -39,8 +40,9 @@
                     name="email"
                     type="email"
                     label="E-mail"
-                    id="id"
+                    id="e-mail"
                     v-model="email"
+                    :rules="emailRules"
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -49,29 +51,31 @@
                 name="password"
                 :type="passwordVisible ? 'text' : 'password'"
                 label="Password"
-                id="id"
+                :rules="passwordRules"
+                id="password"
                 :append-icon="passwordVisible ? 'mdi-eye' : 'mdi-eye-off'"
                 @click:append="passwordVisible = !passwordVisible"
                 v-model="password"
               ></v-text-field>
               <v-text-field
-                name="passwordComfirm"
+                name="passwordConfirm"
                 :type="passwordVisible ? 'text' : 'password'"
-                label="Password Comfirm"
-                id="id"
+                label="Password Confirm"
+                :rules="passwordRules"
+                id="passwordConfirm"
                 :append-icon="passwordVisible ? 'mdi-eye' : 'mdi-eye-off'"
                 @click:append="passwordVisible = !passwordVisible"
                 v-model="passwordComfirm"
               ></v-text-field>
-            </v-form>
           </v-card-text>
           <v-card-actions>
-            <v-btn color="success" outlined v-on:click.prevent="submitRegister">Sign up</v-btn>
+            <v-btn class="mr-4" :disabled="!valid" type="submit" color="success" outlined>Sign up</v-btn>
             <v-spacer></v-spacer>
             <router-link to="/login">
               <v-btn color="orange" outlined>Back</v-btn>
             </router-link>
           </v-card-actions>
+          </v-form>
         </v-card>
   </v-container>
 </template>
@@ -86,6 +90,18 @@ export default {
     firstName: "",
     surname: "",
     error: false,
+    valid: false,
+    emailRules: [
+      v => !!v || 'E-mail is needed',
+      v => /.+@.+\..+/.test(v) || 'E-mail has to be correct',
+    ],
+    passwordRules: [
+        v => !!v || 'Password is needed',
+        () => this.password == this.passwordComfirm || "Passwords has to be the same"
+    ],
+    firstNameRules: [
+        v => !!v || 'Fist Name is needed',
+    ],
   }),
   methods: {
     async submitRegister() {

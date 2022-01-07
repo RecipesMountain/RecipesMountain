@@ -36,7 +36,7 @@ def search_recipes(
     if sort not in ["popular", "views", "best", "nosort"]:
         raise HTTPException(
             status_code=400,
-            detail="Bad tags connect",
+            detail='Bad sort, aviable "popular", "views", "best", "nosort"',
         )
 
     keywords = keywords.replace("+", " ")
