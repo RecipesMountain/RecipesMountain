@@ -42,6 +42,8 @@ services:
       context: ./services/frontend
       dockerfile: Dockerfile.dev
     image: frontend-recipemountain-dev
+    links:
+      - backend
     volumes:
       - ./services/frontend:/app
     ports:
