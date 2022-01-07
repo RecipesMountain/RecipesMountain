@@ -21,11 +21,13 @@ Poetry run
 ```
 
 ### Building frontend
-Fronend can be build by running
+Fronend can be build by running,
 ```
 npm run build
 ```
 in `services/frontend`
+
+Building for production can be accomplished by setting environment variable `VUE_APP_ENV=production`
 
 ## Deployment
 
@@ -43,6 +45,6 @@ In order to remove volumes add `-v` after down
 
 ## Deployment to GKE
 
-Create cluster on GKE, add trigger to Cloud Build and create repository in GCP, change in `cloudbuild.yaml` you region, cluster name and repository. When trigger fires deployment will happen automaticly 
+Create cluster on GKE, add trigger to Cloud Build and create repository in GCP, change your region, cluster name and repository in `cloudbuild.yaml`. When trigger fires deployment will happen automaticly 
 
 
