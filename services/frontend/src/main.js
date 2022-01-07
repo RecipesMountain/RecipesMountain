@@ -7,8 +7,6 @@ import axios from 'axios';
 
 Vue.config.productionTip = false
 
-axios.defaults.baseURL = 'http://'+ window.location.hostname +':5000/';  // the FastAPI backend
-
 new Vue({
   store,
   router,
