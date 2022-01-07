@@ -1,11 +1,19 @@
 <template>
   <v-app-bar app absolute color="rgb(255, 202, 137)" elevate-on-scroll>
-    <v-img
-      lazy-src="https://picsum.photos/id/11/10/6"
-      max-height="50"
-      max-width="100"
-      src="https://picsum.photos/id/11/500/300"
-    ></v-img>
+    <v-tooltip bottom>
+      <template v-slot:activator="{ on, attrs }">
+        <v-img
+          v-bind="attrs"
+          v-on="on"
+          @click="goToHome"
+          lazy-src="https://picsum.photos/id/11/10/6"
+          max-height="50"
+          max-width="100"
+          src="https://picsum.photos/id/11/500/300"
+        ></v-img>
+      </template>
+      <span>Go to main page</span>
+    </v-tooltip>
 
     <v-spacer></v-spacer>
 
@@ -23,35 +31,98 @@
       class="vertical-center"
     ></v-autocomplete>
 
-    <v-btn icon @click="goToSearch">
-      <v-icon>mdi-book-search-outline</v-icon>
-    </v-btn>
-
+    <v-tooltip bottom>
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn 
+          icon 
+          @click="goToSearch"
+          v-bind="attrs"
+          v-on="on">
+          <v-icon>mdi-book-search-outline</v-icon>
+        </v-btn>
+      </template>
+      <span>Search</span>
+    </v-tooltip>
+    
     <v-spacer></v-spacer>
 
-    <v-btn icon >
-      <v-icon>mdi-food-variant</v-icon>
-    </v-btn>
+    <v-tooltip bottom>
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn 
+          icon 
+          @click="goToSearch"
+          v-bind="attrs"
+          v-on="on">
+            <v-icon>mdi-food-variant</v-icon>
+        </v-btn>
+      </template>
+      <span>Your Recpies</span>
+    </v-tooltip>
+    
 
-    <v-btn icon>
-      <v-icon>mdi-chef-hat</v-icon>
-    </v-btn>
+    <v-tooltip bottom>
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn 
+          icon 
+          @click="goToAddRecipe"
+          v-bind="attrs"
+          v-on="on">
+          <v-icon>mdi-chef-hat</v-icon>
+        </v-btn>
+      </template>
+      <span>Add a recpie</span>
+    </v-tooltip>
 
     <v-divider vertical></v-divider>
 
-      <v-btn v-if="isLoggedIn" icon @click="logout">
-        <v-icon>mdi-logout</v-icon>
-      </v-btn>
+      <v-tooltip bottom>
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn 
+          v-if="isLoggedIn"
+          icon 
+          @click="logout"
+          v-bind="attrs"
+          v-on="on">
+          <v-icon>mdi-logout</v-icon>
+        </v-btn>
+      </template>
+      <span>Logout</span>
+    </v-tooltip>
 
-      <v-avatar v-if="isLoggedIn" @click="goToAccount" color="primary" size="56">PW</v-avatar>
+    <v-tooltip bottom>
+      <template v-slot:activator="{ on, attrs }">
+        <v-avatar v-on="on" v-bind="attrs" v-if="isLoggedIn" @click="goToAccount" color="primary" size="56">PW</v-avatar>
+      </template>
+      <span>User Profile</span>
+    </v-tooltip>
 
-      <v-btn v-if="!isLoggedIn" icon @click="login">
-        <v-icon>mdi-login</v-icon>
-      </v-btn>
+    <v-tooltip bottom>
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn 
+          v-if="!isLoggedIn"
+          icon 
+          @click="login"
+          v-bind="attrs"
+          v-on="on">
+          <v-icon>mdi-login</v-icon>
+        </v-btn>
+      </template>
+      <span>Login</span>
+    </v-tooltip>
 
-      <v-btn v-if="!isLoggedIn" icon @click="register">
-        <v-icon>mdi-account-plus-outline</v-icon>
-      </v-btn>
+    <v-tooltip bottom>
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn 
+          v-if="!isLoggedIn"
+          icon 
+          @click="register"
+          v-bind="attrs"
+          v-on="on">
+          <v-icon>mdi-account-plus-outline</v-icon>
+        </v-btn>
+      </template>
+      <span>Register</span>
+    </v-tooltip>
 
     
   </v-app-bar>
@@ -120,6 +191,12 @@ export default {
     },
     goToAccount(){
       mover.goToAccount()
+    },
+    goToAddRecipe() {
+      mover.goToAddRecipe()
+    },
+    goToHome() {
+      mover.goToHome()
     },
     async goToSearch() {
       this.$store.commit("setKeyword", this.keyword)

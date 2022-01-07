@@ -36,7 +36,7 @@ def search_recipes(
     if sort not in ["popular", "views", "best", "nosort"]:
         raise HTTPException(
             status_code=400,
-            detail="Bad tags connect",
+            detail='Bad sort, aviable "popular", "views", "best", "nosort"',
         )
 
     keywords = keywords.replace("+", " ")
@@ -97,7 +97,7 @@ def get_recipe_by_id(
     """
     Get recipe by id
     """
-    recipe = crud.recipe.get_by_id(db=db, recipe_id=recipe_id)
+    recipe = crud.recipe.get_and_incrementViews(db=db, recipe_id=recipe_id)
     if recipe:
         return recipe
     else:

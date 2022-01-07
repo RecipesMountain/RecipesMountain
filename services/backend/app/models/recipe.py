@@ -28,7 +28,6 @@ class Recipe(Base):
     rating = Column(Integer)
 
     totalViews = Column(Integer, default=0)
-    viewsLast24 = Column(Integer, default=0)
     popularityScore = Column(Integer, default=0)
 
     image_blob = Column(LargeBinary, nullable=True)
