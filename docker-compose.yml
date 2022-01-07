@@ -36,6 +36,8 @@ services:
   frontend:
     build: ./services/frontend
     image: frontend-recipemountain
+    links:
+      - "backend:backend"
     ports:
       - "8080:8080"
     container_name: frontend-recipemountain

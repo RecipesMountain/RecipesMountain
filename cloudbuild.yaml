@@ -1,0 +1,38 @@
+steps:
+  # running docker-compose
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+    - 'build'
+    - '--tag=europe-central2-docker.pkg.dev/$PROJECT_ID/spring/backend'
+    - 'services/backend/'
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+    - 'build'
+    - '--tag=europe-central2-docker.pkg.dev/$PROJECT_ID/spring/frontend'
+    - 'services/frontend/'
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+    - 'push'
+    - 'europe-central2-docker.pkg.dev/$PROJECT_ID/spring/backend'
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+    - 'push'
+    - 'europe-central2-docker.pkg.dev/$PROJECT_ID/spring/frontend'
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args: ['get', 'pods']
+    env:
+      - 'CLOUDSDK_COMPUTE_REGION=europe-central2'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=pis-auto'
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args: ['apply', '-f', 'k8s/init-services']
+    env:
+      - 'CLOUDSDK_COMPUTE_REGION=europe-central2'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=pis-auto'
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args: ['apply', '-f', 'k8s']
+    env:
+      - 'CLOUDSDK_COMPUTE_REGION=europe-central2'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=pis-auto'
+images:
+- 'europe-central2-docker.pkg.dev/$PROJECT_ID/spring/backend'
+- 'europe-central2-docker.pkg.dev/$PROJECT_ID/spring/frontend'
