@@ -19,6 +19,9 @@ const state = {
     page: 1,
     perPage: 20,
   },
+  favouriteRecipes: [],
+  authoredRecipes: [],
+  commentedRecipes: [],
   popularRecipes: [],
   bestRecipes: [],
   snackbarOpen: false,
@@ -53,6 +56,15 @@ export const mutations = {
   },
   setBestRecipes(state, newRecipes) {
     state.bestRecipes = newRecipes;
+  },
+  setFavouriteRecipes(state, newRecipes) {
+    state.favouriteRecipes = newRecipes;
+  },
+  setAuthoredRecipes(state, newRecipes) {
+    state.authoredRecipes = newRecipes;
+  },
+  setCommentedRecipes(state, newRecipes) {
+    state.commentedRecipes = newRecipes;
   },
   openSnackbar(state, text) {
     state.snackbarOpen = true;
@@ -121,6 +133,30 @@ export const actions = {
         console.log(error)
     }
   },
+  async getFavouriteRecipes(context, payload) {
+    try {
+      context.commit("setFavouriteRecipes", (await api.getPopular(context.state.user.token, 0, payload.limit)).data);
+    } catch (e) {
+      context.commit("openSnackbar", "A server error has occurred");
+      console.log(e);
+    }
+  },
+  async getAuthoredRecipes(context, payload) {
+    try {
+      context.commit("setAuthoredRecipes", (await api.getPopular(context.state.user.token, 0, payload.limit)).data);
+    } catch (e) {
+      context.commit("openSnackbar", "A server error has occurred");
+      console.log(e);
+    }
+  },
+  async getCommentedRecipes(context, payload) {
+    try {
+      context.commit("setCommentedRecipes", (await api.getPopular(context.state.user.token, 0, payload.limit)).data);
+    } catch (e) {
+      context.commit("openSnackbar", "A server error has occurred");
+      console.log(e);
+    }
+  },
   async getPopularRecipes(context, payload) {
     try {
       context.commit("setPopularRecipes", (await api.getPopular(context.state.user.token, 0, payload.limit)).data);
@@ -148,6 +184,9 @@ export const getters = {
   getTagsAvailable: (state) => state.search.tagsAvailable,
   isSnackbarOpened: (state) => state.snackbarOpen,
   snackbarText: (state) => state.snackbarText,
+  favouriteRecipes: state => state.favouriteRecipes,
+  authoredRecipes: state => state.authoredRecipes,
+  commentedRecipes: state => state.commentedRecipes,
   popularRecipes: state => state.popularRecipes,
   bestRecipes: state => state.bestRecipes,
 }

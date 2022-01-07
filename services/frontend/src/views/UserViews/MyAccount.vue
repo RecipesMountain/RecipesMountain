@@ -1,15 +1,74 @@
 <template>
   <div>
-      USER PAGE
+    <v-parallax
+      height="300"
+      src="user-page-background.jpg"
+    >
+      <v-row
+        align="center"
+        justify="center"
+      >
+        <h1 class="text-h1">Your account</h1>
+      </v-row>
+    </v-parallax>
+    <v-container>
+      <div v-for="(name, i) in ['Your Favourite', 'Authored by You', 'Commented by You']" :key="i">
+        <v-row>
+          <router-link
+            class="text-h5 text-decoration-none grey--text text--darken-3 mt-8 mb-4 arrow-link"
+            :to="`/explore/${name.toLowerCase()}`"
+          >
+            {{ name }} <v-icon class="grey--text text--darken-3 arrow">mdi-arrow-right</v-icon>
+          </router-link>
+        </v-row>
+        <v-row>
+          <div class="horiz-scroll">
+            <RecipeSnippet
+                class="card ma-4"
+                v-for="(recipe, i) in $store.getters[`${name.toLowerCase()}Recipes`]"
+                :key="i"
+                :recipe="recipe"
+            ></RecipeSnippet>
+          </div>
+        </v-row>
+      </div>
+    </v-container>
   </div>
 </template>
 
 <script>
-export default {
+import RecipeSnippet from '@/components/recipe/RecipeSnippet.vue';
 
+export default {
+  name: 'User',
+  components: {
+    RecipeSnippet
+  },
+  created: function() {
+    this.$store.dispatch("getFavouriteRecipes", { limit: 10 });
+    this.$store.dispatch("getAuthoredRecipes", { limit: 10 });
+    this.$store.dispatch("getCommentedRecipes", { limit: 10 });
+  }
 }
 </script>
 
-<style>
+<style scoped>
+.arrow-link > .arrow {
+  margin-left: 0;
+  transition: margin-left 300ms;
+}
 
+.arrow-link:hover > .arrow {
+  margin-left: 8px;
+}
+
+.horiz-scroll {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+
+.horiz-scroll > .card {
+  flex: 0 0 auto;
+}
 </style>
