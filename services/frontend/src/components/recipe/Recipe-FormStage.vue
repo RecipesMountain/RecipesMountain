@@ -13,7 +13,7 @@
       </v-card-title>
       <v-card-text>
         <v-container>
-          <v-form>
+          <v-form v-model="formStage" ref="stageForm">
             <v-row wrap>
               <v-col md="6" cols="12">
                 <v-card outlined flat>
@@ -102,14 +102,17 @@ export default {
   props: ["stage", "products"],
   data() {
     return {
+      formStage: false,
       numberOfIngredients: 0,
       ingredientRules: [
         v => !!v || 'Product is required',
+        v => !!(this.stage.products.filter((prod) => prod.product_id == v).length <= 1)  || 'Product in stage only once'
       ],
     };
   },
   methods: {
     addIngredient() {
+      console.log(this.stage)
       this.stage.products.push({
         no: this.numberOfIngredients,
         name: "",
@@ -130,7 +133,6 @@ export default {
     },
     productsCopy(){
       return this.products
-      // return this.products.filter(product => !this.stage.products.some(x => x.product_id == product.id))
     }
   },
 };
