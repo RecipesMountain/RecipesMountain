@@ -129,10 +129,13 @@ def add_image(
 
     recipe = crud.recipe.get_by_id(db=db, recipe_id=recipe_id)
     if recipe:
-        # if recipe.owner_id == current_user.id:
-        crud.recipe.add_image(db=db, recipe_id=recipe_id, file=image)
-        # else:
-        #     raise HTTPException(status_code=403, detail="You dont have permission to this operation - Update image")
+        if recipe.owner_id == current_user.id:
+            crud.recipe.add_image(db=db, recipe_id=recipe_id, file=image)
+        else:
+            raise HTTPException(
+                status_code=403,
+                detail="You dont have permission to this operation - Update image",
+            )
     else:
         raise HTTPException(status_code=404, detail="Recipe not exists.")
 
