@@ -103,10 +103,10 @@ export default {
   data() {
     return {
       formStage: false,
-      numberOfIngredients: 0,
+      numberOfIngredients: this.stage.products.length,
       ingredientRules: [
         v => !!v || 'Product is required',
-        v => !!(this.stage.products.filter((prod) => prod.product_id == v).length <= 1)  || 'Product in stage only once'
+        v => !!(this.stage.products.filter((prod) => prod.product_id == v).length <= 1)  || 'This product have been already used in this stage'
       ],
     };
   },
