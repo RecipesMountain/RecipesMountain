@@ -96,7 +96,7 @@ export const api = {
     return axios.get(`${APISUFFIX}/api/recipes/` + id)
   },
   async getRecipeImage(id){
-    return axios.defaults.baseURL+`${APISUFFIX}api/recipes/img/` + id
+    return axios.get(`${APISUFFIX}/api/recipes/img/${id}`)
   },
   async createRecipe(token, data){
     return axios.post(`${APISUFFIX}/api/recipes/`, data, authHeaders(token))
