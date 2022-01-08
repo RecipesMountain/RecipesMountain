@@ -96,6 +96,7 @@ export const api = {
     return axios.get(`${APISUFFIX}/api/recipes/` + id)
   },
   async getRecipeImage(id){
+    // console.log(await axios.get(`${APISUFFIX}/api/recipes/img/${id}`))
     return axios.get(`${APISUFFIX}/api/recipes/img/${id}`)
   },
   async createRecipe(token, data){

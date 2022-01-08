@@ -194,9 +194,8 @@ export const recipeModule = {
     },
     async actionGetRecipeImg(context, payload){
       try{
-        const imageLink = await api.getRecipeImage(payload)
-        
-        context.commit("setImage", imageLink.response.responseURL)
+        const imageLink = await api.getRecipeImage(payload)        
+        context.commit("setImage", imageLink.request.responseURL)
         
       }
       catch(error){
