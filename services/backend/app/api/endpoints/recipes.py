@@ -173,8 +173,10 @@ def update_recipe(
         if recipe.owner_id == current_user.id:
             recipe = crud.recipe.update(db=db, obj_in=recipe_in, recipe_id=recipe_id)
         else:
-            raise HTTPException(status_code=403, detail="You dont have permission to this operation - Update recipe")
-        
+            raise HTTPException(
+                status_code=403,
+                detail="You dont have permission to this operation - Update recipe",
+            )
 
     return recipe
 
