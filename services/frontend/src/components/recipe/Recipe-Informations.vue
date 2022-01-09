@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-row align-content="start">
+    <v-row align-content="start" class="flex-row-reverse">
       <v-col md="5" cols="12">
         <v-row>
           <div id="tags-short" class="mx-2">

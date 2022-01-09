@@ -15,7 +15,7 @@
         </v-stepper-step>
         <v-col class="d-flex">
           <v-spacer></v-spacer>
-          <v-btn plain>Preview</v-btn>
+          <!-- <v-btn plain>Preview</v-btn> -->
           <v-spacer></v-spacer>
           <v-btn icon>
             <v-icon>mdi-help-circle-outline</v-icon>
@@ -32,7 +32,7 @@
             <v-divider class="mx-4"></v-divider>
             <v-card-text>
               <v-container>
-                <v-form v-model="formOneValid">
+                <v-form v-model="formOneValid" ref="form">
                   <v-row wrap>
                     <v-col md="6" cols="12">
                       <v-text-field
@@ -51,7 +51,6 @@
                       ></v-text-field>
                     </v-col>
                     <v-col md="6" cols="12">
-                      
                       <v-img
                         :src="previeImage"
                         contain
@@ -59,10 +58,12 @@
                         v-if="isImage"
                       >
                       </v-img>
-                      <v-img v-else-if="isForEdit" 
-                      :src="oldImage"
+                      <v-img
+                        v-else-if="isForEdit"
+                        :src="oldImage"
                         contain
-                        height="150px"></v-img>
+                        height="150px"
+                      ></v-img>
                       <v-file-input
                         show-size
                         chips
@@ -70,6 +71,7 @@
                         accept="image/*"
                         truncate-length="15"
                         @change="selectImage"
+                        :rules="imageRules"
                       ></v-file-input>
                     </v-col>
                   </v-row>
@@ -134,16 +136,14 @@
               </v-container>
             </v-card-text>
           </v-card>
-          <v-btn color="primary" @click="formStep += 1">Next step</v-btn>
+          <v-btn color="primary" @click="nextStepper">Next step</v-btn>
         </v-stepper-content>
 
         <v-stepper-content step="2">
           <v-card color="grey lighten-2">
-            <v-card-title
-              >Recipe Stages<v-btn text class="justify-end" @click="addStage"
-                >New stage</v-btn
-              ></v-card-title
-            >
+            <v-card-title class="px-3">
+              Recipe Stages
+            </v-card-title>
             <v-card-subtitle class="text-left"
               >Each stage can be about another part of a dish</v-card-subtitle
             >
@@ -166,8 +166,12 @@
                         <v-btn :input-value="active" icon @click="toggle">
                           <v-icon>mdi-record</v-icon>
                         </v-btn>
+                        <v-btn icon @click="deleteStage(stage.no)">
+                          <v-icon>mdi-close</v-icon>
+                        </v-btn>
                       </div>
                     </v-item>
+                    <v-btn class="mt-5" @click="addStage">new</v-btn>
                   </v-item-group>
                   <v-col>
                     <v-window
@@ -176,10 +180,7 @@
                       vertical
                     >
                       <v-window-item v-for="stage in stages" :key="stage.no">
-                        <RecipeFormStage
-                          :stage="stage"
-                          :products="products"
-                        />
+                        <RecipeFormStage :stage="stage" :products="products" :ref="'stage'+ stage.no"/>
                       </v-window-item>
                     </v-window>
                   </v-col>
@@ -187,7 +188,7 @@
               </v-container>
             </v-card-text>
           </v-card>
-          <v-btn color="primary" @click="formStep += 1">Next step</v-btn>
+          <v-btn color="primary" @click="nextStepper">Next step</v-btn>
           <v-btn text color="primary" @click="formStep = 1">Back</v-btn>
         </v-stepper-content>
 
@@ -218,9 +219,9 @@
               </v-container>
             </v-card-text>
           </v-card>
-          <v-btn color="success" @click="submitRecipe"
-            >{{submitButtonLabel}}</v-btn
-          >
+          <v-btn color="success" @click="submitRecipe">{{
+            submitButtonLabel
+          }}</v-btn>
           <v-btn text color="primary" @click="formStep = 2">Back</v-btn>
         </v-stepper-content>
       </v-stepper-items>
@@ -238,6 +239,7 @@ export default {
       oldRecipe: undefined,
       oldImage: "",
       recipeTitle: "",
+      recipeDesc: "",
       preparationTime: 0.5,
       difficulty: 0,
       caloriesBillans: 200,
@@ -256,8 +258,13 @@ export default {
       formStep: 1,
       formOneValid: false,
 
-      titleRules: [],
-      recipeDesc: "",
+      titleRules: [
+        (v) => !!v || "Recipe title is required",
+        (v) => v.length <= 50 || "Recipe title must be less then 50 characters",
+      ],
+      imageRules: [
+        (v) => !(!v && !this.isForEdit) || "Recipe needs at least one picture",
+      ],
       descRules: [],
 
       isImage: false,
@@ -293,6 +300,26 @@ export default {
     };
   },
   methods: {
+    nextStepper() {
+      if(this.formStep === 1){
+        if(this.$refs.form.validate())
+        {
+          this.formStep += 1;
+        }
+      }
+      else if(this.formStep === 2){
+        let validStages = true;
+        this.stages.forEach((stage) => {
+          if(!this.$refs[`stage`+stage.no][0].$refs.stageForm.validate())
+          {
+            validStages = false
+          }
+        })
+        if(validStages){
+          this.formStep += 1;
+        }
+      }
+    },
     selectImage(image) {
       if (image == undefined) {
         this.isImage = false;
@@ -312,6 +339,9 @@ export default {
         products: [],
       });
       this.stageNumber += 1;
+    },
+    deleteStage(no){
+      this.stages = this.stages.filter((stage) => stage.no != no)
     },
     async submitRecipe() {
       let tagList = [];
@@ -360,11 +390,11 @@ export default {
           await this.$store.dispatch("actionAddRecipeImage", fileData);
           this.$router.push("/recipes/" + this.NewRecipeId);
         }
-      } 
+      }
       if (this.isForEdit) {
         this.$store.commit("setRecipeId", this.$route.params.id);
         await this.$store.dispatch("actionUpdateRecipe", payload);
-        if(this.recipeImage != undefined){
+        if (this.recipeImage != undefined) {
           let fileData = new FormData();
           fileData.append("image", this.recipeImage);
           await this.$store.dispatch("actionAddRecipeImage", fileData);
@@ -374,11 +404,9 @@ export default {
     },
   },
   computed: {
-    submitButtonLabel(){
-      if(this.isForEdit)
-        return "Update your recipe"
-      else
-        return "Submit your recipe"
+    submitButtonLabel() {
+      if (this.isForEdit) return "Update your recipe";
+      else return "Submit your recipe";
     },
     ErrorStatus() {
       return this.$store.getters["errorStatus"];
@@ -392,26 +420,24 @@ export default {
     if (this.isForEdit) {
       await this.$store.dispatch("actionGetRecipe", this.$route.params.id);
       await this.$store.dispatch("actionGetRecipeImg", this.$route.params.id);
-      
-      this.oldRecipe = this.$store.getters["recipe"]
 
-      this.oldImage = this.oldRecipe.image
+      this.oldRecipe = this.$store.getters["recipe"];
+
+      this.oldImage = this.oldRecipe.image;
 
       this.recipeTitle = this.oldRecipe.title;
       this.preparationTime = this.oldRecipe.time / 30;
 
-      this.difficulty = this.tickDiffLabels.indexOf(
-        this.oldRecipe.difficulty
-      );
+      this.difficulty = this.tickDiffLabels.indexOf(this.oldRecipe.difficulty);
 
       this.caloriesBillans = this.oldRecipe.calories;
       this.servings = this.oldRecipe.servings / 2;
-      
-      this.stages = []
+
+      this.stages = [];
       this.oldRecipe.stages.forEach((stage) => {
-        var prod = []
+        var prod = [];
         var numberOfProducts = 0;
-        stage.products.forEach((product)=>{
+        stage.products.forEach((product) => {
           prod.push({
             no: numberOfProducts,
             name: product.name,
@@ -419,21 +445,19 @@ export default {
             product_id: product.product_id,
             amount: product.amount,
             amount_unit: product.amount_unit,
-          })
-          numberOfProducts += 1
-        })
+          });
+          numberOfProducts += 1;
+        });
         this.stages.push({
           no: this.stageNumber,
           name: stage.name,
           content: stage.content,
           products: prod,
-        })
+        });
         this.stageNumber += 1;
       });
       this.pickedTags = [];
-      this.oldRecipe.tags.forEach((tag) =>
-        this.pickedTags.push(tag.id)
-      );
+      this.oldRecipe.tags.forEach((tag) => this.pickedTags.push(tag.id));
     }
   },
 };
