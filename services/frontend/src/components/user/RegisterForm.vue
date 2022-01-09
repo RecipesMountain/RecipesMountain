@@ -110,7 +110,6 @@ export default {
         password: this.password,
         full_name: this.firstName + ' ' + this.surname,
       }
-      // console.log(payload)
       await this.$store.dispatch("actionRegister", payload)
       if(this.$store.getters["registrationSuccess"])
         this.$router.push('/login')

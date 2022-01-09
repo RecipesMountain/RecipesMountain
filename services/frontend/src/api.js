@@ -111,8 +111,7 @@ export const api = {
     return axios.get(`${APISUFFIX}/api/recipes/isLiked/${id}`, authHeaders(token))
   },
   async updateLikeStatus(token, id){
-    console.log("token:", authHeaders(token),"id:", id)
-    return axios.get(`${APISUFFIX}/api/recipes/like/${id}`, authHeaders(token))
+    return axios.put(`${APISUFFIX}/api/recipes/like/${id}`,"", authHeaders(token))
   }
   
 

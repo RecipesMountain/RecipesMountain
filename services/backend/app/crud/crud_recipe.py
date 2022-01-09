@@ -67,28 +67,44 @@ class CRUDRecipe(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
     def get_all(self, db: Session):
         return db.query(Recipe).all()
 
-    def get_favorite_recepies(self, db: Session, *, user_id: UUID)-> List[Recipe]:
-        return db.query(Recipe).filter(Recipe.users_favorite.any(FavoriteRecipes.user_id == user_id)).all()
+    def get_favorite_recepies(self, db: Session, *, user_id: UUID) -> List[Recipe]:
+        return (
+            db.query(Recipe)
+            .filter(Recipe.users_favorite.any(FavoriteRecipes.user_id == user_id))
+            .all()
+        )
 
-
-    def add_of_delete_from_favorites(self, db: Session, *, user_id: UUID, recipe_id: UUID):
-        liked_recipe = db.query(FavoriteRecipes).filter(FavoriteRecipes.recipe_id == recipe_id, FavoriteRecipes.user_id == user_id).first()
+    def add_of_delete_from_favorites(
+        self, db: Session, *, user_id: UUID, recipe_id: UUID
+    ):
+        liked_recipe = (
+            db.query(FavoriteRecipes)
+            .filter(
+                FavoriteRecipes.recipe_id == recipe_id,
+                FavoriteRecipes.user_id == user_id,
+            )
+            .first()
+        )
         if liked_recipe:
             db.delete(liked_recipe)
             db.commit()
             return False
         else:
-            liked_recipe = FavoriteRecipes(
-                user_id=user_id,
-                recipe_id=recipe_id
-            )
+            liked_recipe = FavoriteRecipes(user_id=user_id, recipe_id=recipe_id)
             db.add(liked_recipe)
             db.commit()
             db.refresh(liked_recipe)
             return True
-            
+
     def is_liked(self, db: Session, *, user_id: UUID, recipe_id: UUID):
-        liked_recipe = db.query(FavoriteRecipes).filter(FavoriteRecipes.recipe_id == recipe_id, FavoriteRecipes.user_id == user_id).first()
+        liked_recipe = (
+            db.query(FavoriteRecipes)
+            .filter(
+                FavoriteRecipes.recipe_id == recipe_id,
+                FavoriteRecipes.user_id == user_id,
+            )
+            .first()
+        )
         if liked_recipe:
             return True
         else:

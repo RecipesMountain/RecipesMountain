@@ -128,7 +128,6 @@ def read_user_by_id(
     return user
 
 
-
 @router.put("/{user_id}", response_model=schemas.User)
 def update_user(
     *,
@@ -148,4 +147,3 @@ def update_user(
         )
     user = crud.user.update(db, db_obj=user, obj_in=user_in)
     return user
-

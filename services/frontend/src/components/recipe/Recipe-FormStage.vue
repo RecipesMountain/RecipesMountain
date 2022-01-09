@@ -112,7 +112,6 @@ export default {
   },
   methods: {
     addIngredient() {
-      console.log(this.stage)
       this.stage.products.push({
         no: this.numberOfIngredients,
         name: "",

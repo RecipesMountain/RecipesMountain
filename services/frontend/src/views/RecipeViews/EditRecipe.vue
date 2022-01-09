@@ -29,7 +29,6 @@ export default {
 
   computed: {
     recipe() {
-      console.log(this.$store.getters["recipe"]);
       return this.$store.getters["recipe"];
     },
     allTags() {

@@ -88,24 +88,30 @@ def get_best_recipes(
     query = crud.recipe.sort_best(query)
     return crud.recipe.execQuery(query, skip=skip, limit=limit)
 
+
 @router.get("/favorites", response_model=List[schemas.RecipeSearch])
 def get_favorites_recipes(
     *,
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_user),
 ) -> Any:
-    favorite_recipies = crud.recipe.get_favorite_recepies(db=db, user_id=current_user.id)
+    favorite_recipies = crud.recipe.get_favorite_recepies(
+        db=db, user_id=current_user.id
+    )
     return favorite_recipies
 
-@router.get("/like/{recipe_id}", response_model=bool)
+
+@router.put("/like/{recipe_id}", response_model=bool)
 def like_or_unlike(
     *,
     recipe_id: UUID,
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_user),
 ) -> Any:
-    # print(current_user.id)
-    return crud.recipe.add_of_delete_from_favorites(db=db, user_id=current_user.id, recipe_id=recipe_id)
+    return crud.recipe.add_of_delete_from_favorites(
+        db=db, user_id=current_user.id, recipe_id=recipe_id
+    )
+
 
 @router.get("/isLiked/{recipe_id}", response_model=bool)
 def is_liked_by_user(
@@ -115,6 +121,7 @@ def is_liked_by_user(
     current_user: models.User = Depends(deps.get_current_user),
 ) -> Any:
     return crud.recipe.is_liked(db=db, user_id=current_user.id, recipe_id=recipe_id)
+
 
 @router.get("/{recipe_id}", response_model=schemas.Recipe)
 def get_recipe_by_id(
@@ -129,7 +136,6 @@ def get_recipe_by_id(
         return recipe
     else:
         raise HTTPException(status_code=404, detail="Recipe not exists.")
-
 
 
 @router.post("/", response_model=schemas.Recipe)

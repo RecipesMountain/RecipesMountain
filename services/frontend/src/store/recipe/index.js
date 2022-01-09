@@ -174,9 +174,7 @@ export const recipeModule = {
         const response = await api.getRecipe(payload)
         if(context.rootState.user.isLoggedIn){
           const likeResponse = await api.getIsLiked(context.rootState.user.token, payload)
-          console.log(likeResponse.data)
           context.commit("setIsLiked", likeResponse.data)
-          console.log("to wczesniej",context.rootState.user.token)
         }
         if (response.data) {
           context.commit("setRecipeId", response.data.id)
@@ -220,7 +218,6 @@ export const recipeModule = {
         if(response.status == 200)
         {
           context.commit("setSubmitStatus", true)
-          console.log("new recipe id: ", response.data.id)
           context.commit("setRecipeId", response.data.id)
           context.commit("openSnackbar", "Succesfully added new recipe")
           context.commit("setErrorStatus", false)
@@ -239,7 +236,6 @@ export const recipeModule = {
     async actionUpdateRecipe(context, payload){
       try{
         const response  = await api.updateRecipe(context.rootState.user.token, payload, context.state.recipe.id)
-        // console.log(response)
         if(response.status == 200){
           context.commit("setSubmitStatus", true)
           context.commit("setRecipeId", response.data.id)
@@ -275,15 +271,12 @@ export const recipeModule = {
       }
     },
     async actionLikeUnlikeRecipe(context, payload){
-      console.log(payload)
       try{
         if(!context.rootState.user.isLoggedIn){
           context.commit("openSnackbar", "To like recipe you have to be logged in!")
         }
         else{
-          // console.log(context.rootState.user.token)
           const response = await api.updateLikeStatus(context.rootState.user.token, payload)
-          console.log(response)
           context.commit("setIsLiked", response.data)
           if(response.data){
             context.commit("openSnackbar", "Liked")

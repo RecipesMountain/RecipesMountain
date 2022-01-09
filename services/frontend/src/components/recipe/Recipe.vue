@@ -10,7 +10,7 @@
   >
     <RecipeInformations :recipe="recipe" :isLiked="isLiked"/>
     <v-row><v-col sm="12" class="d-none d-lg-block"> </v-col></v-row>
-    <v-row v-for="stage in recipe.stages" :key="stage.name" class="flex-column">
+    <v-row v-for="(stage, index) in recipe.stages" :key="index" class="flex-column">
       <v-col>
         <RecipeStage
           :ingredients="stage.products"
@@ -66,7 +66,6 @@ export default {
     await this.$store.dispatch("actionGetRecipe", this.$route.params.id);
     await this.$store.dispatch("actionGetRecipeImg", this.$route.params.id);
     if (this.error) {
-      console.log("error", "pushing");
       this.$router.push("/");
     }
   },
