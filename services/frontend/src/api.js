@@ -112,6 +112,13 @@ export const api = {
   },
   async updateLikeStatus(token, id){
     return axios.put(`${APISUFFIX}/api/recipes/like/${id}`,"", authHeaders(token))
+  },
+
+  async getComments(id) {
+    return  axios.get(`${APISUFFIX}/api/comments/${id}`)
+  },
+  async createComment(token, id, payload) {
+    return  axios.post(`${APISUFFIX}/api/comments/${id}`, payload, authHeaders(token))
   }
   
 

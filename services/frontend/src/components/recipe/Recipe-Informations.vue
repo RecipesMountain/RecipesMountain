@@ -158,7 +158,7 @@
                       icon
                       :ripple="false"
                       plain
-                      v-on:click="$vuetify.goTo('#comments')"
+                      v-on:click="() =>{$vuetify.goTo('#comments'); showAddComment();}"
                     >
                       <v-icon size="50">mdi-comment-outline</v-icon>
                     </v-btn>
@@ -193,7 +193,7 @@ import RecipeImageCarousel from "@/components/recipe/Recipe-ImageCarousel.vue";
 
 export default {
   components: { RecipeImageCarousel },
-  props: ["recipe", "isLiked"],
+  props: ["recipe", "isLiked", "showAddComment"],
   computed: {
     shortTags() {
 

@@ -37,3 +37,11 @@ class User(UserInDBBase):
 # Additional properties stored in DB
 class UserInDB(UserInDBBase):
     hashed_password: str
+
+
+class UserComment(UserBase):
+    id: Optional[UUID] = None
+    full_name: Optional[str]
+
+    class Config:
+        orm_mode = True

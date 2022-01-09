@@ -8,7 +8,7 @@
     outlined
     color="transparent"
   >
-    <RecipeInformations :recipe="recipe" :isLiked="isLiked"/>
+    <RecipeInformations :showAddComment="showAddComment" :isLiked="isLiked" :recipe="recipe" />
     <v-row><v-col sm="12" class="d-none d-lg-block"> </v-col></v-row>
     <v-row v-for="(stage, index) in recipe.stages" :key="index" class="flex-column">
       <v-col>
@@ -42,11 +42,12 @@
         <v-divider />
         <div class="justify-space-between d-flex flex-row">
           <p class="text-left text-h4 ont-weight-bold">Comments:</p>
-          <v-btn icon>
+          <v-btn icon @click="showAddComment">
             <v-icon size="35">mdi-plus</v-icon>
           </v-btn>
         </div>
-        //TODO comments
+          <NewComment v-if="addComment" :commentAdded="commentAdded" :recpie_id="this.$route.params.id"/>
+        <CommentList :comments="comments"/>
       </v-col>
     </v-row>
   </v-sheet>
@@ -55,19 +56,26 @@
 <script>
 import RecipeInformations from "@/components/recipe/Recipe-Informations.vue";
 import RecipeStage from "@/components/recipe/Recipe-Stage.vue";
+import CommentList from "@/components/comment/CommentsList.vue";
+import NewComment from "@/components/comment/NewComment.vue";
+import { mover } from "@/mover";
+import { api } from '@/api';
+
 export default {
-  components: { RecipeInformations, RecipeStage },
+  components: { RecipeInformations, RecipeStage, CommentList, NewComment },
   data() {
     return {
       comments: [],
+      addComment: false,
     };
   },
   async mounted() {
     await this.$store.dispatch("actionGetRecipe", this.$route.params.id);
     await this.$store.dispatch("actionGetRecipeImg", this.$route.params.id);
     if (this.error) {
-      this.$router.push("/");
+      mover.goToHome();
     }
+    this.getComments();
   },
   computed: {
     recipe() {
@@ -80,6 +88,27 @@ export default {
       return this.$store.getters["isLiked"]
     }
   },
+  methods: {
+    showAddComment() {
+      if(this.$store.getters["isLoggedIn"])
+        this.addComment = true
+      else
+        this.$store.commit("openSnackbar", "Must be logged in to add a comment");
+    },
+    commentAdded() {
+      this.addComment = false
+      this.getComments()
+    },
+
+    async getComments() {
+      try {
+        const respone = await api.getComments(this.$route.params.id);
+        this.comments = respone.data;
+      } catch (e) {
+        this.$store.commit("openSnackbar", "Error while getting comments");
+      }
+    }
+  }
 };
 </script>
 
