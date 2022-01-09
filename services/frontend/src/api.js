@@ -93,7 +93,7 @@ export const api = {
     return axios.get(`${APISUFFIX}/api/products/`)
   },
   async getRecipe(id){
-    return axios.get(`${APISUFFIX}/api/recipes/` + id)
+    return axios.get(`${APISUFFIX}/api/recipes/${id}`)
   },
   async getRecipeImage(id){
     return axios.get(`${APISUFFIX}/api/recipes/img/${id}`)
@@ -102,10 +102,17 @@ export const api = {
     return axios.post(`${APISUFFIX}/api/recipes/`, data, authHeaders(token))
   },
   async updateRecipe(token, data, id){
-    return axios.put(`${APISUFFIX}/api/recipes/`+ id, data, authHeaders(token))
+    return axios.put(`${APISUFFIX}/api/recipes/${id}`, data, authHeaders(token))
   },
   async sendImage(token, data, id){
-    return axios.post(`${APISUFFIX}/api/recipes/img/`+ id, data, ImageHeaders(token))
+    return axios.post(`${APISUFFIX}/api/recipes/img/${id}`, data, ImageHeaders(token))
+  },
+  async getIsLiked(token, id){
+    return axios.get(`${APISUFFIX}/api/recipes/isLiked/${id}`, authHeaders(token))
+  },
+  async updateLikeStatus(token, id){
+    console.log("token:", authHeaders(token),"id:", id)
+    return axios.get(`${APISUFFIX}/api/recipes/like/${id}`, authHeaders(token))
   }
   
 

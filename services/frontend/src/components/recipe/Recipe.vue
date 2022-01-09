@@ -8,7 +8,7 @@
     outlined
     color="transparent"
   >
-    <RecipeInformations :recipe="recipe" />
+    <RecipeInformations :recipe="recipe" :isLiked="isLiked"/>
     <v-row><v-col sm="12" class="d-none d-lg-block"> </v-col></v-row>
     <v-row v-for="stage in recipe.stages" :key="stage.name" class="flex-column">
       <v-col>
@@ -77,7 +77,15 @@ export default {
     error() {
       return this.$store.getters["errorStatus"];
     },
+    isLiked(){
+      return this.$store.getters["isLiked"]
+    }
   },
+  methods:{
+    addToFavoriteOrDelete(){
+      
+    }
+  }
 };
 </script>
 

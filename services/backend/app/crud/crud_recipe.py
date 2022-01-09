@@ -86,6 +86,13 @@ class CRUDRecipe(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
             db.commit()
             db.refresh(liked_recipe)
             return True
+            
+    def is_liked(self, db: Session, *, user_id: UUID, recipe_id: UUID):
+        liked_recipe = db.query(FavoriteRecipes).filter(FavoriteRecipes.recipe_id == recipe_id, FavoriteRecipes.user_id == user_id).first()
+        if liked_recipe:
+            return True
+        else:
+            return False
 
     def create(self, db: Session, *, obj_in: RecipeCreate, owner_id: UUID) -> Recipe:
 
