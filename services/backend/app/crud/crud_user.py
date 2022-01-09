@@ -51,23 +51,7 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
     def is_superuser(self, user: User) -> bool:
         return user.is_superuser
 
-    def add_or_delete_from_favorite(self, db: Session, *, user_id: UUID, recipe_id: UUID):
-        likes = db.query(User).filter(User.id==user_id).first()
-        # if recipe_id in
-        # for i in likes:
-        #     print(i)
-        print(likes.id)
-        # print(user.favorites)
-        # for i in user.favorites:
-        #     print(i) 
-        # db_favorite_recipe_obj = FavoriteRecipes(
-        #     user_id=user_id, recipe_id=recipe_id
-        # )
-        # db.add(db_favorite_recipe_obj)
-        # db.commit()
-        # db.refresh(db_favorite_recipe_obj)
 
-        return False
 
 
 user = CRUDUser(User)

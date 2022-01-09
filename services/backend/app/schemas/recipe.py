@@ -74,6 +74,7 @@ class RecipeUpdate(RecipeBase):
     portion: Optional[int]
     tags: Optional[List[Tag]]
     stages: Optional[List[Stage]]
+    
 
 
 class Recipe(RecipeInDB):

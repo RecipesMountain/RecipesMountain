@@ -108,27 +108,6 @@ def create_user_open(
     user = crud.user.create(db, obj_in=user_in)
     return user
 
-#  
-@router.get("/favorites")
-def get_favorites_recipes(
-    *,
-    db: Session = Depends(deps.get_db),
-    current_user: models.User = Depends(deps.get_current_user),
-) -> Any:
-    user = crud.user.get(db=db, id=current_user.id)
-    return user.favorites
-
-
-@router.put("/like/{recipe_id}")
-def like_or_dislike_recipe(
-    *,
-    recipe_id: UUID,
-    db: Session = Depends(deps.get_db),
-    current_user: models.User = Depends(deps.get_current_user),
-) -> Any:
-    user = crud.user.get(db=db, id=current_user.id)
-    return crud.user.add_or_delete_from_favorite(db=db, user_id=current_user.id, recipe_id=recipe_id)
-
 
 @router.get("/{user_id}", response_model=schemas.User)
 def read_user_by_id(
