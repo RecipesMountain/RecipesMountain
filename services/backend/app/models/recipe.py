@@ -25,7 +25,8 @@ class Recipe(Base):
     difficulty = Column(String)
     calories = Column(Integer)
     portion = Column(Integer)
-    rating = Column(Integer)
+    rating = Column(Integer, default=0)
+    ratingCount = Column(Integer, default=0)
 
     totalViews = Column(Integer, default=0)
     popularityScore = Column(Integer, default=0)

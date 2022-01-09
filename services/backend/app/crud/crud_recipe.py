@@ -234,5 +234,16 @@ class CRUDRecipe(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
         db.refresh(recipe)
         return recipe
 
-
+    def rate(self, db: Session, *, recipe_id: UUID, newRating: int) -> int:
+        recipe = db.query(Recipe).filter(Recipe.id == recipe_id).first()
+        if not recipe:
+            return None
+        recipe.ratingCount += 1
+        newRating = (recipe.rating * (recipe.ratingCount - 1) + newRating)/(recipe.ratingCount)
+        recipe.rating = newRating
+        db.add(recipe)
+        db.commit()
+        db.refresh(recipe)
+        return recipe.rating
+        
 recipe = CRUDRecipe(Recipe)
