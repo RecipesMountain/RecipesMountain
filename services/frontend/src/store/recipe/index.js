@@ -21,6 +21,7 @@ const defaultState = {
     image: "https://s3.przepisy.pl/przepisy3ii/img/variants/800x0/zapiekanka-makaronowa-pychotka.jpg",
 
   },
+  isLiked: false,
   allProducts: [],
   allTags: [],
   units: [
@@ -130,6 +131,9 @@ export const recipeModule = {
     },
      setSubmitStatus(state, payload){
        state.submitStatus = payload
+     },
+     setIsLiked(state, payload){
+       state.isLiked = payload
      }
   },
   actions: {
@@ -138,7 +142,6 @@ export const recipeModule = {
       try{
         const response = await api.getProducts()
         if(response.data){
-          // console.log(response.data)
           context.commit("setAllProducts", response.data)
         }
         else {
@@ -169,7 +172,12 @@ export const recipeModule = {
     async actionGetRecipe(context, payload) {
       try {
         const response = await api.getRecipe(payload)
+        if(context.rootState.user.isLoggedIn){
+          const likeResponse = await api.getIsLiked(context.rootState.user.token, payload)
+          context.commit("setIsLiked", likeResponse.data)
+        }
         if (response.data) {
+          context.commit("setRecipeId", response.data.id)
           context.commit("setAuthor", response.data.owner)
           context.commit("setTitle", response.data.title)
           context.commit("setDescription", "")
@@ -184,6 +192,7 @@ export const recipeModule = {
           context.commit("setErrorStatus", false)
         }
         else {
+            context.commit("openSnackbar", "Something gone wrong")
             console.log("Something gone wrong")
         }      
       } catch (error) {
@@ -205,11 +214,10 @@ export const recipeModule = {
     async actionSubmitRecipe(context, payload){
       try {
         const response = await api.createRecipe(context.rootState.user.token, payload)
-        // console.log(response)
+
         if(response.status == 200)
         {
           context.commit("setSubmitStatus", true)
-          console.log("new recipe id: ", response.data.id)
           context.commit("setRecipeId", response.data.id)
           context.commit("openSnackbar", "Succesfully added new recipe")
           context.commit("setErrorStatus", false)
@@ -228,7 +236,6 @@ export const recipeModule = {
     async actionUpdateRecipe(context, payload){
       try{
         const response  = await api.updateRecipe(context.rootState.user.token, payload, context.state.recipe.id)
-        // console.log(response)
         if(response.status == 200){
           context.commit("setSubmitStatus", true)
           context.commit("setRecipeId", response.data.id)
@@ -262,6 +269,29 @@ export const recipeModule = {
       catch(error){
         console.log(error)
       }
+    },
+    async actionLikeUnlikeRecipe(context, payload){
+      try{
+        if(!context.rootState.user.isLoggedIn){
+          context.commit("openSnackbar", "To like recipe you have to be logged in!")
+        }
+        else{
+          const response = await api.updateLikeStatus(context.rootState.user.token, payload)
+          context.commit("setIsLiked", response.data)
+          if(response.data){
+            context.commit("openSnackbar", "Liked")
+          }
+          else{
+            context.commit("openSnackbar", "Disliked")
+          }
+
+        }
+      }
+      catch(error){
+        console.log(error)
+        console.log("error",error.response)
+        context.commit("openSnackbar", "Server error")
+      }
     }
 
   },
@@ -285,5 +315,6 @@ export const recipeModule = {
     units: (state) => state.units,
     allTags: (state) => state.allTags,
     allProducts: (state) => state.allProducts,
+    isLiked: (state) => state.isLiked,
   },
 };

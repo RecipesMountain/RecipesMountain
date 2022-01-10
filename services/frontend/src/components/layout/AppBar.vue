@@ -75,54 +75,56 @@
 
     <v-divider vertical></v-divider>
 
+    <template  v-if="!isLoggedIn">
       <v-tooltip bottom>
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn 
-          v-if="isLoggedIn"
-          icon 
-          @click="logout"
-          v-bind="attrs"
-          v-on="on">
-          <v-icon>mdi-logout</v-icon>
-        </v-btn>
-      </template>
-      <span>Logout</span>
-    </v-tooltip>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn 
+            icon 
+            @click="login"
+            v-bind="attrs"
+            v-on="on">
+            <v-icon>mdi-login</v-icon>
+          </v-btn>
+        </template>
+        <span>Login</span>
+      </v-tooltip>
 
-    <v-tooltip bottom>
-      <template v-slot:activator="{ on, attrs }">
-        <v-avatar v-on="on" v-bind="attrs" v-if="isLoggedIn" @click="goToAccount" color="primary" size="56">PW</v-avatar>
-      </template>
-      <span>User Profile</span>
-    </v-tooltip>
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn 
+            icon 
+            @click="register"
+            v-bind="attrs"
+            v-on="on">
+            <v-icon>mdi-account-plus-outline</v-icon>
+          </v-btn>
+        </template>
+        <span>Register</span>
+      </v-tooltip>
+      
+    </template>
+    <template  v-else-if="isLoggedIn">
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn 
+            icon 
+            @click="logout"
+            v-bind="attrs"
+            v-on="on">
+            <v-icon>mdi-logout</v-icon>
+          </v-btn>
+        </template>
+        <span>Logout</span>
+      </v-tooltip>
 
-    <v-tooltip bottom>
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn 
-          v-if="!isLoggedIn"
-          icon 
-          @click="login"
-          v-bind="attrs"
-          v-on="on">
-          <v-icon>mdi-login</v-icon>
-        </v-btn>
-      </template>
-      <span>Login</span>
-    </v-tooltip>
-
-    <v-tooltip bottom>
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn 
-          v-if="!isLoggedIn"
-          icon 
-          @click="register"
-          v-bind="attrs"
-          v-on="on">
-          <v-icon>mdi-account-plus-outline</v-icon>
-        </v-btn>
-      </template>
-      <span>Register</span>
-    </v-tooltip>
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <v-avatar v-on="on" v-bind="attrs" @click="goToAccount" color="primary" size="56">PW</v-avatar>
+        </template>
+        <span>User Profile</span>
+      </v-tooltip>
+      
+    </template>
 
     
   </v-app-bar>
@@ -143,6 +145,9 @@ export default {
       search: null,
       sortBy: "popular",
     }
+  },
+  mounted(){
+    this.$store.dispatch("actionCheckLoggedIn")
   },
   computed: {
       items() {

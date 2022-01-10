@@ -169,10 +169,10 @@
               <v-tooltip top>
                 <template v-slot:activator="{ on, attrs }">
                   <div v-bind="attrs" v-on="on">
-                    <v-btn icon :ripple="false" plain>
-                      <v-icon size="50">mdi-cards-heart-outline</v-icon>
+                    <v-btn icon :ripple="false" plain @click="likeOrUnlike">
+                      <v-icon size="50" v-if="!isLiked">mdi-cards-heart-outline</v-icon>
+                      <v-icon size="50" v-else>mdi-cards-heart</v-icon>
                     </v-btn>
-                    <!-- <v-icon size="50">mdi-cards-heart</v-icon> -->
                   </div>
                 </template>
                 <span class="font-weight-bold">Like recipe</span>
@@ -193,9 +193,10 @@ import RecipeImageCarousel from "@/components/recipe/Recipe-ImageCarousel.vue";
 
 export default {
   components: { RecipeImageCarousel },
-  props: ["recipe"],
+  props: ["recipe", "isLiked"],
   computed: {
     shortTags() {
+
       if (this.recipe.tags.length > 4) {
         return this.recipe.tags.slice(0, 4);
       } else {
@@ -219,8 +220,16 @@ export default {
     },
     recipeServings() {
       return this.recipe.servings / 2;
+    },
+    recipeId(){
+      return this.recipe.id
     }
   },
+  methods:{
+    async likeOrUnlike(){
+      await this.$store.dispatch("actionLikeUnlikeRecipe", this.recipeId);
+    }
+  }
 };
 </script>
 
