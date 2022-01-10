@@ -8,7 +8,8 @@
     outlined
     color="transparent"
   >
-    <RecipeInformations :showAddComment="showAddComment" :isLiked="isLiked" :recipe="recipe" />
+  <div id="RecipeSheet">
+    <RecipeInformations :printRecipe="printRecipe"  :showAddComment="showAddComment" :isLiked="isLiked" :recipe="recipe" />
     <v-row><v-col sm="12" class="d-none d-lg-block"> </v-col></v-row>
     <v-row v-for="(stage, index) in recipe.stages" :key="index" class="flex-column">
       <v-col>
@@ -37,6 +38,7 @@
         </v-chip-group>
       </v-col>
     </v-row>
+    </div>
     <v-row id="comments" justify="start" class="flex-column">
       <v-col class="">
         <v-divider />
@@ -47,7 +49,7 @@
           </v-btn>
         </div>
           <NewComment v-if="addComment" :commentAdded="commentAdded" :recpie_id="this.$route.params.id"/>
-        <CommentList :comments="comments"/>
+        <CommentList :deleteComment="deleteComment" :comments="comments"/>
       </v-col>
     </v-row>
   </v-sheet>
@@ -57,9 +59,11 @@
 import RecipeInformations from "@/components/recipe/Recipe-Informations.vue";
 import RecipeStage from "@/components/recipe/Recipe-Stage.vue";
 import CommentList from "@/components/comment/CommentsList.vue";
-import NewComment from "@/components/comment/NewComment.vue";
+import NewComment from "@/components/comment/CommentAdd.vue";
 import { mover } from "@/mover";
 import { api } from '@/api';
+import print from 'print-js'
+
 
 export default {
   components: { RecipeInformations, RecipeStage, CommentList, NewComment },
@@ -99,13 +103,26 @@ export default {
       this.addComment = false
       this.getComments()
     },
-
+    printRecipe() {
+      print('RecipeSheet', 'html')
+    },
     async getComments() {
       try {
         const respone = await api.getComments(this.$route.params.id);
         this.comments = respone.data;
       } catch (e) {
         this.$store.commit("openSnackbar", "Error while getting comments");
+      }
+    },
+    async deleteComment(comment) {
+      try { 
+        const respone = await api.deleteComment(this.$store.getters["token"],this.$route.params.id, comment.id)
+        if(respone.data == true) {
+          this.$store.commit("openSnackbar", "Comment deleted successfully");
+        }
+        this.getComments()
+      } catch (e) {
+        this.$store.commit("openSnackbar", "There has been en error while deleting comment");
       }
     }
   }

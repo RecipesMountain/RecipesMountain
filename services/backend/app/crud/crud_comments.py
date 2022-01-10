@@ -36,6 +36,7 @@ class CRUDRecipe(CRUDBase[Comment, CommentCreate, CommentUpdate]):
     def delete(self, db: Session, *, comment_id: UUID) -> bool:
         comment = db.query(Comment).filter(Comment.id == comment_id).first()
         r = db.delete(comment)
+        db.commit()
         return r != 0
 
 comment = CRUDRecipe(Comment)

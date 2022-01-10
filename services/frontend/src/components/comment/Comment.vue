@@ -3,6 +3,10 @@
         <v-card-title class="text-h5"> 
             <div v-if="comment.owner.full_name != null"> <v-avatar color="primary" size="56">PW</v-avatar> {{comment.owner.full_name}} </div>
             <div v-else>Anonymous </div>
+            <v-spacer></v-spacer>
+            <v-btn v-if="comment.owner.id == userID" icon @click="deleteComment">
+                <v-icon size="25">mdi-delete-forever</v-icon>
+            </v-btn>
         </v-card-title>
         <v-card-text>
             <p>{{comment.content}}</p>
@@ -13,7 +17,16 @@
 <script>
 export default {
     name: 'comment',
-    props: ['comment']
+    props: ['comment', "userID", "delete"],
+    mounted() {
+        console.log(this.comment)
+        console.log(this.userID)
+    },
+    methods: {
+        deleteComment() {
+            this.delete(this.comment)
+        }
+    }
 }
 </script>
 

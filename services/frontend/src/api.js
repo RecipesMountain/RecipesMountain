@@ -119,6 +119,9 @@ export const api = {
   },
   async createComment(token, id, payload) {
     return  axios.post(`${APISUFFIX}/api/comments/${id}`, payload, authHeaders(token))
+  },
+  async deleteComment(token, recipe_id, comment_id) {
+    return  axios.delete(`${APISUFFIX}/api/comments/${recipe_id}/${comment_id}`, authHeaders(token))
   }
   
 

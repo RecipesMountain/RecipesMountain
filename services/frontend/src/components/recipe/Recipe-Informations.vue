@@ -144,7 +144,7 @@
               <v-tooltip top>
                 <template v-slot:activator="{ on, attrs }">
                   <div v-bind="attrs" v-on="on">
-                    <v-btn icon plain>
+                    <v-btn icon @click="()=>{printRecipe();}" plain>
                       <v-icon size="50">mdi-printer</v-icon>
                     </v-btn>
                   </div>
@@ -193,7 +193,7 @@ import RecipeImageCarousel from "@/components/recipe/Recipe-ImageCarousel.vue";
 
 export default {
   components: { RecipeImageCarousel },
-  props: ["recipe", "isLiked", "showAddComment"],
+  props: ["recipe", "isLiked", "showAddComment", "printRecipe"],
   computed: {
     shortTags() {
 
