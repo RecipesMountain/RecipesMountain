@@ -80,11 +80,6 @@ export default {
       return this.$store.getters["isLiked"]
     }
   },
-  methods:{
-    addToFavoriteOrDelete(){
-      
-    }
-  }
 };
 </script>
 
