@@ -8,7 +8,7 @@
     outlined
     color="transparent"
   >
-  <div id="RecipeSheet">
+  <div id="RecipeToPrint">
     <RecipeInformations :submitRating="submitRating" :printRecipe="printRecipe"  :showAddComment="showAddComment" :isLiked="isLiked" :recipe="recipe" />
     <v-row><v-col sm="12" class="d-none d-lg-block"> </v-col></v-row>
     <v-row v-for="(stage, index) in recipe.stages" :key="index" class="flex-column">
@@ -38,7 +38,7 @@
         </v-chip-group>
       </v-col>
     </v-row>
-    </div>
+  </div>
     <v-row id="comments" justify="start" class="flex-column">
       <v-col class="">
         <v-divider />
@@ -62,8 +62,11 @@ import CommentList from "@/components/comment/CommentsList.vue";
 import NewComment from "@/components/comment/CommentAdd.vue";
 import { mover } from "@/mover";
 import { api } from '@/api';
-import print from 'print-js'
+// import print from 'print-js'
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 export default {
   components: { RecipeInformations, RecipeStage, CommentList, NewComment },
@@ -105,8 +108,29 @@ export default {
       this.addComment = false
       this.getComments()
     },
-    printRecipe() {
-      print('RecipeSheet', 'html')
+    async printRecipe() {
+
+        // wait for tooltip to disapear 
+        await sleep(1000);
+
+        const prtHtml = document.getElementById('RecipeToPrint').innerHTML;
+        // Get all stylesheets HTML
+        let stylesHtml = '';
+        console.log(document.querySelectorAll('link[rel="stylesheet"], style'))
+        for (const node of [...document.querySelectorAll('link[rel="stylesheet"], style')]) {
+          stylesHtml += node.outerHTML;
+        }
+
+        console.log(prtHtml)
+        console.log(stylesHtml)
+
+        print({
+          printable: 'RecipeToPrint',
+          type: "html",
+          style: stylesHtml,
+          ignoreElements: ["comments", "image-carousel"]
+        })
+
     },
     async submitRating(rating) {
       if(!this.justSubmitedRating) {
