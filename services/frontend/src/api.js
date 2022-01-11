@@ -122,7 +122,14 @@ export const api = {
   },
   async deleteComment(token, recipe_id, comment_id) {
     return  axios.delete(`${APISUFFIX}/api/comments/${recipe_id}/${comment_id}`, authHeaders(token))
+  },
+  async submitRating(token, id, newRating) {
+    let config = authHeaders(token);
+    config["params"] = {}
+    config.params["newRating"] = newRating
+    return  axios.put(`${APISUFFIX}/api/recipes/${id}/rate`, null, config)
   }
+
   
 
 };

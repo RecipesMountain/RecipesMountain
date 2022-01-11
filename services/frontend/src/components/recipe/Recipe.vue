@@ -9,7 +9,7 @@
     color="transparent"
   >
   <div id="RecipeSheet">
-    <RecipeInformations :printRecipe="printRecipe"  :showAddComment="showAddComment" :isLiked="isLiked" :recipe="recipe" />
+    <RecipeInformations :submitRating="submitRating" :printRecipe="printRecipe"  :showAddComment="showAddComment" :isLiked="isLiked" :recipe="recipe" />
     <v-row><v-col sm="12" class="d-none d-lg-block"> </v-col></v-row>
     <v-row v-for="(stage, index) in recipe.stages" :key="index" class="flex-column">
       <v-col>
@@ -71,6 +71,7 @@ export default {
     return {
       comments: [],
       addComment: false,
+      props: ["recipe"]
     };
   },
   async mounted() {
@@ -105,6 +106,12 @@ export default {
     },
     printRecipe() {
       print('RecipeSheet', 'html')
+    },
+    async submitRating(rating) {
+      if(this.$store.getters["isLoggedIn"])
+        api.submitRating(this.$store.getters["token"], this.$route.params.id, rating*10)
+      else
+        this.$store.commit("openSnackbar", "Must be logged in add a rating");
     },
     async getComments() {
       try {
