@@ -14,6 +14,8 @@ from app.models.products_in_stages import ProductsInStages
 from app.models.favorite_recipes import FavoriteRecipes
 
 from app.schemas.recipe import RecipeCreate, RecipeUpdate
+from app.models.recipe_ratings import RecipeRatings
+
 
 from uuid import UUID
 
@@ -234,16 +236,35 @@ class CRUDRecipe(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
         db.refresh(recipe)
         return recipe
 
-    def rate(self, db: Session, *, recipe_id: UUID, newRating: int) -> int:
+    def rate(self, db: Session, *, recipe_id: UUID, user_id:UUID, newRating: int) -> int:
+        rating = db.query(RecipeRatings).filter(
+            RecipeRatings.recipe_id == recipe_id, 
+            RecipeRatings.user_id == user_id).first()
+        if rating:
+            print("fff")
+            rating.rating = newRating
+        else: 
+            print("aaa")
+            rating = RecipeRatings(recipe_id=recipe_id, user_id=user_id, rating=newRating)
+        print(rating)
+        db.add(rating)
+        db.commit()
+        db.refresh(rating)
+
+        ratingUpdate = db.query(func.avg(RecipeRatings.rating).label('average')).filter(
+            RecipeRatings.recipe_id == recipe_id).scalar_subquery()
+        print(ratingUpdate)
         recipe = db.query(Recipe).filter(Recipe.id == recipe_id).first()
-        if not recipe:
-            return None
-        recipe.ratingCount += 1
-        newRating = (recipe.rating * (recipe.ratingCount - 1) + newRating)/(recipe.ratingCount)
-        recipe.rating = newRating
+        
+        recipe.rating = ratingUpdate
+
+        print(recipe.rating)      
+
         db.add(recipe)
         db.commit()
         db.refresh(recipe)
+
         return recipe.rating
-        
+    
+
 recipe = CRUDRecipe(Recipe)

@@ -226,7 +226,7 @@ def delete_recipe(
 ) -> Any:
     pass
 
-@router.put("/{recipe_id}/rate")
+@router.put("/{recipe_id}/rate", response_model=int)
 def rate_recpie(
     recipe_id: UUID,
     newRating: int,
@@ -237,4 +237,4 @@ def rate_recpie(
         newRating = 50
     if newRating < 0:
         newRating = 0
-    return crud.recipe.rate(db, recipe_id=recipe_id, newRating=newRating)
+    return crud.recipe.rate(db, recipe_id=recipe_id, newRating=newRating, user_id=current_user.id)

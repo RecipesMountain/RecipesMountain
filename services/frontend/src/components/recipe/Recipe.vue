@@ -71,7 +71,8 @@ export default {
     return {
       comments: [],
       addComment: false,
-      props: ["recipe"]
+      props: ["recipe"],
+      justSubmitedRating: false,
     };
   },
   async mounted() {
@@ -108,10 +109,20 @@ export default {
       print('RecipeSheet', 'html')
     },
     async submitRating(rating) {
-      if(this.$store.getters["isLoggedIn"])
-        api.submitRating(this.$store.getters["token"], this.$route.params.id, rating*10)
-      else
-        this.$store.commit("openSnackbar", "Must be logged in add a rating");
+      if(!this.justSubmitedRating) {
+        if(this.$store.getters["isLoggedIn"]) {
+          try {
+            const response = await api.submitRating(this.$store.getters["token"], this.$route.params.id, rating*10)
+            this.$store.commit("setRating", response.data)
+            this.$store.commit("openSnackbar", "Rated succefuly!");
+          } catch (e) {
+            this.$store.commit("openSnackbar", "Something went wrong");
+          }
+        }
+        else
+          this.$store.commit("openSnackbar", "Must be logged in add a rating");
+      }
+      this.justSubmitedRating = !this.justSubmitedRating
     },
     async getComments() {
       try {

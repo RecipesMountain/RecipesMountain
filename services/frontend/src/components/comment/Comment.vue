@@ -1,7 +1,7 @@
 <template>
     <v-card class="comment" color="transparent" elevation="2" >
         <v-card-title class="text-h5"> 
-            <div v-if="comment.owner.full_name != null"> <v-avatar color="primary" size="56">PW</v-avatar> {{comment.owner.full_name}} </div>
+            <div v-if="comment.owner.full_name != null"> <v-avatar color="primary" size="50">{{ initials }}</v-avatar> {{comment.owner.full_name}} </div>
             <div v-else>Anonymous </div>
             <v-spacer></v-spacer>
             <v-btn v-if="comment.owner.id == userID" icon @click="deleteComment">
@@ -15,6 +15,8 @@
 </template>
 
 <script>
+import { getInitials } from "@/utils";
+
 export default {
     name: 'comment',
     props: ['comment', "userID", "delete"],
@@ -26,7 +28,15 @@ export default {
         deleteComment() {
             this.delete(this.comment)
         }
+    },
+    computed: {
+       initials(){
+        if(this.comment.owner != null)
+            return getInitials(this.comment.owner.full_name)
+        return "PW"
+      }
     }
+
 }
 </script>
 

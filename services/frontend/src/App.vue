@@ -41,8 +41,9 @@ export default {
       this.$store.dispatch("actionGetMe")
   },
   computed: {
-    snackbar() {
-      return this.$store.getters["isSnackbarOpened"]
+    snackbar: {
+      get() {return this.$store.getters["isSnackbarOpened"]},
+      set() {this.$store.commit('closeSnackbar')}
     },
     text() {
       return this.$store.getters["snackbarText"]
