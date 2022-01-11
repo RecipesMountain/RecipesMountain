@@ -1,6 +1,6 @@
 <template>
 <div>
-    <v-card  shaped color="transparent" elevation="4" >
+    <v-card class="commend-card " shaped color="transparent" elevation="4" >
         <v-card-title class="text-h5">
             Add New Comment
         </v-card-title>
@@ -8,7 +8,7 @@
           filled
           auto-grow
           label="Comment text"
-          rows="2"
+          rows="3"
           row-height="20"
           v-model="comment"
         ></v-textarea>
@@ -50,5 +50,9 @@ export default {
 </script>
 
 <style>
+
+.commend-card {
+  margin: 6px;
+}
 
 </style>

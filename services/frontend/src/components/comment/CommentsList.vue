@@ -1,7 +1,7 @@
 <template>
   <v-col justify="center"  >
     <v-row v-bind:key="comment.id" v-for="comment in comments">
-        <Comment :userID="userID" :delete="deleteComment" :comment="comment"/>
+        <Comment class="commend-card" :userID="userID" :delete="deleteComment" :comment="comment"/>
     </v-row>
   </v-col>
 </template>
@@ -22,5 +22,9 @@ export default {
 </script>
 
 <style>
+
+.commend-card {
+  margin: 4px;
+}
 
 </style>
