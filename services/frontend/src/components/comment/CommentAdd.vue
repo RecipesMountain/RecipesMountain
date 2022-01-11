@@ -1,6 +1,6 @@
 <template>
 <div>
-    <v-card color="transparent" elevation="4" >
+    <v-card  shaped color="transparent" elevation="4" >
         <v-card-title class="text-h5">
             Add New Comment
         </v-card-title>
@@ -13,7 +13,7 @@
           v-model="comment"
         ></v-textarea>
         <v-card-actions>
-           <v-btn @click="submintComment">
+           <v-btn block rounded color="transparent" @click="submintComment">
             Submit you comment
            </v-btn>
         </v-card-actions>

@@ -1,5 +1,5 @@
 <template>
-    <v-card class="comment" color="transparent" elevation="2" >
+    <v-card shaped class="comment" color="transparent" elevation="2" >
         <v-card-title class="text-h5"> 
             <div v-if="comment.owner.full_name != null"> <v-avatar color="primary" size="50">{{ initials }}</v-avatar> {{comment.owner.full_name}} </div>
             <div v-else>Anonymous </div>
