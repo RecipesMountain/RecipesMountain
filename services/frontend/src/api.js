@@ -130,6 +130,5 @@ export const api = {
     return  axios.put(`${APISUFFIX}/api/recipes/${id}/rate`, null, config)
   }
 
-  
 
 };

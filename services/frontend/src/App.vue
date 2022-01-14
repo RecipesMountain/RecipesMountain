@@ -35,8 +35,10 @@ export default {
     Footer,
     AppBar
   },
-  async mounted() {
+  async beforeMount() {
     await this.$store.dispatch("actionCheckLoggedIn")
+  },
+  async mounted() {
     if(this.$store.getters["isLoggedIn"])
       this.$store.dispatch("actionGetMe")
   },

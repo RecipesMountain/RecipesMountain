@@ -73,8 +73,8 @@ export default {
   data() {
     return {
       comments: [],
-      addComment: false,
       props: ["recipe"],
+      addComment: false,
       justSubmitedRating: false,
     };
   },
