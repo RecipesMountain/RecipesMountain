@@ -247,10 +247,8 @@ class CRUDRecipe(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
             .first()
         )
         if rating:
-            print("fff")
             rating.rating = newRating
         else:
-            print("aaa")
             rating = RecipeRatings(
                 recipe_id=recipe_id, user_id=user_id, rating=newRating
             )

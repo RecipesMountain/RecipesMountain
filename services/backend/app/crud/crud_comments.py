@@ -14,7 +14,7 @@ from app.schemas.comment import CommentCreate, CommentUpdate
 from uuid import UUID
 
 
-class CRUDRecipe(CRUDBase[Comment, CommentCreate, CommentUpdate]):
+class CRUDComment(CRUDBase[Comment, CommentCreate, CommentUpdate]):
     def get(
         self, db: Session, *, recipe_id: UUID, skip: int = 0, limit: int = 100
     ) -> List[Comment]:
