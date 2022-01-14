@@ -11,16 +11,19 @@ from app.tests.utils.user import create_random_user
 from app.tests.utils.recpies import createRecpie
 from app.models.user import User
 
+
 def test_comment_create(db: Session) -> None:
     content = random_lower_string()
-    comment,_,_ = createComment(db, content)
+    comment, _, _ = createComment(db, content)
     assert comment.content == content
+
 
 def test_comment_get(db: Session) -> None:
     content = random_lower_string()
     comment, _, recipe_id = createComment(db, content)
     comment = crud.comment.get(db, recipe_id=recipe_id)[0]
     assert comment.content == content
+
 
 def test_comment_delete(db: Session) -> None:
     content = random_lower_string()
@@ -34,5 +37,7 @@ def createComment(db: Session, content: str) -> Tuple[Comment, User, UUID]:
     fakerecpie, nameRecpie = createRecpie(db)
     fakeowner = create_random_user(db)
     content_in = CommentCreate(content=content)
-    comment = crud.comment.create(db, obj_in=content_in, owner_id=fakeowner.id, recipe_id=fakerecpie)
+    comment = crud.comment.create(
+        db, obj_in=content_in, owner_id=fakeowner.id, recipe_id=fakerecpie
+    )
     return comment, fakeowner, fakerecpie

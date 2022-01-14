@@ -236,35 +236,46 @@ class CRUDRecipe(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
         db.refresh(recipe)
         return recipe
 
-    def rate(self, db: Session, *, recipe_id: UUID, user_id:UUID, newRating: int) -> int:
-        rating = db.query(RecipeRatings).filter(
-            RecipeRatings.recipe_id == recipe_id, 
-            RecipeRatings.user_id == user_id).first()
+    def rate(
+        self, db: Session, *, recipe_id: UUID, user_id: UUID, newRating: int
+    ) -> int:
+        rating = (
+            db.query(RecipeRatings)
+            .filter(
+                RecipeRatings.recipe_id == recipe_id, RecipeRatings.user_id == user_id
+            )
+            .first()
+        )
         if rating:
             print("fff")
             rating.rating = newRating
-        else: 
+        else:
             print("aaa")
-            rating = RecipeRatings(recipe_id=recipe_id, user_id=user_id, rating=newRating)
+            rating = RecipeRatings(
+                recipe_id=recipe_id, user_id=user_id, rating=newRating
+            )
         print(rating)
         db.add(rating)
         db.commit()
         db.refresh(rating)
 
-        ratingUpdate = db.query(func.avg(RecipeRatings.rating).label('average')).filter(
-            RecipeRatings.recipe_id == recipe_id).scalar_subquery()
+        ratingUpdate = (
+            db.query(func.avg(RecipeRatings.rating).label("average"))
+            .filter(RecipeRatings.recipe_id == recipe_id)
+            .scalar_subquery()
+        )
         print(ratingUpdate)
         recipe = db.query(Recipe).filter(Recipe.id == recipe_id).first()
-        
+
         recipe.rating = ratingUpdate
 
-        print(recipe.rating)      
+        print(recipe.rating)
 
         db.add(recipe)
         db.commit()
         db.refresh(recipe)
 
         return recipe.rating
-    
+
 
 recipe = CRUDRecipe(Recipe)
