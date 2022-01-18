@@ -42,4 +42,4 @@ class CRUDComment(CRUDBase[Comment, CommentCreate, CommentUpdate]):
         return r != 0
 
 
-comment = CRUDRecipe(Comment)
+comment = CRUDComment(Comment)
