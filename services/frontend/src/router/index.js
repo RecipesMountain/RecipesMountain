@@ -7,7 +7,7 @@ import Register from '@/views/UserViews/Register.vue'
 import ExploreRecipes from "@/views/RecipeViews/ExploreRecipes.vue"
 import SearchRecipe from "@/views/RecipeViews/SearchRecipes.vue"
 import MyAccount from "@/views/UserViews/MyAccount.vue"
-
+import Comment from "@/components/comment/Comment.vue"
 import Recipe from "@/views/RecipeViews/Recipe.vue"
 import AddRecipe from "@/views/RecipeViews/AddRecipe.vue"
 import EditRecipe from "@/views/RecipeViews/EditRecipe.vue"
@@ -58,6 +58,11 @@ const routes = [
     path: '/editRecipe/:id?',
     name: 'EditRecipe',
     component: EditRecipe,
+  },
+  {
+    path: '/comment',
+    name: 'comment',
+    component: Comment,
   },
   {
     path: '/user/',

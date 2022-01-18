@@ -61,7 +61,7 @@
                 name="passwordConfirm"
                 :type="passwordVisible ? 'text' : 'password'"
                 label="Password Confirm"
-                :rules="passwordRules"
+                :rules="[passwordConfirmationRule]"
                 id="passwordConfirm"
                 :append-icon="passwordVisible ? 'mdi-eye' : 'mdi-eye-off'"
                 @click:append="passwordVisible = !passwordVisible"
@@ -97,7 +97,6 @@ export default {
     ],
     passwordRules: [
         v => !!v || 'Password is needed',
-        () => this.password == this.passwordComfirm || "Passwords has to be the same"
     ],
     firstNameRules: [
         v => !!v || 'Fist Name is needed',
@@ -117,6 +116,11 @@ export default {
         this.error = true
     },
   },
+  computed: {
+    passwordConfirmationRule() { // works but thros en error, not in code pen tho XD
+      return (this.password === this.passwordComfirm) || 'Password must match'
+    }
+  }
 };
 </script>
 

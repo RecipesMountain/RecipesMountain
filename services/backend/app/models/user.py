@@ -19,3 +19,7 @@ class User(Base):
     favorites = relationship(
         "Recipe", secondary="favorite_recipes", back_populates="users_favorite"
     )
+
+    ratings = relationship(
+        "Recipe", secondary="recipe_ratings", back_populates="recpie_ratings"
+    )

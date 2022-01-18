@@ -103,6 +103,7 @@
       </v-tooltip>
       
     </template>
+
     <template  v-else-if="isLoggedIn">
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
@@ -119,7 +120,7 @@
 
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
-          <v-avatar v-on="on" v-bind="attrs" @click="goToAccount" color="primary" size="56">PW</v-avatar>
+          <v-avatar v-on="on" v-bind="attrs" @click="goToAccount" color="primary" size="56">{{ initials }}</v-avatar>
         </template>
         <span>User Profile</span>
       </v-tooltip>
@@ -133,7 +134,7 @@
 <script>
   import { api } from '@/api';
   import { mover } from "@/mover";
-
+  import { getInitials } from "@/utils";
 export default {
   
   name: "AppBar",
@@ -155,6 +156,9 @@ export default {
       },
       isLoggedIn() {
         return this.$store.getters["isLoggedIn"]
+      },
+      initials(){
+        return getInitials(this.$store.getters["fullName"])
       }
   },
   watch: {

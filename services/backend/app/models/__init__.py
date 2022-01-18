@@ -6,3 +6,4 @@ from .stage import Stage
 from .tag import Tag
 from .user import User
 from .stats import Stats
+from .recipe_ratings import RecipeRatings

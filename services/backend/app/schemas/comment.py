@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional
 from uuid import UUID
+from app.schemas.user import UserComment
 
 
 class CommentBase(BaseModel):
@@ -17,6 +18,7 @@ class CommentUpdate(CommentBase):
 
 class CommentInDBBase(CommentBase):
     id: Optional[UUID] = None
+    owner: UserComment
 
     class Config:
         orm_mode = True
