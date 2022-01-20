@@ -13,7 +13,7 @@
         <v-list dense color="transparent">
           <v-list-item>
             <v-list-item-title class="text-left subtitle-1 font-weight-black">
-              Ingredients - {{ stageLabel }}
+              Ingredients: {{ stageLabel }}
             </v-list-item-title>
           </v-list-item>
           <v-list-item

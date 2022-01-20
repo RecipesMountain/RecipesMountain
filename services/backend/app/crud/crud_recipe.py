@@ -111,9 +111,10 @@ class CRUDRecipe(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
             return False
 
     def create(self, db: Session, *, obj_in: RecipeCreate, owner_id: UUID) -> Recipe:
-
+        
         db_obj = Recipe(
             title=obj_in.title,
+            description=obj_in.description,
             cookingTime=obj_in.cookingTime,
             difficulty=obj_in.difficulty,
             calories=obj_in.calories,
@@ -234,5 +235,10 @@ class CRUDRecipe(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
         db.refresh(recipe)
         return recipe
 
-
+    def delete(self, db:Session, *, recipe_id: UUID) -> bool:
+        recipe = db.query(Recipe).filter(Recipe.id == recipe_id).first()
+        result = db.delete(recipe)
+        db.commit()
+        return result != 0
+        
 recipe = CRUDRecipe(Recipe)

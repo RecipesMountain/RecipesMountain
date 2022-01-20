@@ -180,7 +180,7 @@ export const recipeModule = {
           context.commit("setRecipeId", response.data.id)
           context.commit("setAuthor", response.data.owner)
           context.commit("setTitle", response.data.title)
-          context.commit("setDescription", "")
+          context.commit("setDescription", response.data.description)
           context.commit("setTime", response.data.cookingTime)
           context.commit("setDifficulty", response.data.difficulty)
           context.commit("setRating", response.data.rating)

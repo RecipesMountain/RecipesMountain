@@ -12,7 +12,7 @@
     >
       <v-card color="transparent" flat>
         <p class="text-h6 text-left font-weight-medium">
-          Preparation - {{ stageLabel }}
+          Preparation: {{ stageLabel }}
         </p>
         <p class="text-subtitle-1 text-left px-2">{{ stageContent }}</p>
       </v-card>
