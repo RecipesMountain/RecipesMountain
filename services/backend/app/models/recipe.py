@@ -25,8 +25,7 @@ class Recipe(Base):
     difficulty = Column(String)
     calories = Column(Integer)
     portion = Column(Integer)
-    rating = Column(Integer)
-
+    rating = Column(Integer, default=0)
     totalViews = Column(Integer, default=0)
     popularityScore = Column(Integer, default=0)
 
@@ -38,6 +37,10 @@ class Recipe(Base):
     users_favorite = relationship(
         "User", secondary="favorite_recipes", back_populates="favorites"
     )
+    recpie_ratings = relationship(
+        "User", secondary="recipe_ratings", back_populates="ratings"
+    )
+
     tags = relationship("Tag", secondary="recipe_tags", back_populates="recipes")
     stages = relationship("Stage", back_populates="recipe")
     comments = relationship("Comment", back_populates="recipe")

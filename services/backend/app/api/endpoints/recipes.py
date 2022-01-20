@@ -225,3 +225,20 @@ def delete_recipe(
     current_user: models.User = Depends(deps.get_current_user),
 ) -> Any:
     return crud.recipe.delete(db, recipe_id=recipe_id)
+
+
+@router.put("/{recipe_id}/rate", response_model=int)
+def rate_recpie(
+    recipe_id: UUID,
+    newRating: int,
+    db: Session = Depends(deps.get_db),
+    current_user: models.User = Depends(deps.get_current_user),
+) -> Any:
+    if newRating > 50:
+        newRating = 50
+    if newRating < 0:
+        newRating = 0
+    return crud.recipe.rate(
+        db, recipe_id=recipe_id, newRating=newRating, user_id=current_user.id
+    )
+

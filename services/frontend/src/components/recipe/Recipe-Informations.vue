@@ -29,7 +29,7 @@
           <v-col cols="12">
             <p class="text-left text-body-1">{{ recipe.description }}</p>
           </v-col>
-          <v-col cols="12">
+          <v-col  v-if="recipe.author != null" cols="12">
             <p class="text-left text-subtitle-2">
               Author: {{ recipe.author.full_name }}
             </p>
@@ -137,14 +137,15 @@
                 length="5"
                 size="40"
                 half-increments
-                v-model="recipeRating"
+                v-model="rating"
                 color="secondary"
                 background-color="secondary"
+                @input="submitRating"
               ></v-rating>
               <v-tooltip top>
                 <template v-slot:activator="{ on, attrs }">
                   <div v-bind="attrs" v-on="on">
-                    <v-btn icon plain>
+                    <v-btn icon @click="()=>{printRecipe();}" plain>
                       <v-icon size="50">mdi-printer</v-icon>
                     </v-btn>
                   </div>
@@ -158,7 +159,7 @@
                       icon
                       :ripple="false"
                       plain
-                      v-on:click="$vuetify.goTo('#comments')"
+                      v-on:click="() =>{$vuetify.goTo('#comments'); showAddComment();}"
                     >
                       <v-icon size="50">mdi-comment-outline</v-icon>
                     </v-btn>
@@ -193,7 +194,7 @@ import RecipeImageCarousel from "@/components/recipe/Recipe-ImageCarousel.vue";
 
 export default {
   components: { RecipeImageCarousel },
-  props: ["recipe", "isLiked"],
+  props: ["recipe", "isLiked", "showAddComment", "printRecipe", "submitRating"],
   computed: {
     shortTags() {
 
@@ -215,14 +216,15 @@ export default {
         return 1;
       }
     },
-    recipeRating() {
-      return this.recipe.rating / 2;
-    },
     recipeServings() {
       return this.recipe.servings / 2;
     },
     recipeId(){
       return this.recipe.id
+    },
+    rating: {
+      get(){return this.recipe.rating / 10},
+      set(e){return e}
     }
   },
   methods:{

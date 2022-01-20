@@ -9,7 +9,7 @@ from app.db.base_class import Base
 
 class Comment(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, index=True, default=uuid.uuid4)
-    comment = Column(String, nullable=False)
+    content = Column(String, nullable=False)
     owner_id = Column(UUID(as_uuid=True), ForeignKey("user.id"))
     recipe_id = Column(UUID(as_uuid=True), ForeignKey("recipe.id"))
 

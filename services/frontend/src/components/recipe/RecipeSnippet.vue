@@ -9,7 +9,7 @@
     <v-card-text>
       <v-row align="center" class="mx-0 my-0">
         <v-rating
-          :value="recipe.rating"
+          :value="(recipe.rating)/10"
           background-color="amber"
           color="amber"
           dense

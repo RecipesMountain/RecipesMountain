@@ -148,6 +148,7 @@ const defaultState = {
         fullName: (state) => state.fullName,
         registrationError: (state) => state.registrationError,
         registrationSuccess: (state) => state.registrationSuccess,
+        userID: (state) => state.userID,
     },
   };
 
