@@ -135,7 +135,7 @@ export const actions = {
   },
   async getFavouriteRecipes(context, payload) {
     try {
-      context.commit("setFavouriteRecipes", (await api.getPopular(context.state.user.token, 0, payload.limit)).data);
+      context.commit("setFavouriteRecipes", (await api.getFavorites(context.state.user.token, 0, payload.limit)).data);
     } catch (e) {
       context.commit("openSnackbar", "A server error has occurred");
       console.log(e);
@@ -143,7 +143,7 @@ export const actions = {
   },
   async getAuthoredRecipes(context, payload) {
     try {
-      context.commit("setAuthoredRecipes", (await api.getPopular(context.state.user.token, 0, payload.limit)).data);
+      context.commit("setAuthoredRecipes", (await api.getAuthored(context.state.user.token, 0, payload.limit)).data);
     } catch (e) {
       context.commit("openSnackbar", "A server error has occurred");
       console.log(e);
@@ -151,7 +151,7 @@ export const actions = {
   },
   async getCommentedRecipes(context, payload) {
     try {
-      context.commit("setCommentedRecipes", (await api.getPopular(context.state.user.token, 0, payload.limit)).data);
+      context.commit("setCommentedRecipes", (await api.getCommented(context.state.user.token, 0, payload.limit)).data);
     } catch (e) {
       context.commit("openSnackbar", "A server error has occurred");
       console.log(e);

@@ -78,9 +78,10 @@ const routes = [
     path: '/user/',
     name: 'MyAccount',
     component: MyAccount,
-    beforeEnter: (to, from, next) => {
-      if(!store.getters["isLoggedIn"]){
-        next({ name: "Home"  })
+    beforeEnter: async (to, from, next) => {
+      await store.dispatch("actionCheckLoggedIn")
+      if (!store.getters["isLoggedIn"]) {
+        next({ name: "Home" })
       } else next()
     },
     children: []
