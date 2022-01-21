@@ -308,7 +308,7 @@ class CRUDRecipe(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
 
         for stage in obj_in.stages:
             for product in stage.products:
-                query = query + ' ' + str(int(product.amount)) + ' ' + product.amount_unit + ' ' + crud.crud_product.product.get_by_id(db=db, product_id=product.product_id).name + ' and'
+                query = query + ' ' + str(int(product.amount)) + ' ' + product.amount_unit + ' ' + product.name + ' and'
         
         return query
 

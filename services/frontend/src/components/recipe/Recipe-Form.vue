@@ -42,13 +42,13 @@
                         required
                       >
                       </v-text-field>
-                      <v-text-field
+                      <!-- <v-text-field
                         label="Calories billans"
                         v-model="caloriesBillans"
                         hint="Insert calories"
                         type="number"
                         :rules="descRules"
-                      ></v-text-field>
+                      ></v-text-field> -->
                     </v-col>
                     <v-col md="6" cols="12">
                       <v-img
