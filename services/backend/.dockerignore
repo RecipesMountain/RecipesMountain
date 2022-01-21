@@ -2,6 +2,7 @@
 **/__pycache__/
 **/.venv/
 **/.mypy_cache/
+**/.pytest_cache/
 
 # Node.js
 **/node_modules/
@@ -21,3 +22,11 @@
 **/Dockerfile.dev
 **/docker-compose.yml
 **/docker-compose.dev.yml
+
+# Coverage
+**/.coverage
+**/htmlcov/
+
+# IDEs
+**/.vscode/
+**/.idea/

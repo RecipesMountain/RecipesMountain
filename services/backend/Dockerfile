@@ -30,8 +30,12 @@ RUN . /venv/bin/activate && poetry install --no-interaction --no-root
 FROM base as final
 
 RUN groupadd -r user && useradd -r -s /bin/false -g user user
+COPY --chown=user:user alembic.ini docker-entrypoint.sh ./
+COPY --chown=user:user alembic ./alembic
 COPY --from=builder --chown=user:user /venv /venv
 ENV PATH=/venv/bin:$PATH
 EXPOSE 5000
 USER user
+
+ENTRYPOINT ["./docker-entrypoint.sh"]
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "5000"]
