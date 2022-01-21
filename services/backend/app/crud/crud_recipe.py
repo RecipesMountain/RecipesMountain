@@ -9,9 +9,11 @@ from app.models.tag import Tag
 
 from app.models.stage import Stage
 
-from app.models.recipe_tags import RecipeTags
-from app.models.products_in_stages import ProductsInStages
+from app.models.comment import Comment
 from app.models.favorite_recipes import FavoriteRecipes
+from app.models.products_in_stages import ProductsInStages
+from app.models.recipe_tags import RecipeTags
+from app.models.user import User
 
 from app.schemas.recipe import RecipeCreate, RecipeUpdate
 from app.models.recipe_ratings import RecipeRatings
@@ -69,10 +71,28 @@ class CRUDRecipe(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
     def get_all(self, db: Session):
         return db.query(Recipe).all()
 
-    def get_favorite_recepies(self, db: Session, *, user_id: UUID) -> List[Recipe]:
+    def get_favorite_recipes(
+        self, db: Session, user_id: UUID, *, skip: int, limit: int
+    ) -> List[Recipe]:
         return (
             db.query(Recipe)
             .filter(Recipe.users_favorite.any(FavoriteRecipes.user_id == user_id))
+            .offset(skip)
+            .limit(limit)
+            .all()
+        )
+
+    def get_commented_recipes(
+        self, db: Session, user_id: UUID, *, skip: int, limit: int
+    ):
+        return (
+            db.query(User)
+            .join(Comment)
+            .join(Recipe)
+            .filter(User.id == user_id)
+            .distinct()
+            .offset(skip)
+            .limit(limit)
             .all()
         )
 
