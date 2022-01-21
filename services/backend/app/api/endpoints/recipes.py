@@ -153,10 +153,11 @@ def create_recipe(
     query = crud.crud_recipe.recipe.make_products_names_string(db=db, obj_in=recipe_in)
     print(query)
 
-
-    headers = {'X-Api-Key': '{key}'.format(key=core.config.settings.REMOTE_API_KEY)}
-    params = {'query': '{q}'.format(q=query)}
-    response = get('https://api.calorieninjas.com/v1/nutrition', params=params, headers=headers).json()
+    headers = {"X-Api-Key": "{key}".format(key=core.config.settings.REMOTE_API_KEY)}
+    params = {"query": "{q}".format(q=query)}
+    response = get(
+        "https://api.calorieninjas.com/v1/nutrition", params=params, headers=headers
+    ).json()
 
     for item in response["items"]:
         sum_of_calories += item["calories"]
@@ -223,11 +224,19 @@ def update_recipe(
     else:
         if recipe.owner_id == current_user.id:
             sum_of_calories = 0
-            query = crud.crud_recipe.recipe.make_products_names_string(db=db, obj_in=recipe_in)
+            query = crud.crud_recipe.recipe.make_products_names_string(
+                db=db, obj_in=recipe_in
+            )
 
-            headers = {'X-Api-Key': '{key}'.format(key=core.config.settings.REMOTE_API_KEY)}
-            params = {'query': '{q}'.format(q=query)}
-            response = get('https://api.calorieninjas.com/v1/nutrition', params=params, headers=headers).json()
+            headers = {
+                "X-Api-Key": "{key}".format(key=core.config.settings.REMOTE_API_KEY)
+            }
+            params = {"query": "{q}".format(q=query)}
+            response = get(
+                "https://api.calorieninjas.com/v1/nutrition",
+                params=params,
+                headers=headers,
+            ).json()
 
             for item in response["items"]:
                 sum_of_calories += item["calories"]

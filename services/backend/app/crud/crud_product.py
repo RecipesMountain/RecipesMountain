@@ -13,7 +13,7 @@ from app.schemas.product import ProductCreate, ProductUpdate
 class CRUDProduct(CRUDBase[Product, ProductCreate, ProductUpdate]):
     def get_all(self, db: Session) -> List[Product]:
         return db.query(Product).all()
-    
+
     def get_by_id(self, db: Session, *, product_id: UUID) -> Optional[Product]:
         return db.query(Product).filter(Product.id == product_id).first()
 

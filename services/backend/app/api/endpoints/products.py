@@ -24,9 +24,11 @@ def search_products(
     payload = {
         "app_id": core.config.settings.EXTERNAL_API_ID_AUTOCOMPLETE,
         "app_key": core.config.settings.EXTERNAL_API_KEY_AUTOCOMPLETE,
-        "q": query
+        "q": query,
     }
-    request = requests.get(core.config.settings.EXTERNAL_API_URL, payload, headers=headers)
+    request = requests.get(
+        core.config.settings.EXTERNAL_API_URL, payload, headers=headers
+    )
     return request.json()
 
 

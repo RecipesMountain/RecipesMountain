@@ -49,7 +49,7 @@ class Settings(BaseSettings):
 
     class Config:
         case_sensitive = True
-    
+
     # TODO move to env
     REMOTE_API_KEY: str = "xoTm8WWs4zPaIdDyxBcdYw==exW9KaGBm3w1ZgNc"
 

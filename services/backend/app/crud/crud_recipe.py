@@ -134,7 +134,6 @@ class CRUDRecipe(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
             db.commit()
             db.refresh(db_stage_obj)
 
-            
             for product in stage.products:
                 # this should be in crud products
                 prod = db.query(Product).filter(Product.name == product.name).first()
@@ -144,10 +143,9 @@ class CRUDRecipe(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
                     db.add(db_obj_prod)
                     db.commit()
                     db.refresh(db_obj_prod)
-                    prod_id  = db_obj_prod.id
+                    prod_id = db_obj_prod.id
                 else:
                     prod_id = prod.id
-                
 
                 db_product_stage_obj = ProductsInStages(
                     product_id=prod_id,
@@ -220,17 +218,20 @@ class CRUDRecipe(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
                         if stage.products:
                             for product in stage.products:
                                 # this should be in crud products
-                                prod = db.query(Product).filter(Product.name == product.name).first()
+                                prod = (
+                                    db.query(Product)
+                                    .filter(Product.name == product.name)
+                                    .first()
+                                )
                                 prod_id = 0
                                 if not prod:
                                     db_obj_prod = Product(name=product.name, price=0)
                                     db.add(db_obj_prod)
                                     db.commit()
                                     db.refresh(db_obj_prod)
-                                    prod_id  = db_obj_prod.id
+                                    prod_id = db_obj_prod.id
                                 else:
                                     prod_id = prod.id
-                                
 
                                 db_product_stage_obj = ProductsInStages(
                                     product_id=prod_id,
@@ -304,12 +305,21 @@ class CRUDRecipe(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
         return recipe.rating
 
     def make_products_names_string(self, db: Session, obj_in: Recipe) -> str:
-        query = ''
+        query = ""
 
         for stage in obj_in.stages:
             for product in stage.products:
-                query = query + ' ' + str(int(product.amount)) + ' ' + product.amount_unit + ' ' + product.name + ' and'
-        
+                query = (
+                    query
+                    + " "
+                    + str(int(product.amount))
+                    + " "
+                    + product.amount_unit
+                    + " "
+                    + product.name
+                    + " and"
+                )
+
         return query
 
 
