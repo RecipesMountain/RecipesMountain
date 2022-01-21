@@ -180,17 +180,15 @@ def create_recipe(
         "app_key": core.config.settings.EXTERNAL_API_KEY_AUTOCOMPLETE,
         "ingr": better_query,
     }
-    request = get(
-        core.config.settings.EXTERNAL_API_URL2, payload, headers=headers
-    )
+    request = get(core.config.settings.EXTERNAL_API_URL2, payload, headers=headers)
     data = request.json()
-    list_of_ingredients = data['parsed']
+    list_of_ingredients = data["parsed"]
 
     for product in list_of_ingredients:
-        kcal_per100 = float(product['food']["nutrients"]["ENERC_KCAL"])
+        kcal_per100 = float(product["food"]["nutrients"]["ENERC_KCAL"])
         quantitiy = float(product["quantity"])
         measure = float(product["measure"]["weight"])
-        calories = quantitiy * (kcal_per100*measure/100)
+        calories = quantitiy * (kcal_per100 * measure / 100)
         sum_of_calories += calories
 
     recipe_in.calories = sum_of_calories
@@ -255,7 +253,7 @@ def update_recipe(
     # TODO: check if this is correct user
     else:
         if recipe.owner_id == current_user.id:
-                ### TODO u have to chenge this fuction to fits new data
+            ### TODO u have to chenge this fuction to fits new data
             sum_of_calories = 0
             better_query = crud.crud_recipe.recipe.make_products_q(obj_in=recipe_in)
 
@@ -269,13 +267,13 @@ def update_recipe(
                 core.config.settings.EXTERNAL_API_URL2, payload, headers=headers
             )
             data = request.json()
-            list_of_ingredients = data['parsed']
+            list_of_ingredients = data["parsed"]
 
             for product in list_of_ingredients:
-                kcal_per100 = float(product['food']["nutrients"]["ENERC_KCAL"])
+                kcal_per100 = float(product["food"]["nutrients"]["ENERC_KCAL"])
                 quantitiy = float(product["quantity"])
                 measure = float(product["measure"]["weight"])
-                calories = quantitiy * (kcal_per100*measure/100)
+                calories = quantitiy * (kcal_per100 * measure / 100)
                 sum_of_calories += calories
 
             recipe_in.calories = sum_of_calories
@@ -312,5 +310,3 @@ def rate_recpie(
     return crud.recipe.rate(
         db, recipe_id=recipe_id, newRating=newRating, user_id=current_user.id
     )
-
-

@@ -31,12 +31,14 @@ context.configure.compare_type = True
 
 
 def get_db_url():
-    if all((
-        os.environ.get("POSTGRES_USER"),
-        os.environ.get("POSTGRES_PASSWORD"),
-        os.environ.get("POSTGRES_SERVER"),
-        os.environ.get("POSTGRES_DB"),
-    )):
+    if all(
+        (
+            os.environ.get("POSTGRES_USER"),
+            os.environ.get("POSTGRES_PASSWORD"),
+            os.environ.get("POSTGRES_SERVER"),
+            os.environ.get("POSTGRES_DB"),
+        )
+    ):
         return "postgresql://{}:{}@{}/{}".format(
             os.environ["POSTGRES_USER"],
             os.environ["POSTGRES_PASSWORD"],
