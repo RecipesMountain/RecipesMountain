@@ -49,6 +49,8 @@ class Settings(BaseSettings):
 
     class Config:
         case_sensitive = True
+    
+    REMOTE_API_KEY: str = "xoTm8WWs4zPaIdDyxBcdYw==exW9KaGBm3w1ZgNc"
 
 
 settings = Settings()

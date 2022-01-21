@@ -7,11 +7,11 @@ from fastapi import File, UploadFile
 
 from sqlalchemy.orm import Session
 
-from app import models, schemas, crud
+from app import models, schemas, crud, core
 from app.api import deps
 
 from fastapi.responses import Response
-
+from requests import get
 
 router = APIRouter()
 
@@ -148,6 +148,17 @@ def create_recipe(
     """
     Create recipe
     """
+    sum_of_calories = 0
+    query = crud.crud_recipe.recipe.make_products_names_string(db=db, obj_in=recipe_in)
+
+    headers = {'X-Api-Key': '{key}'.format(key=core.config.settings.REMOTE_API_KEY)}
+    params = {'query': '{q}'.format(q=query)}
+    response = get('https://api.calorieninjas.com/v1/nutrition', params=params, headers=headers).json()
+
+    for item in response["items"]:
+        sum_of_calories += item["calories"]
+    recipe_in.calories = sum_of_calories
+
     recipe = crud.recipe.create(db, obj_in=recipe_in, owner_id=current_user.id)
     return recipe
 
@@ -208,6 +219,16 @@ def update_recipe(
     # TODO: check if this is correct user
     else:
         if recipe.owner_id == current_user.id:
+            sum_of_calories = 0
+            query = crud.crud_recipe.recipe.make_products_names_string(db=db, obj_in=recipe_in)
+
+            headers = {'X-Api-Key': '{key}'.format(key=core.config.settings.REMOTE_API_KEY)}
+            params = {'query': '{q}'.format(q=query)}
+            response = get('https://api.calorieninjas.com/v1/nutrition', params=params, headers=headers).json()
+
+            for item in response["items"]:
+                sum_of_calories += item["calories"]
+            recipe_in.calories = sum_of_calories
             recipe = crud.recipe.update(db=db, obj_in=recipe_in, recipe_id=recipe_id)
         else:
             raise HTTPException(

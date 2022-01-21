@@ -58,7 +58,7 @@ def init_db(db: Session) -> None:
         "seasoning",
         "salt",
         "black pepper",
-        "mozarella",
+        "mozzarella",
     ]
 
     for product in initialProducts:

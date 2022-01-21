@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session, Query
 from sqlalchemy.sql.functions import func
 
 from app.crud.base import CRUDBase
+from app import crud
 from app.models.recipe import Recipe
 from app.models.tag import Tag
 
@@ -274,6 +275,15 @@ class CRUDRecipe(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
         db.refresh(recipe)
 
         return recipe.rating
+
+    def make_products_names_string(self, db: Session, obj_in: Recipe) -> str:
+        query = ''
+
+        for stage in obj_in.stages:
+            for product in stage.products:
+                query = query + ' ' + str(int(product.amount)) + ' ' + product.amount_unit + ' ' + crud.crud_product.product.get_by_id(db=db, product_id=product.product_id).name + ' and'
+        
+        return query
 
 
 recipe = CRUDRecipe(Recipe)
