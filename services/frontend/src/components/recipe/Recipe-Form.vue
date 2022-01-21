@@ -41,13 +41,6 @@
                         required
                       >
                       </v-text-field>
-                      <!-- <v-text-field
-                        label="Calories billans"
-                        v-model="caloriesBillans"
-                        hint="Insert calories"
-                        type="number"
-                        :rules="caloriesRules"
-                      ></v-text-field> -->
                       <v-textarea
                         label="Recipe description"
                         v-model="recipeDesc"

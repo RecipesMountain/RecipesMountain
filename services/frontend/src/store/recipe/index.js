@@ -62,52 +62,6 @@ const defaultState = {
       shortcut: "ml",
     },
   ],
-  // units: [
-  //   {
-  //     label: "gram",
-  //     shortcut: "g",
-  //   },
-  //   {
-  //     label: "kilogram",
-  //     shortcut: "kg",
-  //   },
-  //   {
-  //     label: "piece",
-  //     shortcut: "pc.",
-  //   },
-  //   {
-  //     label: "pinch",
-  //     shortcut: "pinch",
-  //   },
-  //   {
-  //     label: "tablespoon",
-  //     shortcut: "tbsp.",
-  //   },
-  //   {
-  //     label: "teaspoon",
-  //     shortcut: "tsp.",
-  //   },
-  //   {
-  //     label: "cup",
-  //     shortcut: "cup",
-  //   },
-  //   {
-  //     label: "decagram",
-  //     shortcut: "dag",
-  //   },
-  //   {
-  //     label: "liter",
-  //     shortcut: "l",
-  //   },
-  //   {
-  //     label: "pack",
-  //     shortcut: "pack",
-  //   },
-  //   {
-  //     label: "milliliter",
-  //     shortcut: "ml",
-  //   },
-  // ],
 };
 
 export const recipeModule = {
