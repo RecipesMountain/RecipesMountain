@@ -2,20 +2,19 @@
   <div>
     <v-stepper v-model="formStep" color="red">
       <v-stepper-header>
-        <v-stepper-step :complete="formStep > 1" step="1">
+        <v-stepper-step :complete="formStep > 1" step="1" color="#ff8e88">
           General Informations
         </v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step :complete="formStep > 2" step="2">
+        <v-stepper-step :complete="formStep > 2" step="2" color="#ff8e88">
           Recipe Stages
         </v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step :complete="formStep > 3" step="3">
+        <v-stepper-step :complete="formStep > 3" step="3" color="#ff8e88">
           Recipe Tags
         </v-stepper-step>
         <v-col class="d-flex">
           <v-spacer></v-spacer>
-          <!-- <v-btn plain>Preview</v-btn> -->
           <v-spacer></v-spacer>
           <v-btn icon>
             <v-icon>mdi-help-circle-outline</v-icon>
@@ -47,10 +46,17 @@
                         v-model="caloriesBillans"
                         hint="Insert calories"
                         type="number"
-                        :rules="descRules"
-                      ></v-text-field> -->
+                        :rules="caloriesRules"
+                      ></v-text-field>
                     </v-col>
                     <v-col md="6" cols="12">
+                      <v-textarea
+                        label="Recipe description"
+                        v-model="recipeDesc"
+                        hint="Some additional information about your recipe"
+                        rows="3"
+                        counter="400"
+                      ></v-textarea>
                       <v-img
                         :src="previeImage"
                         contain
@@ -265,6 +271,9 @@ export default {
       imageRules: [
         (v) => !(!v && !this.isForEdit) || "Recipe needs at least one picture",
       ],
+      caloriesRules: [
+        (v) => !(v < 0) || "Negative calories ??"
+      ],
       descRules: [],
 
       isImage: false,
@@ -371,6 +380,7 @@ export default {
       });
       let payload = {
         title: this.recipeTitle,
+        description: this.recipeDesc,
         cookingTime: this.preparationTime * 30,
         difficulty: this.tickDiffLabels[this.difficulty],
         calories: this.caloriesBillans,
@@ -426,6 +436,7 @@ export default {
       this.oldImage = this.oldRecipe.image;
 
       this.recipeTitle = this.oldRecipe.title;
+      this.recipeDesc = this.oldRecipe.description;
       this.preparationTime = this.oldRecipe.time / 30;
 
       this.difficulty = this.tickDiffLabels.indexOf(this.oldRecipe.difficulty);

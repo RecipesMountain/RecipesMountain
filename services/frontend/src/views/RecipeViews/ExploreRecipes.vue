@@ -14,27 +14,24 @@
 
 <script>
 import RecipeSnippet from "@/components/recipe/RecipeSnippet";
+import {capitalize} from "@/utils";
 
 export default {
   name: "ExploreRecipes",
   components: {RecipeSnippet},
   created: function() {
     let sort = this.$route.params.sort;
+    let skip = this.$route.params.skip || 0;
+    let limit = this.$route.params.limit || 100;
 
-    if (sort === "popular") {
-      this.$store.dispatch("getPopularRecipes", { limit: 20 });
-    } else if (sort === "best") {
-      this.$store.dispatch("getBestRecipes", { limit: 20 });
-    }
+    this.$store.dispatch(`get${capitalize(sort)}Recipes`, { skip: skip, limit: limit });
   },
   computed: {
     titleText: function() {
-      let sort = this.$route.params.sort
-      return sort.charAt(0).toUpperCase() + sort.substring(1) + " recipes";
+      return capitalize(this.$route.params.sort) + " recipes";
     },
     recipes: function() {
-      let sort = this.$route.params.sort
-      return sort === "popular" ? this.$store.getters.popularRecipes : (sort === "best" ? this.$store.getters.bestRecipes : []);
+      return this.$store.getters[`${this.$route.params.sort}Recipes`] || []
     }
   },
 }

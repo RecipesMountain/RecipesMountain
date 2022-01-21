@@ -94,11 +94,33 @@ def get_favorites_recipes(
     *,
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_user),
+    skip: int = 0,
+    limit: int = 100,
 ) -> Any:
-    favorite_recipies = crud.recipe.get_favorite_recepies(
-        db=db, user_id=current_user.id
+    return current_user.favorites[skip : max(skip + limit, len(current_user.favorites))]
+
+
+@router.get("/authored", response_model=List[schemas.RecipeSearch])
+def get_authored_recipes(
+    *,
+    current_user: models.User = Depends(deps.get_current_user),
+    skip: int = 0,
+    limit: int = 100,
+):
+    return current_user.recipes[skip : max(skip + limit, len(current_user.recipes))]
+
+
+@router.get("/commented", response_model=List[schemas.RecipeSearch])
+def get_commented_recipes(
+    *,
+    db: Session = Depends(deps.get_db),
+    current_user: models.User = Depends(deps.get_current_user),
+    skip: int = 0,
+    limit: int = 100,
+):
+    return crud.recipe.get_commented_recipes(
+        db, current_user.id, skip=skip, limit=limit
     )
-    return favorite_recipies
 
 
 @router.put("/like/{recipe_id}", response_model=bool)
@@ -273,7 +295,7 @@ def delete_recipe(
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_user),
 ) -> Any:
-    pass
+    return crud.recipe.delete(db, recipe_id=recipe_id)
 
 
 @router.put("/{recipe_id}/rate", response_model=int)

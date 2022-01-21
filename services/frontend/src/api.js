@@ -70,6 +70,15 @@ export const api = {
   async getBest(token, skip, limit){
     return axios.get(`${APISUFFIX}/api/recipes/best`, basicConfig(token, skip, limit))
   },
+  async getAuthored(token, skip, limit) {
+    return axios.get(`${APISUFFIX}/api/recipes/authored`, basicConfig(token, skip, limit))
+  },
+  async getFavorites(token, skip, limit) {
+    return axios.get(`${APISUFFIX}/api/recipes/favorites`, basicConfig(token, skip, limit))
+  },
+  async getCommented(token, skip, limit) {
+    return axios.get(`${APISUFFIX}/api/recipes/commented`, basicConfig(token, skip, limit))
+  },
   async search(token, keyword, tags, sort, skip, limit){
     let config = basicConfig(token, skip, limit)
     if (tags != null && tags != [])

@@ -11,9 +11,11 @@ from app.models.product import Product
 
 from app.models.stage import Stage
 
-from app.models.recipe_tags import RecipeTags
-from app.models.products_in_stages import ProductsInStages
+from app.models.comment import Comment
 from app.models.favorite_recipes import FavoriteRecipes
+from app.models.products_in_stages import ProductsInStages
+from app.models.recipe_tags import RecipeTags
+from app.models.user import User
 
 from app.schemas.recipe import RecipeCreate, RecipeUpdate
 from app.models.recipe_ratings import RecipeRatings
@@ -71,10 +73,28 @@ class CRUDRecipe(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
     def get_all(self, db: Session):
         return db.query(Recipe).all()
 
-    def get_favorite_recepies(self, db: Session, *, user_id: UUID) -> List[Recipe]:
+    def get_favorite_recipes(
+        self, db: Session, user_id: UUID, *, skip: int, limit: int
+    ) -> List[Recipe]:
         return (
             db.query(Recipe)
             .filter(Recipe.users_favorite.any(FavoriteRecipes.user_id == user_id))
+            .offset(skip)
+            .limit(limit)
+            .all()
+        )
+
+    def get_commented_recipes(
+        self, db: Session, user_id: UUID, *, skip: int, limit: int
+    ):
+        return (
+            db.query(User)
+            .join(Comment)
+            .join(Recipe)
+            .filter(User.id == user_id)
+            .distinct()
+            .offset(skip)
+            .limit(limit)
             .all()
         )
 
@@ -118,6 +138,7 @@ class CRUDRecipe(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
 
         db_obj = Recipe(
             title=obj_in.title,
+            description=obj_in.description,
             cookingTime=obj_in.cookingTime,
             difficulty=obj_in.difficulty,
             calories=obj_in.calories,
@@ -264,6 +285,12 @@ class CRUDRecipe(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
         db.commit()
         db.refresh(recipe)
         return recipe
+
+    def delete(self, db: Session, *, recipe_id: UUID) -> bool:
+        recipe = db.query(Recipe).filter(Recipe.id == recipe_id).first()
+        result = db.delete(recipe)
+        db.commit()
+        return result != 0
 
     def rate(
         self, db: Session, *, recipe_id: UUID, user_id: UUID, newRating: int
