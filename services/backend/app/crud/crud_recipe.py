@@ -322,5 +322,12 @@ class CRUDRecipe(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
 
         return query
 
+    def make_products_q(self, obj_in: Recipe):
+        query = ""
+        for stage in obj_in.stages:
+            for product in stage.products:
+                query += str(product.amount) + " " + product.amount_unit + " of " + product.name + " and "
+
+        return query
 
 recipe = CRUDRecipe(Recipe)

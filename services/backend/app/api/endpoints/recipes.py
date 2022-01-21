@@ -150,17 +150,27 @@ def create_recipe(
     """
     ### TODO u have to chenge this fuction to fits new data
     sum_of_calories = 0
-    query = crud.crud_recipe.recipe.make_products_names_string(db=db, obj_in=recipe_in)
-    print(query)
+    better_query = crud.crud_recipe.recipe.make_products_q(obj_in=recipe_in)
 
-    headers = {"X-Api-Key": "{key}".format(key=core.config.settings.REMOTE_API_KEY)}
-    params = {"query": "{q}".format(q=query)}
-    response = get(
-        "https://api.calorieninjas.com/v1/nutrition", params=params, headers=headers
-    ).json()
+    headers = {"Accept": "application/json"}
+    payload = {
+        "app_id": core.config.settings.EXTERNAL_API_ID_AUTOCOMPLETE,
+        "app_key": core.config.settings.EXTERNAL_API_KEY_AUTOCOMPLETE,
+        "ingr": better_query,
+    }
+    request = get(
+        core.config.settings.EXTERNAL_API_URL2, payload, headers=headers
+    )
+    data = request.json()
+    list_of_ingredients = data['parsed']
 
-    for item in response["items"]:
-        sum_of_calories += item["calories"]
+    for product in list_of_ingredients:
+        kcal_per100 = float(product['food']["nutrients"]["ENERC_KCAL"])
+        quantitiy = float(product["quantity"])
+        measure = float(product["measure"]["weight"])
+        calories = quantitiy * (kcal_per100*measure/100)
+        sum_of_calories += calories
+
     recipe_in.calories = sum_of_calories
 
     recipe = crud.recipe.create(db, obj_in=recipe_in, owner_id=current_user.id)
@@ -223,23 +233,29 @@ def update_recipe(
     # TODO: check if this is correct user
     else:
         if recipe.owner_id == current_user.id:
+                ### TODO u have to chenge this fuction to fits new data
             sum_of_calories = 0
-            query = crud.crud_recipe.recipe.make_products_names_string(
-                db=db, obj_in=recipe_in
-            )
+            better_query = crud.crud_recipe.recipe.make_products_q(obj_in=recipe_in)
 
-            headers = {
-                "X-Api-Key": "{key}".format(key=core.config.settings.REMOTE_API_KEY)
+            headers = {"Accept": "application/json"}
+            payload = {
+                "app_id": core.config.settings.EXTERNAL_API_ID_AUTOCOMPLETE,
+                "app_key": core.config.settings.EXTERNAL_API_KEY_AUTOCOMPLETE,
+                "ingr": better_query,
             }
-            params = {"query": "{q}".format(q=query)}
-            response = get(
-                "https://api.calorieninjas.com/v1/nutrition",
-                params=params,
-                headers=headers,
-            ).json()
+            request = get(
+                core.config.settings.EXTERNAL_API_URL2, payload, headers=headers
+            )
+            data = request.json()
+            list_of_ingredients = data['parsed']
 
-            for item in response["items"]:
-                sum_of_calories += item["calories"]
+            for product in list_of_ingredients:
+                kcal_per100 = float(product['food']["nutrients"]["ENERC_KCAL"])
+                quantitiy = float(product["quantity"])
+                measure = float(product["measure"]["weight"])
+                calories = quantitiy * (kcal_per100*measure/100)
+                sum_of_calories += calories
+
             recipe_in.calories = sum_of_calories
             recipe = crud.recipe.update(db=db, obj_in=recipe_in, recipe_id=recipe_id)
         else:
@@ -274,3 +290,5 @@ def rate_recpie(
     return crud.recipe.rate(
         db, recipe_id=recipe_id, newRating=newRating, user_id=current_user.id
     )
+
+

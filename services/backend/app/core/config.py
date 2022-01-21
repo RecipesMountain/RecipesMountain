@@ -54,6 +54,7 @@ class Settings(BaseSettings):
     REMOTE_API_KEY: str = "xoTm8WWs4zPaIdDyxBcdYw==exW9KaGBm3w1ZgNc"
 
     EXTERNAL_API_URL: str = "https://api.edamam.com/auto-complete"
+    EXTERNAL_API_URL2: str = "https://api.edamam.com/api/food-database/v2/parser"
     EXTERNAL_API_ID_AUTOCOMPLETE: str = "d9d90ac2"
     EXTERNAL_API_KEY_AUTOCOMPLETE: str = "56e8dd67d71c15d633a59e9f4ab16216"
 
