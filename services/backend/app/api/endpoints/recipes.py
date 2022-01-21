@@ -241,4 +241,3 @@ def rate_recpie(
     return crud.recipe.rate(
         db, recipe_id=recipe_id, newRating=newRating, user_id=current_user.id
     )
-
