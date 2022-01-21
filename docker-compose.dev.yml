@@ -29,7 +29,7 @@ services:
       - postgres.env
       - backend.env
     volumes:
-      - ./services/backend/app:/app/app
+      - ./services/backend:/app
     ports:
       - "5000:5000"
     container_name: backend-recipemountain-dev
