@@ -180,7 +180,7 @@
                       vertical
                     >
                       <v-window-item v-for="stage in stages" :key="stage.no">
-                        <RecipeFormStage :stage="stage" :products="products" :ref="'stage'+ stage.no"/>
+                        <RecipeFormStage :stage="stage" :products="products" :ref="'stage'+ stage.no" :isForEdit="isForEdit"/>
                       </v-window-item>
                     </v-window>
                   </v-col>

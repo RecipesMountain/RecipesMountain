@@ -43,7 +43,7 @@
                             v-model="product.product_id"
                             :rules="ingredientRules"
                           ></v-autocomplete> -->
-                          <RecipeSingleProduct :product="product"/>
+                          <RecipeSingleProduct :product="product" :isForEdit="isForEdit"/>
                         </v-col>
                         <v-col md="4">
                           <v-text-field
@@ -102,7 +102,7 @@
 import RecipeSingleProduct from './Recipe-SingleProduct.vue';
 export default {
   components: { RecipeSingleProduct },
-  props: ["stage", "products"],
+  props: ["stage", "products", "isForEdit"],
   data() {
     return {
       formStage: false,

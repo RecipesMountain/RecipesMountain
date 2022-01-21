@@ -14,7 +14,7 @@
 <script>
 import { api } from '@/api';
 export default {
-    props: ["product"],
+    props: ["product", "isForEdit"],
     data() {
     return {
       ingredientRules: [
@@ -28,7 +28,9 @@ export default {
     };
   },
   mounted(){
-    this.ingredients.push(this.product.name)
+    if(this.isForEdit){
+      this.ingredients.push(this.product.name)
+    }
   },
   watch: {
     async search (query) {
