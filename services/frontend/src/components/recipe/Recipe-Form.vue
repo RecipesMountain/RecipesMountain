@@ -47,9 +47,7 @@
                         hint="Insert calories"
                         type="number"
                         :rules="caloriesRules"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col md="6" cols="12">
+                      ></v-text-field> -->
                       <v-textarea
                         label="Recipe description"
                         v-model="recipeDesc"
@@ -57,6 +55,9 @@
                         rows="3"
                         counter="400"
                       ></v-textarea>
+                    </v-col>
+                    <v-col md="6" cols="12">
+                      
                       <v-img
                         :src="previeImage"
                         contain
