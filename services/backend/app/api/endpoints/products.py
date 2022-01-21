@@ -4,13 +4,15 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from app import models, schemas, crud
+from app import models, schemas, crud, core
 from app.api import deps
+
+import requests
 
 router = APIRouter()
 
 
-@router.get("/search", response_model=List[schemas.Product])
+@router.get("/search")
 def search_products(
     db: Session = Depends(deps.get_db),
     query: str = "",
@@ -18,7 +20,14 @@ def search_products(
     limit: int = 100,
     current_user: models.User = Depends(deps.get_current_user),
 ) -> Any:
-    pass
+    headers = {"Accept": "application/json"}
+    payload = {
+        "app_id": core.config.settings.EXTERNAL_API_ID_AUTOCOMPLETE,
+        "app_key": core.config.settings.EXTERNAL_API_KEY_AUTOCOMPLETE,
+        "q": query
+    }
+    request = requests.get(core.config.settings.EXTERNAL_API_URL, payload, headers=headers)
+    return request.json()
 
 
 @router.get("/", response_model=List[schemas.Product])

@@ -148,16 +148,18 @@ def create_recipe(
     """
     Create recipe
     """
-    sum_of_calories = 0
-    query = crud.crud_recipe.recipe.make_products_names_string(db=db, obj_in=recipe_in)
+    ### TODO u have to chenge this fuction to fits new data
+    # sum_of_calories = 0
+    # query = crud.crud_recipe.recipe.make_products_names_string(db=db, obj_in=recipe_in)
 
-    headers = {'X-Api-Key': '{key}'.format(key=core.config.settings.REMOTE_API_KEY)}
-    params = {'query': '{q}'.format(q=query)}
-    response = get('https://api.calorieninjas.com/v1/nutrition', params=params, headers=headers).json()
 
-    for item in response["items"]:
-        sum_of_calories += item["calories"]
-    recipe_in.calories = sum_of_calories
+    # headers = {'X-Api-Key': '{key}'.format(key=core.config.settings.REMOTE_API_KEY)}
+    # params = {'query': '{q}'.format(q=query)}
+    # response = get('https://api.calorieninjas.com/v1/nutrition', params=params, headers=headers).json()
+
+    # for item in response["items"]:
+    #     sum_of_calories += item["calories"]
+    # recipe_in.calories = sum_of_calories
 
     recipe = crud.recipe.create(db, obj_in=recipe_in, owner_id=current_user.id)
     return recipe

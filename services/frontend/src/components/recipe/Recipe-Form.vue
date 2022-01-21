@@ -356,7 +356,7 @@ export default {
         let productList = [];
         element.products.forEach((product) => {
           productList.push({
-            name: "",
+            name: product.name,
             price: 0,
             product_id: product.product_id,
             amount: product.amount,

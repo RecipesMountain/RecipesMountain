@@ -33,7 +33,7 @@
                         :key="product.no"
                       >
                         <v-col md="4">
-                          <v-autocomplete
+                          <!-- <v-autocomplete
                             outlined
                             clearable
                             label="Product"
@@ -42,7 +42,8 @@
                             item-value="id"
                             v-model="product.product_id"
                             :rules="ingredientRules"
-                          ></v-autocomplete>
+                          ></v-autocomplete> -->
+                          <RecipeSingleProduct :product="product"/>
                         </v-col>
                         <v-col md="4">
                           <v-text-field
@@ -98,7 +99,9 @@
 </template>
 
 <script>
+import RecipeSingleProduct from './Recipe-SingleProduct.vue';
 export default {
+  components: { RecipeSingleProduct },
   props: ["stage", "products"],
   data() {
     return {
