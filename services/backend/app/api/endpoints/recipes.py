@@ -224,7 +224,7 @@ def delete_recipe(
     db: Session = Depends(deps.get_db),
     current_user: models.User = Depends(deps.get_current_user),
 ) -> Any:
-    pass
+    return crud.recipe.delete(db, recipe_id=recipe_id)
 
 
 @router.put("/{recipe_id}/rate", response_model=int)

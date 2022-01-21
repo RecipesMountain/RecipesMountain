@@ -53,11 +53,21 @@ const routes = [
     path: '/addRecipe',
     name: 'AddRecipe',
     component: AddRecipe,
+    beforeEnter: (to, from, next) => {
+      if(!store.getters["isLoggedIn"]){
+        next({ name: "Home"  })
+      } else next()
+    },
   },
   {
     path: '/editRecipe/:id?',
     name: 'EditRecipe',
     component: EditRecipe,
+    beforeEnter: (to, from, next) => {
+      if(!store.getters["isLoggedIn"]){
+        next({ name: "Home"  })
+      } else next()
+    },
   },
   {
     path: '/comment',
