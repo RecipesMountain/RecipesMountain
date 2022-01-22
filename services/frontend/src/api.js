@@ -137,7 +137,12 @@ export const api = {
     config["params"] = {}
     config.params["newRating"] = newRating
     return  axios.put(`${APISUFFIX}/api/recipes/${id}/rate`, null, config)
-  }
+  },
+  async searchProducts(token, query){
+    let config = basicConfig(token, 0, 100)
+    config.params["query"] = query
+    return axios.get(`${APISUFFIX}/api/products/search`, config)
+  },
 
 
 };

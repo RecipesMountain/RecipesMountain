@@ -59,12 +59,5 @@ def init_db(db: Session) -> None:
         "seasoning",
         "salt",
         "black pepper",
-        "mozarella",
+        "mozzarella",
     ]
-
-    for product in initialProducts:
-        db_product = crud.product.get_by_name(db=db, name=product)
-        if not db_product:
-            product_in = schemas.ProductCreate(name=product, price=1)
-            crud.product.create(db=db, obj_in=product_in)
-    # crud.recipe.add_image(db=db, recipe_id='f7677a97-f892-4017-bbac-a598fbe59001', file='sdklhaskldhajklshklds')

@@ -20,6 +20,11 @@ class ProductUpdate(ProductBase):
     pass
 
 
+class ProductWithAmountNew(ProductCreate):
+    amount: Optional[float]
+    amount_unit: Optional[str]
+
+
 class ProductWithAmount(ProductCreate):
     product_id: Optional[UUID]
     amount: Optional[float]

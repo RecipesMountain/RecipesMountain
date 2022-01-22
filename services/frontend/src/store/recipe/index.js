@@ -26,20 +26,24 @@ const defaultState = {
   allTags: [],
   units: [
     {
+      label: "ounce",
+      shortcut: "oz",
+    },
+    {
       label: "gram",
       shortcut: "g",
+    },
+    {
+      label: "pound",
+      shortcut: "pd",
     },
     {
       label: "kilogram",
       shortcut: "kg",
     },
     {
-      label: "piece",
-      shortcut: "pc.",
-    },
-    {
-      label: "pinch",
-      shortcut: "pinch",
+      label: "liter",
+      shortcut: "l",
     },
     {
       label: "tablespoon",
@@ -54,19 +58,7 @@ const defaultState = {
       shortcut: "cup",
     },
     {
-      label: "decagram",
-      shortcut: "dag",
-    },
-    {
-      label: "litre",
-      shortcut: "l",
-    },
-    {
-      label: "pack",
-      shortcut: "pack",
-    },
-    {
-      label: "millilitre",
+      label: "milliliter",
       shortcut: "ml",
     },
   ],

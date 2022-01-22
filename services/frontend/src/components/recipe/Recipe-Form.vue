@@ -41,15 +41,6 @@
                         required
                       >
                       </v-text-field>
-                      <v-text-field
-                        label="Calories billans"
-                        v-model="caloriesBillans"
-                        hint="Insert calories"
-                        type="number"
-                        :rules="caloriesRules"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col md="6" cols="12">
                       <v-textarea
                         label="Recipe description"
                         v-model="recipeDesc"
@@ -57,6 +48,9 @@
                         rows="3"
                         counter="400"
                       ></v-textarea>
+                    </v-col>
+                    <v-col md="6" cols="12">
+                      
                       <v-img
                         :src="previeImage"
                         contain
@@ -186,7 +180,7 @@
                       vertical
                     >
                       <v-window-item v-for="stage in stages" :key="stage.no">
-                        <RecipeFormStage :stage="stage" :products="products" :ref="'stage'+ stage.no"/>
+                        <RecipeFormStage :stage="stage" :products="products" :ref="'stage'+ stage.no" :isForEdit="isForEdit"/>
                       </v-window-item>
                     </v-window>
                   </v-col>
@@ -365,7 +359,7 @@ export default {
         let productList = [];
         element.products.forEach((product) => {
           productList.push({
-            name: "",
+            name: product.name,
             price: 0,
             product_id: product.product_id,
             amount: product.amount,

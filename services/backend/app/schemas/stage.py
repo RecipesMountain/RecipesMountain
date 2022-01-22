@@ -3,7 +3,7 @@ from typing import Optional
 from typing import List
 from uuid import UUID
 
-from .product import ProductWithAmount, Product
+from .product import ProductWithAmount, Product, ProductWithAmountNew
 
 
 class StageBase(BaseModel):
@@ -15,7 +15,7 @@ class StageBase(BaseModel):
 
 
 class StageWithIngredients(StageBase):
-    products: Optional[List[ProductWithAmount]]
+    products: Optional[List[ProductWithAmountNew]]
 
 
 class StageCreate(StageWithIngredients):

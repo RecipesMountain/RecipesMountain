@@ -7,11 +7,11 @@ from fastapi import File, UploadFile
 
 from sqlalchemy.orm import Session
 
-from app import models, schemas, crud
+from app import models, schemas, crud, core
 from app.api import deps
 
 from fastapi.responses import Response
-
+from requests import get
 
 router = APIRouter()
 
@@ -170,6 +170,29 @@ def create_recipe(
     """
     Create recipe
     """
+    ### TODO u have to chenge this fuction to fits new data
+    sum_of_calories = 0
+    better_query = crud.crud_recipe.recipe.make_products_q(obj_in=recipe_in)
+
+    headers = {"Accept": "application/json"}
+    payload = {
+        "app_id": core.config.settings.EXTERNAL_API_ID_AUTOCOMPLETE,
+        "app_key": core.config.settings.EXTERNAL_API_KEY_AUTOCOMPLETE,
+        "ingr": better_query,
+    }
+    request = get(core.config.settings.EXTERNAL_API_URL2, payload, headers=headers)
+    data = request.json()
+    list_of_ingredients = data["parsed"]
+
+    for product in list_of_ingredients:
+        kcal_per100 = float(product["food"]["nutrients"]["ENERC_KCAL"])
+        quantitiy = float(product["quantity"])
+        measure = float(product["measure"]["weight"])
+        calories = quantitiy * (kcal_per100 * measure / 100)
+        sum_of_calories += calories
+
+    recipe_in.calories = sum_of_calories
+
     recipe = crud.recipe.create(db, obj_in=recipe_in, owner_id=current_user.id)
     return recipe
 
@@ -230,6 +253,30 @@ def update_recipe(
     # TODO: check if this is correct user
     else:
         if recipe.owner_id == current_user.id:
+            ### TODO u have to chenge this fuction to fits new data
+            sum_of_calories = 0
+            better_query = crud.crud_recipe.recipe.make_products_q(obj_in=recipe_in)
+
+            headers = {"Accept": "application/json"}
+            payload = {
+                "app_id": core.config.settings.EXTERNAL_API_ID_AUTOCOMPLETE,
+                "app_key": core.config.settings.EXTERNAL_API_KEY_AUTOCOMPLETE,
+                "ingr": better_query,
+            }
+            request = get(
+                core.config.settings.EXTERNAL_API_URL2, payload, headers=headers
+            )
+            data = request.json()
+            list_of_ingredients = data["parsed"]
+
+            for product in list_of_ingredients:
+                kcal_per100 = float(product["food"]["nutrients"]["ENERC_KCAL"])
+                quantitiy = float(product["quantity"])
+                measure = float(product["measure"]["weight"])
+                calories = quantitiy * (kcal_per100 * measure / 100)
+                sum_of_calories += calories
+
+            recipe_in.calories = sum_of_calories
             recipe = crud.recipe.update(db=db, obj_in=recipe_in, recipe_id=recipe_id)
         else:
             raise HTTPException(

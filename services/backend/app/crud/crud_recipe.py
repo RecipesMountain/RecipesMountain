@@ -4,8 +4,10 @@ from sqlalchemy.orm import Session, Query
 from sqlalchemy.sql.functions import func
 
 from app.crud.base import CRUDBase
+from app import crud
 from app.models.recipe import Recipe
 from app.models.tag import Tag
+from app.models.product import Product
 
 from app.models.stage import Stage
 
@@ -154,9 +156,20 @@ class CRUDRecipe(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
             db.refresh(db_stage_obj)
 
             for product in stage.products:
-                print(product.name)
+                # this should be in crud products
+                prod = db.query(Product).filter(Product.name == product.name).first()
+                prod_id = 0
+                if not prod:
+                    db_obj_prod = Product(name=product.name, price=0)
+                    db.add(db_obj_prod)
+                    db.commit()
+                    db.refresh(db_obj_prod)
+                    prod_id = db_obj_prod.id
+                else:
+                    prod_id = prod.id
+
                 db_product_stage_obj = ProductsInStages(
-                    product_id=product.product_id,
+                    product_id=prod_id,
                     stage_id=db_stage_obj.id,
                     amount=product.amount,
                     amount_unit=product.amount_unit,
@@ -225,8 +238,24 @@ class CRUDRecipe(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
 
                         if stage.products:
                             for product in stage.products:
+                                # this should be in crud products
+                                prod = (
+                                    db.query(Product)
+                                    .filter(Product.name == product.name)
+                                    .first()
+                                )
+                                prod_id = 0
+                                if not prod:
+                                    db_obj_prod = Product(name=product.name, price=0)
+                                    db.add(db_obj_prod)
+                                    db.commit()
+                                    db.refresh(db_obj_prod)
+                                    prod_id = db_obj_prod.id
+                                else:
+                                    prod_id = prod.id
+
                                 db_product_stage_obj = ProductsInStages(
-                                    product_id=product.product_id,
+                                    product_id=prod_id,
                                     stage_id=db_stage_obj.id,
                                     amount=product.amount,
                                     amount_unit=product.amount_unit,
@@ -301,6 +330,39 @@ class CRUDRecipe(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
         db.refresh(recipe)
 
         return recipe.rating
+
+    def make_products_names_string(self, db: Session, obj_in: Recipe) -> str:
+        query = ""
+
+        for stage in obj_in.stages:
+            for product in stage.products:
+                query = (
+                    query
+                    + " "
+                    + str(int(product.amount))
+                    + " "
+                    + product.amount_unit
+                    + " "
+                    + product.name
+                    + " and"
+                )
+
+        return query
+
+    def make_products_q(self, obj_in: Recipe):
+        query = ""
+        for stage in obj_in.stages:
+            for product in stage.products:
+                query += (
+                    str(product.amount)
+                    + " "
+                    + product.amount_unit
+                    + " of "
+                    + product.name
+                    + " and "
+                )
+
+        return query
 
 
 recipe = CRUDRecipe(Recipe)
